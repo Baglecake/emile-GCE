@@ -15,8 +15,11 @@ import sys
 import time
 import json
 from pathlib import Path
-from typing import Dict, Any, List, Optional, Callable
+from typing import Dict, Any, List, Optional, Callable, TYPE_CHECKING
 from dataclasses import dataclass, field
+
+if TYPE_CHECKING:
+    from agents.identity_core import IdentityCore
 
 # Use relative imports for social_rl modules
 from .context_injector import (
@@ -29,6 +32,15 @@ from .feedback_extractor import (
 )
 from .process_retriever import ProcessRetriever, ReasoningPolicy
 from .dual_llm_client import DualLLMClient, DualLLMConfig, GenerationResult
+
+# Phase 2a: IdentityCore integration (optional)
+try:
+    from agents.identity_core import IdentityCore, IdentityVector
+    IDENTITY_CORE_AVAILABLE = True
+except ImportError:
+    IDENTITY_CORE_AVAILABLE = False
+    IdentityCore = None
+    IdentityVector = None
 
 
 def _get_default_output_dir(experiment_id: str = None) -> str:
@@ -76,6 +88,16 @@ class SocialRLConfig:
 
     # Challenge mode for A/B testing (empirical semiotics)
     challenge_mode: str = "adaptive"  # off, adaptive, always
+
+    # Phase 2a: IdentityCore integration
+    use_identity_cores: bool = False  # Enable per-agent identity tracking
+    identity_modulates_temperature: bool = True  # Let IdentityCore set temperature
+
+    # Temporal compression (Phase 2b: will be calibrated from CES)
+    temporal_config: Dict[str, Any] = field(default_factory=lambda: {
+        'years_per_experiment': 4,
+        'years_per_round': {'R1': 1.5, 'R2': 1.5, 'R3': 1.0}
+    })
 
 
 @dataclass
@@ -183,6 +205,11 @@ class SocialRLRunner:
         self.round_results: Dict[int, SocialRLRoundResult] = {}
         self.accumulated_feedback: Dict[str, Dict[str, float]] = {}
 
+        # Phase 2a: IdentityCore tracking (optional)
+        self.identity_cores: Dict[str, 'IdentityCore'] = {}
+        if self.config.use_identity_cores and IDENTITY_CORE_AVAILABLE:
+            self._initialize_identity_cores()
+
         # Setup output directory
         if self.config.output_dir:
             self.output_dir = Path(self.config.output_dir)
@@ -284,6 +311,11 @@ class SocialRLRunner:
         # Update accumulated feedback
         for agent_id, fb in round_feedback.items():
             self.accumulated_feedback[agent_id] = fb.as_reward_signal()
+
+        # Phase 2a: Update identity cores with observed behavior
+        if self.identity_cores:
+            for agent_id, fb in round_feedback.items():
+                self._update_identity_core(agent_id, fb.as_reward_signal(), round_number)
 
         duration = time.time() - start_time
 
@@ -648,9 +680,16 @@ class SocialRLRunner:
             # Ensure directory exists
             self.output_dir.mkdir(parents=True, exist_ok=True)
 
+            # Save round result
             output_file = self.output_dir / f"round{result.round_number}_social_rl.json"
+            round_data = result.to_dict()
+
+            # Phase 2a: Include identity core states in round data
+            if self.identity_cores:
+                round_data['identity_states'] = self.get_identity_states()
+
             with open(output_file, "w") as f:
-                json.dump(result.to_dict(), f, indent=2)
+                json.dump(round_data, f, indent=2)
 
             # Also save policy state after each round
             policy_file = self.output_dir / "policy_state.json"
@@ -678,8 +717,142 @@ class SocialRLRunner:
         with open(output_path / "social_rl_report.txt", "w") as f:
             f.write(self.generate_report())
 
+        # Phase 2a: Save identity core states
+        if self.identity_cores:
+            identity_state = {
+                agent_id: core.get_state()
+                for agent_id, core in self.identity_cores.items()
+            }
+            with open(output_path / "identity_cores.json", "w") as f:
+                json.dump(identity_state, f, indent=2)
+
         if self.config.verbose:
             print(f"\nResults saved to: {output_dir}")
+
+    # =========================================================================
+    # Phase 2a: IdentityCore Integration
+    # =========================================================================
+
+    def _initialize_identity_cores(self):
+        """Initialize IdentityCore for each agent in the canvas."""
+        if not IDENTITY_CORE_AVAILABLE:
+            return
+
+        for agent in self.canvas.get("agents", []):
+            agent_id = agent.get("identifier", "")
+            if not agent_id:
+                continue
+
+            # Infer group_id from agent identifier
+            group_id = self._infer_group_id(agent_id)
+
+            # Create initial identity vector (neutral baseline)
+            # Will be updated after first round with actual behavior
+            initial_vec = IdentityVector(
+                engagement=0.5,  # Neutral engagement
+                institutional_faith=0.8,  # Default moderate faith
+                social_friction=0.2,  # Low initial friction
+            )
+
+            self.identity_cores[agent_id] = IdentityCore(
+                agent_id=agent_id,
+                group_id=group_id,
+                initial_vector=initial_vec,
+            )
+
+        if self.config.verbose and self.identity_cores:
+            print(f"  IdentityCore: Initialized {len(self.identity_cores)} identity cores")
+
+    def _infer_group_id(self, agent_id: str) -> str:
+        """Infer CES strata group_id from agent identifier."""
+        aid_lower = agent_id.lower()
+
+        # Location
+        if 'urban' in aid_lower:
+            location = 'urban'
+        elif 'rural' in aid_lower:
+            location = 'rural'
+        elif 'suburban' in aid_lower:
+            location = 'suburban'
+        else:
+            location = ''
+
+        # Tenure
+        if 'renter' in aid_lower:
+            tenure = 'renter'
+        elif 'owner' in aid_lower or 'homeowner' in aid_lower:
+            tenure = 'owner'
+        else:
+            tenure = ''
+
+        # Political lean
+        if 'progressive' in aid_lower or 'liberal' in aid_lower:
+            lean = 'left'
+        elif 'conservative' in aid_lower:
+            lean = 'right'
+        elif 'swing' in aid_lower or 'moderate' in aid_lower:
+            lean = 'center'
+        else:
+            lean = ''
+
+        # Engagement level
+        if 'disengaged' in aid_lower:
+            engagement = 'disengaged'
+        elif 'engaged' in aid_lower or 'active' in aid_lower:
+            engagement = 'engaged'
+        else:
+            engagement = ''
+
+        parts = [p for p in [location, tenure, lean, engagement] if p]
+        return '_'.join(parts) if parts else 'unknown'
+
+    def _update_identity_core(
+        self,
+        agent_id: str,
+        feedback: Dict[str, float],
+        round_number: int
+    ):
+        """Update an agent's IdentityCore with observed behavior."""
+        if agent_id not in self.identity_cores:
+            return
+
+        core = self.identity_cores[agent_id]
+
+        # Compute sim_time from temporal config
+        temporal_cfg = self.config.temporal_config
+        years_per_round = temporal_cfg.get('years_per_round', {})
+        sim_time = sum(
+            years_per_round.get(f'R{i}', 1.0)
+            for i in range(1, round_number + 1)
+        )
+
+        # Extract vector from feedback
+        # Map feedback signals to identity dimensions
+        engagement = feedback.get('engagement', core.vector.engagement)
+        # contribution_value maps loosely to institutional_faith
+        faith = 1.0 - feedback.get('critical_ratio', 0.0)  # inverse of criticism
+        friction = feedback.get('direct_references', core.vector.social_friction)
+
+        new_vec = IdentityVector(
+            engagement=engagement,
+            institutional_faith=faith,
+            social_friction=friction,
+        )
+
+        core.update(new_vec, sim_time)
+
+    def _get_identity_temperature(self, agent_id: str) -> Optional[float]:
+        """Get temperature from IdentityCore if available."""
+        if agent_id in self.identity_cores:
+            return self.identity_cores[agent_id].compute_temperature()
+        return None
+
+    def get_identity_states(self) -> Dict[str, Dict[str, Any]]:
+        """Get current state of all identity cores."""
+        return {
+            agent_id: core.get_state()
+            for agent_id, core in self.identity_cores.items()
+        }
 
 
 # Convenience function for quick testing

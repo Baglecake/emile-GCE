@@ -6,3 +6,6 @@ __pycache__/
 venv/
 .vscode/
 outputs/*/simulation_logs/
+
+# Development notes (theory/design conversations)
+dev-notes.md
