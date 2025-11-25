@@ -99,6 +99,12 @@ class SocialRLConfig:
         'years_per_round': {'R1': 1.5, 'R2': 1.5, 'R3': 1.0}
     })
 
+    # Phase 2b: Grit mode (static vs dynamic calibration)
+    grit_mode: str = "dynamic"  # "static" = fixed at creation, "dynamic" = per-turn calibration
+    grit_smoothing: float = 0.3  # Weight for new grit level (0.3 = 30% new, 70% old)
+    grit_min_words: int = 30     # Minimum words even for STRONG grit
+    grit_max_words: int = 300    # Maximum words even for NONE grit
+
 
 @dataclass
 class SocialRLMessage:
@@ -209,6 +215,10 @@ class SocialRLRunner:
         self.identity_cores: Dict[str, 'IdentityCore'] = {}
         if self.config.use_identity_cores and IDENTITY_CORE_AVAILABLE:
             self._initialize_identity_cores()
+
+        # Phase 2b: Dynamic grit states (per-agent grit level calibrated each turn)
+        # Maps agent_id -> current GritLevel (updated by calibrate_grit_to_ces)
+        self.grit_states: Dict[str, str] = {}  # agent_id -> "NONE"/"LIGHT"/"MODERATE"/"STRONG"
 
         # Setup output directory
         if self.config.output_dir:
@@ -407,24 +417,91 @@ class SocialRLRunner:
             content = self._generate_simple(system_prompt, user_message)
             validation_meta = None
 
-        # 5b. GRIT ENFORCEMENT: Truncate responses for STRONG grit agents
-        # The LLM often ignores prompt-based constraints, so we enforce word limits
+        # 5b. DYNAMIC GRIT CALIBRATION: Adjust grit level based on engagement vs CES target
+        # This is the "active dynamics" - grit level changes per-turn based on overshoot
+        # See dev-notes.md for design rationale (smoothing, clamping, CES targets)
+        current_engagement = agent_feedback.get('engagement', 0.5)
         agent_prompt = agent.get("prompt", "")
-        if "GRIT-STRONG" in agent_prompt:
-            # Hard limit to ~50 words for STRONG grit agents
-            words = content.split()
-            if len(words) > 60:  # Allow slight buffer
-                # Find sentence boundary near 50 words
-                truncated = " ".join(words[:50])
-                # Try to end at a sentence
-                for end_char in [". ", "? ", "! "]:
-                    last_pos = truncated.rfind(end_char)
-                    if last_pos > 20:  # Don't truncate too early
-                        truncated = truncated[:last_pos + 1]
-                        break
-                content = truncated.strip()
-                if self.config.verbose:
-                    print(f"    [GRIT] Truncated response from {len(words)} to {len(content.split())} words")
+
+        # Grit level ordering for smoothing (NONE=0, LIGHT=1, MODERATE=2, STRONG=3)
+        GRIT_LEVELS = {"NONE": 0, "LIGHT": 1, "MODERATE": 2, "STRONG": 3}
+        GRIT_NAMES = {0: "NONE", 1: "LIGHT", 2: "MODERATE", 3: "STRONG"}
+
+        # Get current grit state (default from prompt if not yet set)
+        old_grit = self.grit_states.get(agent_id)
+        if old_grit is None:
+            # Initialize from prompt
+            if "GRIT-STRONG" in agent_prompt:
+                old_grit = "STRONG"
+            elif "GRIT-MODERATE" in agent_prompt:
+                old_grit = "MODERATE"
+            elif "GRIT-LIGHT" in agent_prompt:
+                old_grit = "LIGHT"
+            else:
+                old_grit = "NONE"
+
+        grit_level = old_grit  # Default: keep current level
+
+        # Dynamic calibration if enabled
+        if self.config.grit_mode == "dynamic":
+            try:
+                from agents.ces_generators.grit_config import calibrate_grit_to_ces, GritLevel
+
+                # Infer identity_salience from current grit level
+                salience_map = {"STRONG": 0.15, "MODERATE": 0.30, "LIGHT": 0.45, "NONE": 0.75}
+                identity_metrics = {'identity_salience': salience_map.get(old_grit, 0.5)}
+
+                # Get proposed new grit level from CES calibration
+                dynamic_constraint = calibrate_grit_to_ces(agent_id, current_engagement, identity_metrics)
+                proposed_grit = dynamic_constraint.level.value.upper()
+
+                # SMOOTH the update (prevent whiplash)
+                old_level = GRIT_LEVELS.get(old_grit, 0)
+                proposed_level = GRIT_LEVELS.get(proposed_grit, 0)
+                smoothed_level = round(
+                    (1 - self.config.grit_smoothing) * old_level +
+                    self.config.grit_smoothing * proposed_level
+                )
+                smoothed_level = max(0, min(3, smoothed_level))  # Clamp to valid range
+                grit_level = GRIT_NAMES[smoothed_level]
+
+                # Update state
+                self.grit_states[agent_id] = grit_level
+
+                if self.config.verbose and (grit_level != old_grit or grit_level != "NONE"):
+                    print(f"    [GRIT-DYNAMIC] {agent_id}: {old_grit}→{grit_level} (eng={current_engagement:.2f})")
+            except ImportError:
+                pass  # Keep static grit if calibration not available
+        else:
+            # Static mode: just track current state
+            self.grit_states[agent_id] = old_grit
+
+        # 5c. GRIT ENFORCEMENT: Truncate based on grit level with clamping
+        # Word limits per grit level (from dev-notes.md)
+        WORD_LIMITS = {
+            "STRONG": 50,    # ~2-3 sentences
+            "MODERATE": 75,  # ~3-5 sentences
+            "LIGHT": 150,    # ~5-8 sentences
+            "NONE": self.config.grit_max_words
+        }
+
+        words = content.split()
+        word_limit = WORD_LIMITS.get(grit_level, self.config.grit_max_words)
+
+        # Enforce minimum (don't over-truncate)
+        word_limit = max(word_limit, self.config.grit_min_words)
+
+        if len(words) > word_limit + 10:  # Allow small buffer
+            # Find sentence boundary near limit
+            truncated = " ".join(words[:word_limit])
+            for end_char in [". ", "? ", "! "]:
+                last_pos = truncated.rfind(end_char)
+                if last_pos > self.config.grit_min_words:
+                    truncated = truncated[:last_pos + 1]
+                    break
+            content = truncated.strip()
+            if self.config.verbose:
+                print(f"    [GRIT] Truncated from {len(words)} to {len(content.split())} words (limit={word_limit})")
 
         # Create message with Social RL metadata
         return SocialRLMessage(
