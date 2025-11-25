@@ -1,0 +1,73 @@
+{
+  "per_round": {
+    "round_1": {
+      "participation": {
+        "total_messages": 6,
+        "by_role": {
+          "Worker": 4,
+          "Owner": 2
+        },
+        "by_agent": {
+          "Worker+Alice": 2,
+          "Worker+Ben": 2,
+          "Owner+Marta": 2
+        },
+        "worker_ratio": 0.667,
+        "owner_ratio": 0.333
+      },
+      "justification": {
+        "total_count": 0,
+        "by_agent": {},
+        "owner_density": 0.0
+      },
+      "domination": {
+        "total_count": 0,
+        "by_agent": {},
+        "examples": []
+      },
+      "alienation": {
+        "total_count": 0,
+        "by_agent": {},
+        "examples": []
+      }
+    }
+  },
+  "aggregate": {
+    "participation": {
+      "total_messages": 6,
+      "by_role": {
+        "Worker": 4,
+        "Owner": 2
+      },
+      "by_agent": {
+        "Worker+Alice": 2,
+        "Worker+Ben": 2,
+        "Owner+Marta": 2
+      },
+      "worker_ratio": 0.667,
+      "owner_ratio": 0.333
+    },
+    "justification": {
+      "total_count": 0,
+      "by_agent": {},
+      "owner_density": 0.0
+    },
+    "domination": {
+      "total_count": 0,
+      "by_agent": {},
+      "examples": []
+    },
+    "alienation": {
+      "total_count": 0,
+      "by_agent": {},
+      "examples": []
+    }
+  },
+  "summary": {
+    "participation_asymmetry": "balanced",
+    "justification_trend": "stable",
+    "domination_level": "low",
+    "alienation_level": "low",
+    "key_observations": []
+  }
+}

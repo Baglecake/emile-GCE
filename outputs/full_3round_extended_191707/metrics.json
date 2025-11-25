@@ -1,0 +1,112 @@
+{
+  "per_round": {
+    "round_1": {
+      "participation": {
+        "total_messages": 12,
+        "by_role": {
+          "Worker": 8,
+          "Owner": 4
+        },
+        "by_agent": {
+          "Worker+Alice": 4,
+          "Worker+Ben": 4,
+          "Owner+Marta": 4
+        },
+        "worker_ratio": 0.667,
+        "owner_ratio": 0.333
+      },
+      "justification": {
+        "total_count": 1,
+        "by_agent": {
+          "Worker+Ben": 1
+        },
+        "owner_density": 0.0
+      },
+      "domination": {
+        "total_count": 0,
+        "by_agent": {},
+        "examples": []
+      },
+      "alienation": {
+        "total_count": 0,
+        "by_agent": {},
+        "examples": []
+      }
+    },
+    "round_2": {
+      "participation": {
+        "total_messages": 12,
+        "by_role": {
+          "Worker": 8,
+          "Owner": 4
+        },
+        "by_agent": {
+          "Worker+Alice": 4,
+          "Worker+Ben": 4,
+          "Owner+Marta": 4
+        },
+        "worker_ratio": 0.667,
+        "owner_ratio": 0.333
+      },
+      "justification": {
+        "total_count": 3,
+        "by_agent": {
+          "Worker+Ben": 2,
+          "Worker+Alice": 1
+        },
+        "owner_density": 0.0
+      },
+      "domination": {
+        "total_count": 0,
+        "by_agent": {},
+        "examples": []
+      },
+      "alienation": {
+        "total_count": 0,
+        "by_agent": {},
+        "examples": []
+      }
+    }
+  },
+  "aggregate": {
+    "participation": {
+      "total_messages": 24,
+      "by_role": {
+        "Worker": 16,
+        "Owner": 8
+      },
+      "by_agent": {
+        "Worker+Alice": 8,
+        "Worker+Ben": 8,
+        "Owner+Marta": 8
+      },
+      "worker_ratio": 0.667,
+      "owner_ratio": 0.333
+    },
+    "justification": {
+      "total_count": 4,
+      "by_agent": {
+        "Worker+Ben": 3,
+        "Worker+Alice": 1
+      },
+      "owner_density": 0.0
+    },
+    "domination": {
+      "total_count": 0,
+      "by_agent": {},
+      "examples": []
+    },
+    "alienation": {
+      "total_count": 0,
+      "by_agent": {},
+      "examples": []
+    }
+  },
+  "summary": {
+    "participation_asymmetry": "balanced",
+    "justification_trend": "stable",
+    "domination_level": "low",
+    "alienation_level": "low",
+    "key_observations": []
+  }
+}

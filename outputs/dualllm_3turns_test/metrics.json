@@ -1,0 +1,95 @@
+{
+  "per_round": {
+    "round_1": {
+      "participation": {
+        "total_messages": 3,
+        "by_role": {
+          "Worker": 2,
+          "Owner": 1
+        },
+        "by_agent": {
+          "Worker+Alice": 1,
+          "Worker+Ben": 1,
+          "Owner+Marta": 1
+        },
+        "worker_ratio": 0.667,
+        "owner_ratio": 0.333
+      },
+      "justification": {
+        "total_count": 1,
+        "by_agent": {
+          "Worker+Ben": 1
+        },
+        "owner_density": 0.0
+      },
+      "domination": {
+        "total_count": 1,
+        "by_agent": {
+          "Owner+Marta": 1
+        },
+        "examples": [
+          {
+            "round": 1,
+            "agent": "Owner+Marta",
+            "match": "no questions",
+            "excerpt": "Alice, Ben, begin your tasks. Ensure efficiency and quality. I expect no delays and no questions unless it's absolutely necessary for completion. Remember, your primary goal is to meet deadlines and m..."
+          }
+        ]
+      },
+      "alienation": {
+        "total_count": 0,
+        "by_agent": {},
+        "examples": []
+      }
+    }
+  },
+  "aggregate": {
+    "participation": {
+      "total_messages": 3,
+      "by_role": {
+        "Worker": 2,
+        "Owner": 1
+      },
+      "by_agent": {
+        "Worker+Alice": 1,
+        "Worker+Ben": 1,
+        "Owner+Marta": 1
+      },
+      "worker_ratio": 0.667,
+      "owner_ratio": 0.333
+    },
+    "justification": {
+      "total_count": 1,
+      "by_agent": {
+        "Worker+Ben": 1
+      },
+      "owner_density": 0.0
+    },
+    "domination": {
+      "total_count": 1,
+      "by_agent": {
+        "Owner+Marta": 1
+      },
+      "examples": [
+        {
+          "round": 0,
+          "agent": "Owner+Marta",
+          "match": "no questions",
+          "excerpt": "Alice, Ben, begin your tasks. Ensure efficiency and quality. I expect no delays and no questions unless it's absolutely necessary for completion. Remember, your primary goal is to meet deadlines and m..."
+        }
+      ]
+    },
+    "alienation": {
+      "total_count": 0,
+      "by_agent": {},
+      "examples": []
+    }
+  },
+  "summary": {
+    "participation_asymmetry": "balanced",
+    "justification_trend": "stable",
+    "domination_level": "moderate",
+    "alienation_level": "low",
+    "key_observations": []
+  }
+}

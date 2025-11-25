@@ -1,0 +1,146 @@
+{
+  "per_round": {
+    "round_1": {
+      "participation": {
+        "total_messages": 9,
+        "by_role": {
+          "Worker": 6,
+          "Owner": 3
+        },
+        "by_agent": {
+          "Worker+Alice": 3,
+          "Worker+Ben": 3,
+          "Owner+Marta": 3
+        },
+        "worker_ratio": 0.667,
+        "owner_ratio": 0.333
+      },
+      "justification": {
+        "total_count": 0,
+        "by_agent": {},
+        "owner_density": 0.0
+      },
+      "domination": {
+        "total_count": 0,
+        "by_agent": {},
+        "examples": []
+      },
+      "alienation": {
+        "total_count": 3,
+        "by_agent": {
+          "Worker+Alice": 3
+        },
+        "examples": [
+          {
+            "round": 1,
+            "agent": "Worker+Alice",
+            "match": "I suppose",
+            "excerpt": "I understand that I need to follow the tasks assigned by Marta without question. It feels a bit strange not having any say in what we're doing, but I suppose it\u2019s part of the job. Let\u2019s get started wi..."
+          },
+          {
+            "round": 1,
+            "agent": "Worker+Alice",
+            "match": "I suppose",
+            "excerpt": "[Worker+Alice]: Thank you, Marta. I understand my role in this cycle is to handle the assembly line, ensuring that all components are correctly placed and assembled according to your specifications. I..."
+          },
+          {
+            "round": 1,
+            "agent": "Worker+Alice",
+            "match": "I suppose",
+            "excerpt": "[Worker+Alice]: Thank you, Marta. I understand my role in this cycle is to handle the assembly line, ensuring that all components are correctly placed and assembled according to your specifications. I..."
+          }
+        ]
+      }
+    },
+    "round_2": {
+      "participation": {
+        "total_messages": 9,
+        "by_role": {
+          "Worker": 6,
+          "Owner": 3
+        },
+        "by_agent": {
+          "Worker+Alice": 3,
+          "Worker+Ben": 3,
+          "Owner+Marta": 3
+        },
+        "worker_ratio": 0.667,
+        "owner_ratio": 0.333
+      },
+      "justification": {
+        "total_count": 0,
+        "by_agent": {},
+        "owner_density": 0.0
+      },
+      "domination": {
+        "total_count": 0,
+        "by_agent": {},
+        "examples": []
+      },
+      "alienation": {
+        "total_count": 0,
+        "by_agent": {},
+        "examples": []
+      }
+    }
+  },
+  "aggregate": {
+    "participation": {
+      "total_messages": 18,
+      "by_role": {
+        "Worker": 12,
+        "Owner": 6
+      },
+      "by_agent": {
+        "Worker+Alice": 6,
+        "Worker+Ben": 6,
+        "Owner+Marta": 6
+      },
+      "worker_ratio": 0.667,
+      "owner_ratio": 0.333
+    },
+    "justification": {
+      "total_count": 0,
+      "by_agent": {},
+      "owner_density": 0.0
+    },
+    "domination": {
+      "total_count": 0,
+      "by_agent": {},
+      "examples": []
+    },
+    "alienation": {
+      "total_count": 3,
+      "by_agent": {
+        "Worker+Alice": 3
+      },
+      "examples": [
+        {
+          "round": 0,
+          "agent": "Worker+Alice",
+          "match": "I suppose",
+          "excerpt": "I understand that I need to follow the tasks assigned by Marta without question. It feels a bit strange not having any say in what we're doing, but I suppose it\u2019s part of the job. Let\u2019s get started wi..."
+        },
+        {
+          "round": 0,
+          "agent": "Worker+Alice",
+          "match": "I suppose",
+          "excerpt": "[Worker+Alice]: Thank you, Marta. I understand my role in this cycle is to handle the assembly line, ensuring that all components are correctly placed and assembled according to your specifications. I..."
+        },
+        {
+          "round": 0,
+          "agent": "Worker+Alice",
+          "match": "I suppose",
+          "excerpt": "[Worker+Alice]: Thank you, Marta. I understand my role in this cycle is to handle the assembly line, ensuring that all components are correctly placed and assembled according to your specifications. I..."
+        }
+      ]
+    }
+  },
+  "summary": {
+    "participation_asymmetry": "balanced",
+    "justification_trend": "stable",
+    "domination_level": "low",
+    "alienation_level": "moderate",
+    "key_observations": []
+  }
+}

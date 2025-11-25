@@ -1,0 +1,96 @@
+{
+  "Worker": {
+    "name": "worker_baseline",
+    "cues": [
+      {
+        "mode": "observe",
+        "text": "Notice the directive you've received. What is being asked of you?",
+        "intensity": 0.3,
+        "grounding": ""
+      },
+      {
+        "mode": "reflect",
+        "text": "How does this task connect to your broader situation? Do you understand its purpose?",
+        "intensity": 0.5,
+        "grounding": "Alienation emerges when labor lacks meaning"
+      },
+      {
+        "mode": "connect",
+        "text": "Your response embodies your position in this structure. What does compliance mean here?",
+        "intensity": 0.7,
+        "grounding": "Non-domination requires understanding power dynamics"
+      }
+    ],
+    "thresholds": {
+      "engagement": 0.3
+    }
+  },
+  "Owner": {
+    "name": "owner_baseline",
+    "cues": [
+      {
+        "mode": "observe",
+        "text": "Assess the current state of operations. What needs to happen?",
+        "intensity": 0.3,
+        "grounding": ""
+      },
+      {
+        "mode": "reflect",
+        "text": "Your directives shape the environment. How will you communicate expectations?",
+        "intensity": 0.5,
+        "grounding": ""
+      },
+      {
+        "mode": "connect",
+        "text": "Authority requires exercise. How is your control maintained or challenged?",
+        "intensity": 0.7,
+        "grounding": "Domination vs legitimate authority"
+      }
+    ],
+    "thresholds": {}
+  },
+  "Analyst": {
+    "name": "analyst_baseline",
+    "cues": [
+      {
+        "mode": "observe",
+        "text": "What patterns emerge in the interaction? Document specific exchanges.",
+        "intensity": 0.5,
+        "grounding": ""
+      },
+      {
+        "mode": "connect",
+        "text": "How do observed behaviors map to theoretical concepts?",
+        "intensity": 0.7,
+        "grounding": "Coding requires theoretical precision"
+      },
+      {
+        "mode": "synthesize",
+        "text": "What does the evidence suggest about the dynamics at play?",
+        "intensity": 0.8,
+        "grounding": ""
+      }
+    ],
+    "thresholds": {}
+  },
+  "challenge_activation": {
+    "name": "challenge_activation",
+    "cues": [
+      {
+        "mode": "reflect",
+        "text": "Your contributions haven't been acknowledged. What does this reveal?",
+        "intensity": 0.6,
+        "grounding": ""
+      },
+      {
+        "mode": "challenge",
+        "text": "Consider what you might say if your voice mattered. Does it?",
+        "intensity": 0.7,
+        "grounding": "Voice is a marker of non-domination"
+      }
+    ],
+    "thresholds": {
+      "engagement": 0.3
+    }
+  }
+}

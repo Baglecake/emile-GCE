@@ -1,0 +1,34 @@
+{
+  "experiment_id": "ces_condB_seed1",
+  "context_mode": "progressive",
+  "challenge_mode": "off",
+  "rounds": [
+    {
+      "round_number": 1,
+      "regime": "UNKNOWN",
+      "raw_metrics": {
+        "engagement": 0.7470038193072566,
+        "voice_valence": 1.0,
+        "stance_valence": 1.0,
+        "justificatory_pct": 0.4166666666666667
+      },
+      "ema_metrics": {},
+      "collapse_type": "none",
+      "divergence_injected": null
+    },
+    {
+      "round_number": 2,
+      "regime": "STIMULATED_DIALOGUE",
+      "raw_metrics": {
+        "engagement": 0.6659107402031931,
+        "voice_valence": 0.3333333333333333,
+        "stance_valence": 1.0,
+        "justificatory_pct": 0.3333333333333333
+      },
+      "ema_metrics": {},
+      "collapse_type": "none",
+      "divergence_injected": null
+    }
+  ],
+  "divergence_log": []
+}

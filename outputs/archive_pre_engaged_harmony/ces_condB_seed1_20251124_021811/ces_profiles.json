@@ -1,0 +1,58 @@
+[
+  {
+    "cps21_ResponseId": "CES_Urban_Progressive",
+    "cps21_province": 35,
+    "cps21_yob": 1995,
+    "cps21_genderid": 2,
+    "cps21_education": 9,
+    "cps21_income_cat": 4,
+    "cps21_urban_rural": 1,
+    "cps21_pid_party": 3,
+    "cps21_lr_scale": 2.5,
+    "cps21_turnout": 1,
+    "cps21_bornin_canada": 1,
+    "cps21_riding_id": "ON_TOR_01"
+  },
+  {
+    "cps21_ResponseId": "CES_Suburban_Swing",
+    "cps21_province": 35,
+    "cps21_yob": 1975,
+    "cps21_genderid": 1,
+    "cps21_education": 7,
+    "cps21_income_cat": 7,
+    "cps21_urban_rural": 2,
+    "cps21_pid_party": 8,
+    "cps21_lr_scale": 5.5,
+    "cps21_turnout": 2,
+    "cps21_bornin_canada": 1,
+    "cps21_riding_id": "ON_905_02"
+  },
+  {
+    "cps21_ResponseId": "CES_Rural_Conservative",
+    "cps21_province": 35,
+    "cps21_yob": 1960,
+    "cps21_genderid": 1,
+    "cps21_education": 5,
+    "cps21_income_cat": 5,
+    "cps21_urban_rural": 3,
+    "cps21_pid_party": 2,
+    "cps21_lr_scale": 7.5,
+    "cps21_turnout": 1,
+    "cps21_bornin_canada": 1,
+    "cps21_riding_id": "ON_NORTH_03"
+  },
+  {
+    "cps21_ResponseId": "CES_Disengaged_Renter",
+    "cps21_province": 35,
+    "cps21_yob": 1998,
+    "cps21_genderid": 3,
+    "cps21_education": 8,
+    "cps21_income_cat": 2,
+    "cps21_urban_rural": 1,
+    "cps21_pid_party": 8,
+    "cps21_lr_scale": 4.0,
+    "cps21_turnout": 3,
+    "cps21_bornin_canada": 1,
+    "cps21_riding_id": "ON_TOR_04"
+  }
+]

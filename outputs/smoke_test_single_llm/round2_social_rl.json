@@ -1,0 +1,155 @@
+{
+  "round_number": 2,
+  "messages": [
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "content": "Mock response #5",
+      "round_number": 2,
+      "turn_number": 1,
+      "timestamp": 1763959974.9719229,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.2,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": null
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "content": "Mock response #6",
+      "round_number": 2,
+      "turn_number": 2,
+      "timestamp": 1763959974.971951,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": null
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "content": "Mock response #7",
+      "round_number": 2,
+      "turn_number": 3,
+      "timestamp": 1763959974.971978,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": null
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "content": "Mock response #8",
+      "round_number": 2,
+      "turn_number": 4,
+      "timestamp": 1763959974.972061,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": null
+    }
+  ],
+  "feedback": {
+    "CES_CES_Urban_Progressive": {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "round_number": 2,
+      "engagement": 0.2,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Suburban_Swing": {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "round_number": 2,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Rural_Conservative": {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "round_number": 2,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Disengaged_Renter": {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "round_number": 2,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    }
+  },
+  "policy_adaptations": [
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": 0.0
+      },
+      "round": 2
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": 0.0
+      },
+      "round": 2
+    },
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": 0.0
+      },
+      "round": 2
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": 0.0
+      },
+      "round": 2
+    }
+  ],
+  "synthesis": "",
+  "duration_seconds": 0.0002491474151611328
+}

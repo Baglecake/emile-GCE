@@ -1,0 +1,17 @@
+{
+  "experiment_id": "social_rl_2025-11-23_162944",
+  "framework": "Class Conflict / Alienation",
+  "framework_option": "A",
+  "model": "qwen2.5:7b",
+  "provider": "mock",
+  "backend": "mock",
+  "performer_temperature": 0.7,
+  "coach_temperature": 0.1,
+  "dual_llm_enabled": true,
+  "rounds_executed": 1,
+  "max_turns_per_round": 3,
+  "git_commit": "621c95d",
+  "social_rl_version": "0.2.0",
+  "prar_state_file": null,
+  "timestamp": "2025-11-23T16:29:44.466681"
+}

@@ -1,0 +1,22 @@
+{
+  "experiment_id": "true_dual_2025-11-24_053248",
+  "experiment_type": "true_dual_llm",
+  "framework": "Class Conflict / Alienation",
+  "framework_option": "A",
+  "performer": {
+    "model": "Qwen/Qwen2.5-14B-Instruct",
+    "endpoint": "https://gtxc3ese60ajbp-64410f1c-8000.proxy.runpod.net/v1",
+    "temperature": 0.7
+  },
+  "coach": {
+    "model": "Qwen/Qwen2.5-7B-Instruct",
+    "endpoint": "https://o5ej5sx5cydkhk-64411155-8000.proxy.runpod.net/v1",
+    "temperature": 0.1
+  },
+  "rounds_executed": 2,
+  "max_turns_per_round": 3,
+  "git_commit": "c1b479f",
+  "social_rl_version": "0.3.0",
+  "prar_state_file": "/Users/delcoburn/Documents/GitHub/Socratic-RCM/prar/outputs/2025-11-23_baseline_full_qwen/state.json",
+  "timestamp": "2025-11-24T05:34:33.187640"
+}

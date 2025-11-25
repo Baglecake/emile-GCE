@@ -1,0 +1,16 @@
+{
+  "experiment_id": "ces_true_dual_llm_v2",
+  "experiment_type": "CES-grounded",
+  "framework": "Social Aesthetics",
+  "data_source": "CES 2021 (simulated)",
+  "agents": [
+    "CES_Urban_Progressive",
+    "CES_Suburban_Swing",
+    "CES_Rural_Conservative",
+    "CES_Disengaged_Renter"
+  ],
+  "model": "qwen2.5:7b",
+  "provider": "ollama",
+  "rounds_executed": 2,
+  "timestamp": "2025-11-23T20:39:02.659274"
+}

@@ -1,0 +1,98 @@
+{
+  "round_number": 1,
+  "messages": [
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "content": "Mock response #1",
+      "round_number": 1,
+      "turn_number": 1,
+      "timestamp": 1763959974.970498,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?\n[CHALLENGE] The others seem to agree. But does their view reflect your actual experience? Push back if needed.",
+      "feedback_snapshot": null,
+      "validation_metadata": null
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "content": "Mock response #2",
+      "round_number": 1,
+      "turn_number": 2,
+      "timestamp": 1763959974.9705322,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?\n[CHALLENGE] The others seem to agree. But does their view reflect your actual experience? Push back if needed.",
+      "feedback_snapshot": null,
+      "validation_metadata": null
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "content": "Mock response #3",
+      "round_number": 1,
+      "turn_number": 3,
+      "timestamp": 1763959974.970559,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?\n[CHALLENGE] The others seem to agree. But does their view reflect your actual experience? Push back if needed.",
+      "feedback_snapshot": null,
+      "validation_metadata": null
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "content": "Mock response #4",
+      "round_number": 1,
+      "turn_number": 4,
+      "timestamp": 1763959974.971264,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?\n[CHALLENGE] The others seem to agree. But does their view reflect your actual experience? Push back if needed.",
+      "feedback_snapshot": null,
+      "validation_metadata": null
+    }
+  ],
+  "feedback": {
+    "CES_CES_Urban_Progressive": {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "round_number": 1,
+      "engagement": 0.2,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Suburban_Swing": {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "round_number": 1,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Rural_Conservative": {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "round_number": 1,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Disengaged_Renter": {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "round_number": 1,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    }
+  },
+  "policy_adaptations": [],
+  "synthesis": "",
+  "duration_seconds": 0.0008759498596191406
+}

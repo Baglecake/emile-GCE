@@ -1,0 +1,167 @@
+{
+  "experiment_1": {
+    "experiment_id": "ces_experiment_2025-11-24_074626",
+    "condition": "G",
+    "seed": 2,
+    "agents": {
+      "CES_CES_Urban_Progressive": {
+        "agent_id": "CES_CES_Urban_Progressive",
+        "identity_vectors": {
+          "engagement": 0.259,
+          "institutional_faith": 1.0,
+          "social_friction": 0.333
+        },
+        "behavioral_metrics": {
+          "avg_message_length": 2401.9,
+          "total_messages": 9,
+          "concepts_embodied": [],
+          "engagement_by_round": [
+            0.444,
+            0.167,
+            0.167
+          ]
+        }
+      },
+      "CES_CES_Suburban_Swing": {
+        "agent_id": "CES_CES_Suburban_Swing",
+        "identity_vectors": {
+          "engagement": 0.185,
+          "institutional_faith": 1.0,
+          "social_friction": 0.667
+        },
+        "behavioral_metrics": {
+          "avg_message_length": 2597.1,
+          "total_messages": 9,
+          "concepts_embodied": [],
+          "engagement_by_round": [
+            0.556,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "CES_CES_Rural_Conservative": {
+        "agent_id": "CES_CES_Rural_Conservative",
+        "identity_vectors": {
+          "engagement": 0.267,
+          "institutional_faith": 1.0,
+          "social_friction": 1.333
+        },
+        "behavioral_metrics": {
+          "avg_message_length": 2615.9,
+          "total_messages": 9,
+          "concepts_embodied": [
+            "Non-domination",
+            "Non-domination"
+          ],
+          "engagement_by_round": [
+            0.8,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "CES_CES_Disengaged_Renter": {
+        "agent_id": "CES_CES_Disengaged_Renter",
+        "identity_vectors": {
+          "engagement": 0.267,
+          "institutional_faith": 1.0,
+          "social_friction": 1.333
+        },
+        "behavioral_metrics": {
+          "avg_message_length": 2365.9,
+          "total_messages": 9,
+          "concepts_embodied": [],
+          "engagement_by_round": [
+            0.8,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  },
+  "experiment_2": {
+    "experiment_id": "ces_experiment_2025-11-24_163237",
+    "condition": "G",
+    "seed": 6,
+    "agents": {
+      "CES_CES_Urban_Progressive": {
+        "agent_id": "CES_CES_Urban_Progressive",
+        "identity_vectors": {
+          "engagement": 0.167,
+          "institutional_faith": 0.0,
+          "social_friction": 0.0
+        },
+        "behavioral_metrics": {
+          "avg_message_length": 1923.8,
+          "total_messages": 9,
+          "concepts_embodied": [
+            "Alienation"
+          ],
+          "engagement_by_round": [
+            0.167,
+            0.167,
+            0.167
+          ]
+        }
+      },
+      "CES_CES_Suburban_Swing": {
+        "agent_id": "CES_CES_Suburban_Swing",
+        "identity_vectors": {
+          "engagement": 0.0,
+          "institutional_faith": 1.0,
+          "social_friction": 0.0
+        },
+        "behavioral_metrics": {
+          "avg_message_length": 2099.9,
+          "total_messages": 9,
+          "concepts_embodied": [],
+          "engagement_by_round": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "CES_CES_Rural_Conservative": {
+        "agent_id": "CES_CES_Rural_Conservative",
+        "identity_vectors": {
+          "engagement": 0.0,
+          "institutional_faith": 0.0,
+          "social_friction": 0.0
+        },
+        "behavioral_metrics": {
+          "avg_message_length": 2463.9,
+          "total_messages": 9,
+          "concepts_embodied": [
+            "Alienation"
+          ],
+          "engagement_by_round": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "CES_CES_Disengaged_Renter": {
+        "agent_id": "CES_CES_Disengaged_Renter",
+        "identity_vectors": {
+          "engagement": 0.0,
+          "institutional_faith": 1.0,
+          "social_friction": 0.0
+        },
+        "behavioral_metrics": {
+          "avg_message_length": 2274.2,
+          "total_messages": 9,
+          "concepts_embodied": [],
+          "engagement_by_round": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "experiment_id": "ces_condC_seed1",
+  "context_mode": "adaptive",
+  "challenge_mode": "off",
+  "rounds": [
+    {
+      "round_number": 1,
+      "regime": "UNKNOWN",
+      "raw_metrics": {
+        "engagement": 0.6757240004689882,
+        "voice_valence": 1.0,
+        "stance_valence": 1.0,
+        "justificatory_pct": 0.3333333333333333
+      },
+      "ema_metrics": {
+        "engagement": 0.5615034001641459,
+        "voice_valence": 0.35,
+        "stance_valence": 0.675,
+        "justificatory_pct": 0.37666666666666665
+      },
+      "collapse_type": "none",
+      "divergence_injected": null
+    },
+    {
+      "round_number": 2,
+      "regime": "UNKNOWN",
+      "raw_metrics": {
+        "engagement": 0.8304769828064337,
+        "voice_valence": -0.6666666666666666,
+        "stance_valence": 1.0,
+        "justificatory_pct": 0.6666666666666666
+      },
+      "ema_metrics": {
+        "engagement": 0.6556441540889466,
+        "voice_valence": -0.005833333333333329,
+        "stance_valence": 0.7887500000000001,
+        "justificatory_pct": 0.47816666666666663
+      },
+      "collapse_type": "none",
+      "divergence_injected": null
+    },
+    {
+      "round_number": 3,
+      "regime": "UNKNOWN",
+      "raw_metrics": {
+        "engagement": 0.7333546734955184,
+        "voice_valence": 1.0,
+        "stance_valence": 1.0,
+        "justificatory_pct": 0.4166666666666667
+      },
+      "ema_metrics": {
+        "engagement": 0.6828428358812468,
+        "voice_valence": 0.34620833333333334,
+        "stance_valence": 0.8626875,
+        "justificatory_pct": 0.4566416666666666
+      },
+      "collapse_type": "none",
+      "divergence_injected": null
+    }
+  ],
+  "divergence_log": []
+}

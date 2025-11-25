@@ -1,0 +1,44 @@
+{
+  "experiment_id": "ces_condD_seed1",
+  "context_mode": "adaptive",
+  "challenge_mode": "off",
+  "rounds": [
+    {
+      "round_number": 1,
+      "regime": "UNKNOWN",
+      "raw_metrics": {
+        "engagement": 0.6878252287816257,
+        "voice_valence": -0.42857142857142855,
+        "stance_valence": 1.0,
+        "justificatory_pct": 0.4166666666666667
+      },
+      "ema_metrics": {
+        "engagement": 0.565738830073569,
+        "voice_valence": -0.15,
+        "stance_valence": 0.675,
+        "justificatory_pct": 0.4058333333333334
+      },
+      "collapse_type": "none",
+      "divergence_injected": null
+    },
+    {
+      "round_number": 2,
+      "regime": "UNKNOWN",
+      "raw_metrics": {
+        "engagement": 0.8102020418362249,
+        "voice_valence": -1.0,
+        "stance_valence": 0.75,
+        "justificatory_pct": 0.75
+      },
+      "ema_metrics": {
+        "engagement": 0.6513009541904986,
+        "voice_valence": -0.4475,
+        "stance_valence": 0.7012499999999999,
+        "justificatory_pct": 0.5262916666666666
+      },
+      "collapse_type": "none",
+      "divergence_injected": null
+    }
+  ],
+  "divergence_log": []
+}

@@ -1,0 +1,211 @@
+{
+  "round_number": 2,
+  "messages": [
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "content": "Mock response #19",
+      "round_number": 2,
+      "turn_number": 1,
+      "timestamp": 1763959831.2818072,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.2,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": {
+        "attempts": 2,
+        "validations": [
+          {
+            "valid": false,
+            "issues": []
+          },
+          {
+            "valid": false,
+            "issues": []
+          }
+        ],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "content": "Mock response #23",
+      "round_number": 2,
+      "turn_number": 2,
+      "timestamp": 1763959831.2818491,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": {
+        "attempts": 2,
+        "validations": [
+          {
+            "valid": false,
+            "issues": []
+          },
+          {
+            "valid": false,
+            "issues": []
+          }
+        ],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "content": "Mock response #27",
+      "round_number": 2,
+      "turn_number": 3,
+      "timestamp": 1763959831.2818902,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": {
+        "attempts": 2,
+        "validations": [
+          {
+            "valid": false,
+            "issues": []
+          },
+          {
+            "valid": false,
+            "issues": []
+          }
+        ],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "content": "Mock response #31",
+      "round_number": 2,
+      "turn_number": 4,
+      "timestamp": 1763959831.2819982,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": {
+        "attempts": 2,
+        "validations": [
+          {
+            "valid": false,
+            "issues": []
+          },
+          {
+            "valid": false,
+            "issues": []
+          }
+        ],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    }
+  ],
+  "feedback": {
+    "CES_CES_Urban_Progressive": {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "round_number": 2,
+      "engagement": 0.2,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Suburban_Swing": {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "round_number": 2,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Rural_Conservative": {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "round_number": 2,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Disengaged_Renter": {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "round_number": 2,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    }
+  },
+  "policy_adaptations": [
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": 0.0
+      },
+      "round": 2
+    },
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": 0.0
+      },
+      "round": 2
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": 0.0
+      },
+      "round": 2
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": 0.0
+      },
+      "round": 2
+    }
+  ],
+  "synthesis": "",
+  "duration_seconds": 0.00032711029052734375
+}

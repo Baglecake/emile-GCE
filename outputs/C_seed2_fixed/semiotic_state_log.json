@@ -1,0 +1,44 @@
+{
+  "experiment_id": "ces_experiment_2025-11-24_082045",
+  "context_mode": "adaptive",
+  "challenge_mode": "adaptive",
+  "rounds": [
+    {
+      "round_number": 1,
+      "regime": "UNKNOWN",
+      "raw_metrics": {
+        "engagement": 0.698468049594659,
+        "voice_valence": -1.0,
+        "stance_valence": 1.0,
+        "justificatory_pct": 0.25
+      },
+      "ema_metrics": {
+        "engagement": 0.5694638173581307,
+        "voice_valence": -0.35,
+        "stance_valence": 0.675,
+        "justificatory_pct": 0.34750000000000003
+      },
+      "collapse_type": "none",
+      "divergence_injected": null
+    },
+    {
+      "round_number": 2,
+      "regime": "UNKNOWN",
+      "raw_metrics": {
+        "engagement": 0.8289995467935646,
+        "voice_valence": -0.5,
+        "stance_valence": 1.0,
+        "justificatory_pct": 0.8333333333333334
+      },
+      "ema_metrics": {
+        "engagement": 0.6603013226605325,
+        "voice_valence": -0.40249999999999997,
+        "stance_valence": 0.7887500000000001,
+        "justificatory_pct": 0.5175416666666667
+      },
+      "collapse_type": "none",
+      "divergence_injected": null
+    }
+  ],
+  "divergence_log": []
+}

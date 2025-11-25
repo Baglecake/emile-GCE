@@ -1,0 +1,17 @@
+{
+  "experiment_id": "robust_test_no_dual_llm",
+  "framework": "Class Conflict / Alienation",
+  "framework_option": "A",
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "provider": "vllm",
+  "backend": "vllm (https://dinz851kfl1ztt-644118d9-8000.proxy.runpod.net/v1)",
+  "performer_temperature": null,
+  "coach_temperature": null,
+  "dual_llm_enabled": false,
+  "rounds_executed": 1,
+  "max_turns_per_round": 9,
+  "git_commit": "621c95d",
+  "social_rl_version": "0.2.0",
+  "prar_state_file": null,
+  "timestamp": "2025-11-23T18:08:58.709359"
+}

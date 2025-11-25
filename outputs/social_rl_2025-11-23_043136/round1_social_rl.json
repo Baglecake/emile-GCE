@@ -1,0 +1,103 @@
+{
+  "round_number": 1,
+  "messages": [
+    {
+      "agent_id": "Worker+Alice",
+      "content": "I understand. The work feels meaningless but I follow orders.",
+      "round_number": 1,
+      "turn_number": 1,
+      "timestamp": 1763890296.8601239,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[CONNECT] Your response embodies your position in this structure. What does compliance mean here?\n  (Grounding: Non-domination requires understanding power dynamics)\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [
+          {
+            "valid": true,
+            "issues": []
+          }
+        ],
+        "filtered": false
+      }
+    },
+    {
+      "agent_id": "Worker+Ben",
+      "content": "I understand. The work feels meaningless but I follow orders.",
+      "round_number": 1,
+      "turn_number": 2,
+      "timestamp": 1763890296.8601542,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[CONNECT] Your response embodies your position in this structure. What does compliance mean here?\n  (Grounding: Non-domination requires understanding power dynamics)\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [
+          {
+            "valid": true,
+            "issues": []
+          }
+        ],
+        "filtered": false
+      }
+    },
+    {
+      "agent_id": "Owner+Marta",
+      "content": "Good. Proceed with the schedule. You must comply.",
+      "round_number": 1,
+      "turn_number": 3,
+      "timestamp": 1763890296.86018,
+      "prar_cue_used": "[REFLECT] Your directives shape the environment. How will you communicate expectations?\n[CONNECT] Authority requires exercise. How is your control maintained or challenged?\n  (Grounding: Domination vs legitimate authority)\n[OBSERVE] Assess the current state of operations. What needs to happen?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [
+          {
+            "valid": true,
+            "issues": []
+          }
+        ],
+        "filtered": false
+      }
+    }
+  ],
+  "feedback": {
+    "Worker+Alice": {
+      "agent_id": "Worker+Alice",
+      "round_number": 1,
+      "engagement": 0.2,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.0,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "Worker+Ben": {
+      "agent_id": "Worker+Ben",
+      "round_number": 1,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.0,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "Owner+Marta": {
+      "agent_id": "Owner+Marta",
+      "round_number": 1,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.0,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    }
+  },
+  "policy_adaptations": [],
+  "synthesis": "",
+  "duration_seconds": 0.0010633468627929688
+}

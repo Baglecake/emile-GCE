@@ -1,0 +1,28 @@
+{
+  "experiment_id": "ces_experiment_2025-11-24_083245",
+  "experiment_type": "CES-grounded",
+  "framework": "Social Aesthetics",
+  "data_source": "CES 2021 (simulated)",
+  "agents": [
+    "CES_Urban_Progressive",
+    "CES_Suburban_Swing",
+    "CES_Rural_Conservative",
+    "CES_Disengaged_Renter"
+  ],
+  "model": "Qwen/Qwen2.5-14B-Instruct",
+  "provider": "vllm",
+  "rounds_executed": 2,
+  "timestamp": "2025-11-24T08:38:19.149652",
+  "condition": "H",
+  "seed": 2,
+  "context_mode": "adaptive",
+  "challenge_mode": "adaptive",
+  "dual_llm": false,
+  "true_dual_llm": null,
+  "regime_trajectory": [
+    "UNKNOWN",
+    "UNKNOWN"
+  ],
+  "final_regime": "UNKNOWN",
+  "divergence_events": 0
+}

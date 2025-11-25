@@ -1,0 +1,47 @@
+{
+  "experiment_id": "B_seed3",
+  "context_mode": "progressive",
+  "challenge_mode": "off",
+  "rounds": [
+    {
+      "round_number": 1,
+      "regime": "ACTIVE_CONTESTATION",
+      "raw_metrics": {
+        "engagement": 1.0,
+        "voice_valence": 0.0,
+        "stance_valence": 0.75,
+        "justificatory_pct": 0.0
+      },
+      "ema_metrics": {},
+      "collapse_type": "none",
+      "divergence_injected": null
+    },
+    {
+      "round_number": 2,
+      "regime": "ACTIVE_CONTESTATION",
+      "raw_metrics": {
+        "engagement": 1.0,
+        "voice_valence": 0.0,
+        "stance_valence": 0.75,
+        "justificatory_pct": 0.0
+      },
+      "ema_metrics": {},
+      "collapse_type": "none",
+      "divergence_injected": null
+    },
+    {
+      "round_number": 3,
+      "regime": "ACTIVE_CONTESTATION",
+      "raw_metrics": {
+        "engagement": 1.0,
+        "voice_valence": 0.0,
+        "stance_valence": 0.75,
+        "justificatory_pct": 0.0
+      },
+      "ema_metrics": {},
+      "collapse_type": "none",
+      "divergence_injected": null
+    }
+  ],
+  "divergence_log": []
+}

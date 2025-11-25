@@ -1,0 +1,1097 @@
+{
+  "experiment_dir": "outputs/ces_14B_performer_7B_coach",
+  "rounds": {
+    "1": {
+      "codes": [
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 1,
+          "round_number": 1,
+          "content": "Hi everyone, I'm really glad we're having this discussion. As a young professional in Toronto, the cost of housing is a huge issue for me. I graduated from university just a few years ago and while I have a good job, the rising costs of rent and property taxes make it feel like I'm barely keeping my head above water. I lean towards the NDP because they've been vocal about addressing these issues, but I want to see concrete policies that will actually make a difference.\n\nI'm curious to hear what others think about the different parties' proposals. Does anyone have any specific ideas or experiences they'd like to share?",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [
+            "make a difference"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 2,
+          "round_number": 1,
+          "content": "Hi there, thanks for starting this conversation. I\u2019m in my late 40s and live in a suburb outside of Toronto. I\u2019ve got a decent job and a family, but the rising cost of housing here is definitely causing stress. My mortgage payments keep going up, and the thought of my kids being able to afford homes here one day worries me. \n\nI've been looking at the Liberal and Conservative platforms, but both seem to focus more on building new homes rather than making existing ones more affordable. I can see the need for new developments, but it feels like they\u2019re not doing enough to address the immediate pressures on families like mine. \n\nWhat do you think about the idea of rent control or tax breaks for homeowners? Do you think either of those could be effective solutions?",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [],
+          "voice_markers": [],
+          "stance_markers": [
+            "i can see"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 3,
+          "round_number": 1,
+          "content": "Hey everyone, thanks for bringing up such an important topic. I'm a 55-year-old farmer from rural Ontario, and while the cost of housing might not be as acute here as in the city or suburbs, it's still something that affects us. We don't have the same kind of housing market pressure, but things like property taxes and the ability to pass down our land to the next generation are crucial concerns.\n\nI tend to lean Conservative because I believe in free markets and personal responsibility. However, I understand that some people need support, especially when it comes to basic needs like housing. The Conservative platform talks about creating more supply through deregulation and streamlining development processes, which makes sense to me. But I also know that rural areas face unique challenges, like limited infrastructure and services, that need to be addressed.\n\nWhen it comes to specific policies, I'm wary of rent control because I think it could discourage investment in rental properties, which would ultimately hurt those who rely on renting. Tax breaks for homeowners could be helpful, but I\u2019d prefer to see targeted assistance programs that ensure resources go to those truly in need. What do you think about the Conservatives' approach versus the other parties'? Have you seen any proposals that resonate with you?",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "makes sense"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "turn_number": 4,
+          "round_number": 1,
+          "content": "Hey everyone, thanks for sharing your perspectives. I'm a 18-24 year old non-binary person living in an urban area in Ontario. I recently finished college and am currently working part-time while trying to figure out my next steps. The cost of housing is a massive concern for me, especially since I can barely afford my current place, let alone think about saving for a home or even moving to a better apartment.\n\nI haven't really aligned myself with any political party yet because none of them seem to fully address the issues I'm facing. I've heard about the NDP's focus on affordable housing, but I'm not sure if their plans are practical or realistic. On the other hand, the Liberals and Conservatives seem to be more focused on increasing the supply of housing, which doesn't directly solve the problem of high rents and property taxes for people like me who are already struggling.\n\nRent control sounds appealing, but I'm worried it might not be enough. And tax breaks for homeowners won't help someone like me who isn't a homeowner yet. I'm open to hearing more about the specifics of each party's proposals, but so far, I haven't found a clear solution that resonates with my situation.\n\nDo any of you have thoughts on how younger renters like me can get more involved in shaping housing policies that actually benefit us?",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.ALIENATED",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "because",
+            "since"
+          ],
+          "voice_markers": [
+            "people like me"
+          ],
+          "stance_markers": [
+            "that resonates",
+            "your perspective"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 5,
+          "round_number": 1,
+          "content": "Hi [CES_CES_Disengaged_Renter], thanks for sharing your perspective. It\u2019s really important to hear from younger renters like yourself, as you represent a significant portion of the population that is often overlooked in housing discussions. I completely understand your frustration with the current options presented by the major parties. While the NDP has been vocal about affordable housing, I agree that we need to see more concrete and practical measures that directly address the immediate pressures faced by renters like us.\n\nOne proposal that the NDP has put forward is the creation of a national housing strategy that includes a mix of initiatives aimed at both increasing the supply of affordable housing and providing direct financial assistance to low-income households. This includes investments in social housing, rent supplements, and support for co-operative housing projects. While building more units is necessary, it's equally important to implement policies that stabilize the rental market and protect tenants from excessive rent increases.\n\nRegarding rent control, I think it\u2019s a critical measure that needs to be implemented carefully to prevent negative side effects. For example, ensuring that landlords receive fair returns on their investments can mitigate concerns about discouraging investment. Additionally, targeted tax breaks or incentives for landlords who maintain affordable rents could be beneficial.\n\nIn terms of getting more involved, I think it\u2019s essential for younger renters to engage with local community groups and advocacy organizations that focus on housing rights. These groups often have a better understanding of the grassroots issues and can provide valuable insights into how policies can be improved. Participating in town hall meetings, contacting local representatives, and signing petitions are also great ways to make your voice heard.\n\nLastly, I\u2019d encourage you to look into the specifics of each party\u2019s platform and reach out to candidates directly if possible. Sometimes, the nuances of their proposals can offer more clarity on how they plan to tackle housing affordability. It\u2019s a complex issue, but by staying informed and engaged, we can push for policies that truly benefit us all.\n\nWhat do you think about these suggestions? Are there any particular aspects of housing policy that you feel strongly about or would like to explore further?",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.DIRECT_ADDRESS",
+          "justification_markers": [],
+          "voice_markers": [],
+          "stance_markers": [
+            "your perspective"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 6,
+          "round_number": 1,
+          "content": "Hi [CES_CES_Urban_Progressive], thanks for your detailed response and for highlighting the importance of engaging with local advocacy groups. It\u2019s true that we need a balanced approach to housing affordability, one that addresses both supply and demand sides of the equation.\n\nFrom my perspective, I agree that rent control could be a useful tool, but it needs to be implemented in a way that ensures it doesn\u2019t stifle the rental market. I\u2019ve heard some concerns from my neighbors who are landlords that strict rent controls could lead them to pull back from investing in maintenance and improvements, which could harm the quality of the rental stock over time. At the same time, I understand that skyrocketing rents are putting a lot of pressure on young professionals and families like mine.\n\nTax breaks for homeowners, while not directly benefiting renters, could help alleviate some of the financial strain on homeowners, potentially freeing up more resources for home maintenance and improvements. However, I also recognize that this isn\u2019t a long-term solution for the broader housing crisis.\n\nYour point about the NDP\u2019s national housing strategy is interesting. While I appreciate their emphasis on social housing and rent supplements, I worry about the feasibility and implementation of such large-scale programs. There\u2019s a risk that these initiatives might take too long to materialize, given the current pace of government bureaucracy.\n\nI think the key is to find a mix of short-term and long-term solutions. Short-term measures like temporary rent stabilization could provide immediate relief, while longer-term strategies like incentivizing developers to build more affordable units could create sustainable change. Perhaps there\u2019s room for a hybrid approach that combines elements from different party platforms.\n\nWhat do you think about the idea of requiring developers to include a certain percentage of affordable units in new residential projects? It seems like a way to increase the supply of affordable housing without relying solely on government funding. Have you seen any proposals along these lines that you find promising?\n\nAlso, I\u2019d love to hear more about how younger renters like [CES_CES_Disengaged_Renter] can effectively engage with policymakers. Any tips on how to make our voices heard and influence the direction of housing policy?",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "the importance of"
+          ],
+          "voice_markers": [
+            "demand"
+          ],
+          "stance_markers": [
+            "i appreciate",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 7,
+          "round_number": 1,
+          "content": "Hi [CES_CES_Suburban_Swing],\n\nThanks for your thoughtful input. I appreciate the balance you\u2019re aiming for in addressing housing affordability. As a rural conservative, I see the value in a mixed approach, but I\u2019m also mindful of the potential pitfalls of over-regulation and unintended consequences.\n\nRegarding the idea of requiring developers to include a certain percentage of affordable units in new residential projects, it\u2019s an interesting concept. In rural areas, however, this might not always be feasible due to limited development activity and the unique nature of our housing market. For instance, many of us own our own land and build our homes ourselves, so imposing such regulations could complicate matters. That said, I can see how this could work in denser suburban and urban areas where there\u2019s more development activity.\n\nWhen it comes to engaging with policymakers, I think it\u2019s crucial for everyone, regardless of age or location, to stay informed and proactive. Young renters like [CES_CES_Disengaged_Renter] should absolutely participate in the dialogue. Here are a few suggestions:\n\n1. **Local Meetings:** Attend town hall meetings and public consultations where housing policies are discussed. This is a great opportunity to voice your concerns directly to elected officials.\n   \n2. **Advocacy Groups:** Join or support local advocacy groups that focus on housing issues. These groups often have a better understanding of the grassroots problems and can help shape policies that are more responsive to real-world needs.\n\n3. **Petitions and Letters:** Sign petitions and write letters to your local representatives expressing your concerns and supporting specific policies. Personal contact can sometimes be more impactful than mass communication.\n\n4. **Social Media:** Use social media platforms to raise awareness about housing affordability issues and to engage with policymakers. Many politicians are active online and may respond to direct messages or posts.\n\n5. **Election Engagement:** Vote in every election and consider volunteering for campaigns that align with your values. Helping to elect candidates who prioritize housing affordability can make a big difference in the long run.\n\nI also think it\u2019s important to remember that while the federal government plays a role, much of the housing policy is determined at the provincial and municipal levels. Engaging with local councillors and mayors can sometimes yield quicker results.\n\nWhat do you think about these engagement strategies? Are there any other ways you think younger renters can effectively contribute to the conversation around housing affordability?",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "due to",
+            "absolutely"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "i appreciate",
+            "i can see"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "turn_number": 8,
+          "round_number": 1,
+          "content": "Hey [CES_CES_Suburban_Swing] and [CES_CES_Rural_Conservative], thank you both for your thoughtful responses. It\u2019s reassuring to see that despite our different backgrounds and locations, we\u2019re all grappling with similar challenges when it comes to housing affordability.\n\n[CES_CES_Urban_Progressive], your suggestion about engaging with local advocacy groups and participating in town hall meetings is something I hadn\u2019t considered before. I\u2019ll definitely look into joining a local group focused on housing rights. I think connecting with others who are facing the same struggles could provide a sense of solidarity and maybe even some practical advice on navigating the housing market.\n\nRegarding the idea of requiring developers to include a certain percentage of affordable units in new residential projects, I think it\u2019s a promising approach. It seems like a way to increase the supply of affordable housing without relying solely on government funding, which could be more sustainable in the long term. However, I\u2019m also concerned about the potential downsides, such as whether developers might pass on the increased costs to buyers or renters, leading to higher prices overall. It would be great to see more details on how such a policy could be implemented effectively.\n\n[CES_CES_Rural_Conservative], your point about the differences between urban, suburban, and rural housing markets is well-taken. While the idea of mandatory affordable units might not be feasible in rural areas, it could certainly work in cities and suburbs. I agree that engaging with local councillors and mayors is important, and I\u2019ll start looking into who represents my area and how I can get involved.\n\nIn terms of getting more involved in shaping housing policies, I think your suggestions are spot-on. Attending town hall meetings and writing to local representatives are actions I can take right away. I\u2019ll also try to use social media more actively to raise awareness about housing affordability issues and to connect with like-minded individuals.\n\nLastly, I appreciate your openness to hearing from younger renters. It\u2019s easy to feel like our voices aren\u2019t being heard, but initiatives like this conversation show that there\u2019s a willingness to listen and learn from diverse perspectives. I\u2019m hopeful that by staying informed and engaged, we can push for policies that truly address the immediate needs of young renters like myself.\n\nDo you have any additional thoughts on how we can make our voices heard and ensure that our concerns are taken seriously in the policy-making process?",
+          "justification": "JustificationType.ASSERTIVE",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "certainly"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "i appreciate",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 9,
+          "round_number": 1,
+          "content": "Hi [CES_CES_Disengaged_Renter], I\u2019m glad to see that you\u2019re finding value in the suggestions and ideas shared here. It\u2019s incredibly important for young renters to engage with the broader conversation about housing affordability, and I\u2019m happy to offer some additional thoughts on how we can make our voices heard and ensure that our concerns are taken seriously.\n\nFirstly, I think it\u2019s crucial to stay informed about the specifics of each party\u2019s housing policies. While broad statements can be compelling, the devil is often in the details. Look for party platforms that outline concrete steps and timelines for implementing their proposed changes. For instance, the NDP\u2019s national housing strategy includes specific goals for increasing the number of affordable housing units and reducing homelessness. Understanding these specifics can help you evaluate which proposals are most likely to make a tangible difference.\n\nSecondly, leveraging social media and digital platforms can be a powerful tool for amplifying your voice. Hashtags like #HousingForAll or #AffordableHousing can help you connect with others who share your concerns. Sharing personal stories and experiences can also humanize the issue and draw attention to the very real struggles faced by young renters. Platforms like Twitter, Facebook, and even Reddit can be used to start conversations, share articles, and organize events.\n\nThirdly, attending town hall meetings and public consultations is a direct way to engage with policymakers. These events are opportunities to ask questions, express concerns, and provide feedback on proposed policies. Don\u2019t hesitate to reach out to local candidates or representatives to request meetings or to attend their campaign events. Many politicians are eager to hear from constituents, especially those who are passionate about specific issues.\n\nFourthly, consider joining or forming a tenant union or advocacy group. These organizations can provide a collective voice and leverage to negotiate with landlords, advocate for policy changes, and support legislative efforts. They can also offer resources and legal advice that can be invaluable for navigating the complexities of the housing market.\n\nLastly, voting in every election is fundamental. While it might feel like a small action, consistently showing up at the polls and supporting candidates who prioritize affordable housing can gradually shift the political landscape. Encouraging friends and peers to vote and to stay informed about housing policies can also amplify the impact of your efforts.\n\nIn summary, staying informed, using social media effectively, attending public events, joining advocacy groups, and voting are all crucial steps in making your voice heard. By combining these approaches, we can collectively push for policies that truly address the immediate needs of young renters and create a more equitable housing",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [],
+          "voice_markers": [],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 10,
+          "round_number": 1,
+          "content": "Hi [CES_CES_Disengaged_Renter] and [CES_CES_Urban_Progressive],\n\nThank you both for your insightful comments. It\u2019s heartening to see the range of perspectives and the common ground we can find in addressing housing affordability. I particularly appreciate the emphasis on concrete actions and engagement strategies.\n\nTo add to the discussion, I think it\u2019s important to consider how we can bridge the gap between the immediate concerns of renters and the broader economic realities that affect housing markets. Policies like rent control and tax breaks for homeowners are certainly steps in the right direction, but they need to be part of a comprehensive strategy that includes both short-term relief and long-term structural changes.\n\nOne aspect that hasn\u2019t been touched upon much is the role of zoning laws and land-use policies. Many suburban areas, including where I live, have restrictive zoning laws that limit the types of housing that can be built. This can drive up housing costs by limiting supply. If we could find ways to loosen these restrictions while ensuring that new developments meet the needs of existing communities, it could help alleviate some of the pressure on housing affordability.\n\nAnother idea is to explore partnerships between the government and private sector to build more affordable housing. This could involve incentives for developers to include affordable units in new projects, as mentioned earlier, but also public-private partnerships that leverage government funding and expertise with private-sector efficiency. Such collaborations could help expedite the development process and bring more affordable options to the market faster.\n\nIn terms of engagement, I think it\u2019s vital for younger renters to form alliances with established advocacy groups and community organizations. These groups often have the experience and networks needed to influence policy and can provide guidance on how best to advocate for change. Additionally, reaching out to local business leaders and community stakeholders can help build a coalition that speaks with a unified voice on housing issues.\n\nI\u2019d also like to hear more about the role of education in addressing housing affordability. Providing resources and information to renters about their rights, available subsidies, and financial planning tools could empower them to navigate the housing market more effectively. Educational programs that focus on financial literacy and housing management could be particularly beneficial for young renters who are just starting out.\n\nLastly, I agree that staying informed and voting are crucial. But beyond that, I think it\u2019s important to hold elected officials accountable once they are in office. Regular check-ins, follow-up meetings, and public forums where officials have to report on progress can ensure that promises made during campaigns are followed through on.\n\nWhat do you think about these ideas? Are there any other",
+          "justification": "JustificationType.ASSERTIVE",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "certainly"
+          ],
+          "voice_markers": [],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 11,
+          "round_number": 1,
+          "content": "Hi everyone,\n\nThanks for the continued discussion and the thoughtful insights. I appreciate the emphasis on bridging immediate concerns with long-term solutions, and I think we're all looking for a balanced approach that works across different regions and demographics.\n\nTo build on [CES_CES_Suburban_Swing]'s points, I agree that zoning laws and land-use policies play a critical role in shaping the housing market. In rural areas, these laws often differ significantly from urban and suburban settings, and they can either hinder or facilitate development depending on the context. For instance, rural zoning laws might restrict the types of housing that can be built, which can limit options for those looking to move to or within a rural community. However, relaxing these laws too much could also lead to sprawl and loss of agricultural land, which is a concern for many rural residents.\n\nRegarding public-private partnerships, I see the potential benefits, especially in terms of speeding up the development process and bringing more affordable housing options to the market. However, I also caution against over-reliance on such partnerships, as they can sometimes result in less oversight and accountability. Ensuring that these partnerships are transparent and that the interests of rural communities are protected is crucial.\n\nEducation and financial literacy are indeed vital components in addressing housing affordability. Providing young renters with the knowledge and tools to manage their finances and navigate the housing market can make a significant difference. This could include workshops on budgeting, credit scores, and understanding the intricacies of mortgages and rental agreements. Empowering individuals with this information can help them make more informed decisions and potentially avoid some of the pitfalls associated with poor financial choices.\n\nOn the topic of holding elected officials accountable, I couldn't agree more. Once candidates are elected, it's essential to keep the pressure on them to deliver on their promises. Regular town hall meetings, public forums, and direct communication channels can help ensure that officials remain responsive to the needs of their constituents. In rural areas, where distances can be vast, leveraging technology\u2014such as virtual town halls and online surveys\u2014can help bridge the gap and make it easier for people to engage with their representatives.\n\nLastly, I think it\u2019s important to consider the unique challenges faced by rural areas, such as limited infrastructure and services. These factors can significantly impact housing affordability and quality of life. For example, access to healthcare, schools, and transportation can be critical determinants of where people choose to live. Ensuring that rural communities have the necessary infrastructure to support a thriving housing market is crucial.\n\nIn summary, while the solutions proposed by",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.CONDITIONAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [],
+          "voice_markers": [
+            "depending on"
+          ],
+          "stance_markers": [
+            "i appreciate"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "turn_number": 12,
+          "round_number": 1,
+          "content": "Hey everyone,\n\nThanks for the continued discussion and the thoughtful insights. It\u2019s great to see such a range of perspectives and ideas being shared. I appreciate [CES_CES_Suburban_Swing]'s and [CES_CES_Rural_Conservative]'s points about zoning laws and the importance of balancing immediate needs with long-term solutions. I think these are crucial considerations that often get overlooked in broader debates about housing affordability.\n\nThe idea of public-private partnerships to build more affordable housing is intriguing. It seems like a way to leverage the strengths of both sectors\u2014government funding and private-sector efficiency\u2014to create more affordable housing options. However, I agree with [CES_CES_Rural_Conservative]\u2019s caution about ensuring transparency and accountability in these partnerships. It\u2019s important to have safeguards in place to protect the interests of renters and homeowners alike.\n\nRegarding education and financial literacy, I think this is a fantastic suggestion. As someone who\u2019s just finishing college and entering the workforce, I realize how crucial it is to have a solid understanding of financial management. Workshops and educational programs that focus on budgeting, credit scores, and understanding housing contracts could be incredibly beneficial for young renters like myself. It would give us the tools to navigate the housing market more effectively and make informed decisions.\n\nI also think the idea of holding elected officials accountable once they\u2019re in office is vital. Regular check-ins, public forums, and direct communication channels can help ensure that officials are delivering on their promises. This could be especially helpful for younger voters like myself, who might feel like our voices aren\u2019t always heard in the political process.\n\nIn terms of specific policies, I\u2019m still on the fence about which party\u2019s proposals resonate most with my situation. The NDP\u2019s focus on affordable housing and rent supplements seems promising, but I\u2019m not sure how quickly these policies could be implemented. The Liberals and Conservatives\u2019 emphasis on increasing the supply of housing is also important, but it doesn\u2019t directly address the immediate pressures I\u2019m facing as a renter.\n\nI\u2019d love to hear more about how each party\u2019s proposals could be tailored to better support young renters like myself. Are there any specific measures or initiatives that stand out as particularly effective or practical?\n\nLastly, I appreciate the suggestion to engage with local advocacy groups and attend town hall meetings. I\u2019ll definitely look into joining a local tenant union or advocacy group and start attending more public consultations. I think these are tangible steps I can take to become more involved and make my voice heard.\n\nThanks again for the discussion, and I look forward to",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "the importance of"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "i appreciate",
+            "agree with"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 13,
+          "round_number": 1,
+          "content": "Hi everyone,\n\nThank you for the enriching discussion and for the thoughtful insights shared by both [CES_CES_Suburban_Swing] and [CES_CES_Rural_Conservative]. I appreciate the emphasis on balancing immediate needs with long-term solutions, and the recognition of the unique challenges faced by different regions and demographics.\n\nTo address some of the specific points raised:\n\n1. **Zoning Laws and Land-Use Policies**: I agree that zoning laws and land-use policies are crucial. In urban areas, restrictive zoning can exacerbate housing shortages and drive up costs. Encouraging mixed-use developments that allow for a variety of housing types\u2014ranging from single-family homes to multi-unit buildings\u2014could help increase the supply of affordable housing. This approach could be adapted to fit the needs of both urban and suburban areas, while respecting the unique characteristics of rural regions.\n\n2. **Public-Private Partnerships**: These partnerships can indeed be effective in building affordable housing. However, as [CES_CES_Rural_Conservative] pointed out, transparency and accountability are paramount. Ensuring that these partnerships are structured to benefit the community rather than just the developers is crucial. Public oversight mechanisms and clear performance metrics can help achieve this balance.\n\n3. **Education and Financial Literacy**: I wholeheartedly agree that education is key. Programs that teach financial literacy, budgeting, and the intricacies of the housing market can empower young renters to make informed decisions. Universities and community colleges could integrate these topics into their curricula, providing students with the skills they need to navigate the housing market successfully.\n\n4. **Holding Elected Officials Accountable**: Regular check-ins and public forums are excellent ways to ensure that elected officials are responsive to their constituents. Local advocacy groups can play a pivotal role in organizing these events and keeping officials accountable. Social media platforms can also be leveraged to track progress and hold officials responsible for their commitments.\n\nRegarding the specific policies proposed by different parties:\n\n- **NDP's National Housing Strategy**: The NDP\u2019s focus on social housing, rent supplements, and co-operative housing is promising. Their emphasis on a national housing strategy that includes both supply-side and demand-side measures is comprehensive. While implementation timelines may be a concern, the NDP\u2019s commitment to immediate relief measures like rent control and rent supplements can provide much-needed support to renters in the short term.\n\n- **Liberals and Conservatives' Emphasis on Supply**: Increasing the supply of housing through deregulation and streamlining development processes can help alleviate long-term pressures. However, these",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [],
+          "voice_markers": [
+            "demand"
+          ],
+          "stance_markers": [
+            "i appreciate"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 14,
+          "round_number": 1,
+          "content": "Hi everyone,\n\nThanks for the continued discussion and the insightful points brought up by [CES_CES_Urban_Progressive], [CES_CES_Rural_Conservative], and [CES_CES_Disengaged_Renter]. I appreciate the depth of the conversation and the various perspectives being shared.\n\nTo build on the discussion:\n\n1. **Zoning Laws and Land-Use Policies**: Zoning laws are indeed a critical piece of the puzzle. In suburban areas like mine, restrictive zoning often limits the types of housing that can be developed, which can contribute to higher housing costs. Encouraging more flexible zoning that allows for a mix of housing types\u2014like duplexes, triplexes, and smaller apartment buildings\u2014could help increase the supply of affordable housing without overwhelming the character of the neighborhood. However, we need to ensure that these changes don't lead to gentrification or displacement of long-term residents.\n\n2. **Public-Private Partnerships**: I agree that these partnerships can be effective, but they must be structured carefully. Transparency and community involvement are key to ensuring that these projects benefit everyone, not just developers. We need to establish clear guidelines and oversight mechanisms to monitor the progress and impact of these partnerships. Community input and feedback should be integral parts of the decision-making process.\n\n3. **Education and Financial Literacy**: Education is crucial, especially for young renters like [CES_CES_Disengaged_Renter]. Providing resources and workshops on budgeting, credit scores, and understanding housing contracts can empower individuals to make informed decisions. Schools and community centers could play a significant role in offering these programs, helping to build a financially literate generation that can navigate the complexities of the housing market.\n\n4. **Holding Elected Officials Accountable**: Regular check-ins and public forums are essential for keeping elected officials accountable. Local advocacy groups can help organize these events and ensure that officials are held to their commitments. Using platforms like social media to track progress and hold officials responsible for their promises can also be effective.\n\nRegarding specific party proposals:\n\n- **NDP's National Housing Strategy**: The NDP\u2019s focus on social housing, rent supplements, and co-operative housing is appealing. Their emphasis on immediate relief measures like rent control and rent supplements is crucial for renters like [CES_CES_Disengaged_Renter]. However, I share some concerns about the feasibility and implementation of large-scale programs. It\u2019s important to see concrete steps and timelines for how these policies will be rolled out.\n\n- **Liberals and Conservatives' Emphasis on Supply**:",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [],
+          "voice_markers": [],
+          "stance_markers": [
+            "i appreciate"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 15,
+          "round_number": 1,
+          "content": "Hi everyone,\n\nThanks for the ongoing discussion and the insightful points brought up by [CES_CES_Urban_Progressive], [CES_CES_Suburban_Swing], and [CES_CES_Disengaged_Renter]. I appreciate the depth of the conversation and the various perspectives being shared.\n\nTo build on the discussion:\n\n1. **Zoning Laws and Land-Use Policies**: Zoning laws are indeed a critical piece of the puzzle. In rural areas, these laws often differ significantly from urban and suburban settings. While restrictive zoning can limit development, it can also help preserve the rural character and agricultural land. We need to strike a balance that allows for necessary development without compromising the unique qualities of rural life. Encouraging mixed-use developments that respect the rural context could be a viable approach. For example, allowing for small-scale multifamily units or accessory dwelling units (ADUs) can increase housing options without overwhelming the rural landscape.\n\n2. **Public-Private Partnerships**: These partnerships can be effective, but they must be structured carefully. Transparency and community involvement are key to ensuring that these projects benefit everyone, not just developers. We need to establish clear guidelines and oversight mechanisms to monitor the progress and impact of these partnerships. Community input and feedback should be integral parts of the decision-making process. Rural communities often have unique needs and challenges, so any partnership should be tailored to address these specific circumstances.\n\n3. **Education and Financial Literacy**: Education is crucial, especially for young renters like [CES_CES_Disengaged_Renter]. Providing resources and workshops on budgeting, credit scores, and understanding housing contracts can empower individuals to make informed decisions. Schools and community centers could play a significant role in offering these programs, helping to build a financially literate generation that can navigate the complexities of the housing market. In rural areas, where resources might be more limited, leveraging online platforms and teleconferencing could help reach a wider audience.\n\n4. **Holding Elected Officials Accountable**: Regular check-ins and public forums are essential for keeping elected officials accountable. Local advocacy groups can help organize these events and ensure that officials are held to their commitments. Using platforms like social media to track progress and hold officials responsible for their promises can also be effective. In rural areas, where distances can be vast, leveraging technology\u2014such as virtual town halls and online surveys\u2014can help bridge the gap and make it easier for people to engage with their representatives.\n\nRegarding specific party proposals:\n\n- **NDP's National Housing Strategy**: The NDP\u2019s focus on",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [],
+          "voice_markers": [],
+          "stance_markers": [
+            "i appreciate"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        }
+      ],
+      "summary": {
+        "CES_CES_Urban_Progressive": {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "total_turns": 4,
+          "justification_ratio": 0.25,
+          "assertion_ratio": 0.0,
+          "alienation_count": 0,
+          "empowerment_count": 2,
+          "conditional_count": 0,
+          "bridging_count": 1,
+          "dismissive_count": 0,
+          "direct_address_count": 1,
+          "voice_valence": 0.5,
+          "stance_valence": 0.25
+        },
+        "CES_CES_Suburban_Swing": {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "total_turns": 4,
+          "justification_ratio": 0.25,
+          "assertion_ratio": 0.25,
+          "alienation_count": 0,
+          "empowerment_count": 1,
+          "conditional_count": 0,
+          "bridging_count": 3,
+          "dismissive_count": 0,
+          "direct_address_count": 0,
+          "voice_valence": 0.25,
+          "stance_valence": 0.75
+        },
+        "CES_CES_Rural_Conservative": {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "total_turns": 4,
+          "justification_ratio": 0.25,
+          "assertion_ratio": 0.0,
+          "alienation_count": 0,
+          "empowerment_count": 0,
+          "conditional_count": 1,
+          "bridging_count": 4,
+          "dismissive_count": 0,
+          "direct_address_count": 0,
+          "voice_valence": 0.0,
+          "stance_valence": 1.0
+        },
+        "CES_CES_Disengaged_Renter": {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "total_turns": 3,
+          "justification_ratio": 0.6666666666666666,
+          "assertion_ratio": 0.3333333333333333,
+          "alienation_count": 1,
+          "empowerment_count": 0,
+          "conditional_count": 0,
+          "bridging_count": 3,
+          "dismissive_count": 0,
+          "direct_address_count": 0,
+          "voice_valence": -0.3333333333333333,
+          "stance_valence": 1.0
+        }
+      }
+    },
+    "2": {
+      "codes": [
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 1,
+          "round_number": 2,
+          "content": "For me, as someone who has always leaned left and reliably voted in elections, the idea of mandatory voting isn't something I'm entirely against. However, I also recognize that there's a fine line between encouraging civic engagement and enforcing it. Voting should be seen as an act of personal responsibility and empowerment, rather than a chore that's mandated by law.\n\nLiving in an urban area in Ontario, I feel that politics matters deeply because the decisions made at all levels of government directly impact our daily lives\u2014whether it's affordable housing, public transit, or healthcare services. As someone who is university-educated and works in a competitive job market, I often find myself facing economic pressures that could be addressed through better policies. For instance, the cost of living in cities can be prohibitive, and having a robust social safety net is crucial.\n\nWhen it comes to whether parties reach out to voters like me, I have mixed feelings. On one hand, I appreciate the efforts of the NDP to engage with constituents and address issues such as income inequality, climate change, and accessible education. However, sometimes these efforts feel tokenistic or not tailored enough to resonate with the specific challenges faced by young professionals in urban areas. For example, while the NDP might talk about affordable housing, the solutions proposed often don't account for the nuances of city living, where even modest homes are out of reach for many.\n\nIn essence, while I believe voting should be a priority for everyone, making it mandatory isn't necessarily the best approach. Instead, we need to foster a culture where people understand the importance of their vote and see tangible benefits from participating in the democratic process. Political engagement isn't just about casting a ballot\u2014it's about feeling heard and knowing that the system is working for you.",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "because",
+            "the importance of"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "i appreciate"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 2,
+          "round_number": 2,
+          "content": "From my perspective, living in a suburban area and being college-educated, I find the idea of mandatory voting intriguing but ultimately not necessary. I think voting should be a choice, reflecting a personal commitment to the democratic process rather than a legal obligation. While I agree that civic engagement is important, forcing people to vote might not necessarily translate into more informed or meaningful participation.\n\nPolitics certainly matters to me, especially given my background and the issues that affect my community. Living in a suburb means that concerns like local infrastructure, property taxes, and access to quality schools are high on my list. These aren\u2019t just abstract concepts; they directly impact my family\u2019s day-to-day life. For instance, the condition of roads and public transportation can significantly influence how easily we get to work or school, and property taxes play a critical role in maintaining those services.\n\nHowever, when it comes to whether political parties reach out to voters like me, I have to say it's hit-or-miss. The Liberals, for example, have made some attempts to engage with suburban voters by highlighting issues such as balancing economic growth with environmental sustainability. Yet, their messaging often feels broad and less focused on the specific needs of suburban communities compared to urban areas. Issues like affordable housing are relevant here too, but the solutions offered don\u2019t always align with the reality of suburban living, where space constraints and higher costs are different from those in cities.\n\nOn the other hand, the Conservatives have occasionally reached out with messages around fiscal responsibility and tax relief, which resonate with many suburban residents who are concerned about financial stability. But their approach can sometimes come across as overly focused on individual responsibility without acknowledging the systemic issues that affect us all.\n\nOverall, while I believe that voting is a vital part of democracy, I don\u2019t think it needs to be mandatory. What would be more effective is fostering a culture where people feel that their voices matter and that the political system is responsive to their needs. If parties could tailor their outreach and policies more closely to the unique challenges of suburban voters, it might encourage more people like me to engage actively in the political process.",
+          "justification": "JustificationType.ASSERTIVE",
+          "voice": "VoiceMarker.ALIENATED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "certainly"
+          ],
+          "voice_markers": [
+            "people like me"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 3,
+          "round_number": 2,
+          "content": "From my standpoint, as a 55-64 year old man living in a rural area of Ontario, I've always felt that voting is a fundamental duty, but not something that should be mandated by law. In my view, voting should stem from a genuine sense of civic responsibility and a desire to make a difference, rather than being forced upon individuals. Living in a rural setting, where community ties run deep and every vote counts, I believe that people here already take their political participation seriously. Making voting compulsory could undermine the intrinsic value of casting a ballot, turning it into a mere formality rather than a heartfelt expression of one's beliefs.\n\nFor me, politics matters immensely because the decisions made at various levels of government directly impact the fabric of rural life. Issues such as agricultural support, infrastructure development, and access to healthcare are paramount. These aren't just abstract concepts; they're the bread and butter of our existence here. For instance, the state of our roads affects how efficiently goods can be transported to market, and the availability of healthcare services determines the well-being of our families.\n\nWhen it comes to whether political parties reach out to voters like me, I must admit that it's been a mixed bag. The Conservatives have historically done a decent job of addressing rural concerns, particularly around economic stability and fiscal responsibility. Their focus on reducing taxes and streamlining regulations resonates strongly with many of us who rely on small businesses and farming for our livelihoods. However, sometimes their messaging feels too broad and doesn't always capture the nuanced challenges we face. For example, while they may talk about improving infrastructure, the specifics of how this translates into better rural connectivity and services are often lacking.\n\nOn the flip side, the NDP and Liberals have made occasional efforts to engage rural voters, but their primary focus tends to be on urban-centric issues. This can make it seem as though our voices aren't fully heard. When they do reach out, it often feels like a token gesture, as if they're checking off a box rather than genuinely understanding our needs.\n\nIn summary, I believe that voting is a critical aspect of our democratic system, but it shouldn't be made mandatory. Instead, we need to cultivate a culture where people feel that their votes matter and that their representatives are truly listening to them. If parties can better tailor their outreach and policies to reflect the unique realities of rural life, it could go a long way in boosting voter engagement and ensuring that our voices are heard.",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [
+            "make a difference"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "turn_number": 4,
+          "round_number": 2,
+          "content": "From my perspective, as an 18-24 year old non-binary person living in an urban area in Ontario, the idea of mandatory voting doesn't really appeal to me. Voting feels more like a personal choice and responsibility, rather than something that should be enforced by law. Sure, I understand the argument that it could increase civic engagement, but I also worry that it might lead to people just going through the motions without truly thinking about who they're voting for or why. \n\nLiving in an urban area, politics definitely impacts my life, especially when it comes to things like housing, transportation, and healthcare. The cost of living here is sky-high, and it feels like no matter how hard I work, it's tough to make ends meet. I often wonder if there are better policies out there that could help alleviate some of the financial pressures I face, but it seems like most of the time, the political discourse is focused elsewhere.\n\nWhen it comes to whether parties reach out to voters like me, I have to say it's pretty hit-or-miss. Sometimes it feels like they\u2019re trying to connect, but often it feels like they're just going through the motions. For example, the NDP talks a lot about affordable housing and income inequality, which are definitely issues that resonate with me. But when I look at the actual policies they propose, they often feel too broad or not tailored enough to address the specific challenges of living in a big city. It\u2019s frustrating because while I want to believe in a party that represents my interests, it\u2019s hard to feel truly connected when their solutions don\u2019t quite fit my reality.\n\nOverall, I think voting is important, but I\u2019m not convinced that making it mandatory would solve the underlying issue of disengagement. What I\u2019d really like to see is a political system that feels more responsive to the needs of young professionals in urban areas. If parties could do a better job of addressing the specific challenges we face\u2014like the high cost of living and lack of affordable housing\u2014I might feel more motivated to participate in the political process. Right now, it just feels like another thing on my to-do list, rather than a meaningful way to make a difference.",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [
+            "make a difference"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 5,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting is something I can understand on one level, but ultimately, I lean towards keeping it a choice. Voting should be seen as an act of personal responsibility and empowerment, not merely a legal requirement. For me, living in an urban area in Ontario, politics is incredibly relevant because the decisions made by our government directly affect our daily lives\u2014whether it's through affordable housing initiatives, public transit improvements, or healthcare services. These aren't abstract concepts; they're issues that touch us personally and tangibly.\n\nThe economic pressures faced by young professionals in urban areas are significant. The cost of living in cities can be prohibitive, and having a robust social safety net is crucial. As someone who is university-educated and works in a competitive job market, I often feel the strain of these pressures. While I appreciate the efforts of the NDP to engage with constituents and address issues like income inequality, climate change, and accessible education, sometimes these efforts feel tokenistic or not tailored enough to resonate with the specific challenges faced by young professionals in urban areas. For example, while the NDP might talk about affordable housing, the solutions proposed often don't account for the nuances of city living, where even modest homes are out of reach for many.\n\nRegarding the question of whether political parties reach out effectively to voters like me, I have mixed feelings. The NDP, for instance, makes efforts to engage with urban voters, but their messaging can sometimes feel too broad or not finely tuned to the unique challenges of city life. The same can be said for the Liberals and Greens, who often focus on urban-centric issues but may not always tailor their outreach and policies to the specific needs of young professionals in urban areas.\n\nOn the other hand, the Conservatives and Liberals have occasionally reached out with messages around economic stability and environmental sustainability, respectively. However, their approaches can sometimes come across as less focused on the systemic issues that affect us all. For instance, the Conservatives might emphasize fiscal responsibility, but their policies often don't address the root causes of the high cost of living and income inequality in cities.\n\nIn summary, while I believe voting is a critical part of democracy and civic engagement, I don't think making it mandatory is the best approach. Instead, we need to foster a culture where people feel that their votes matter and that the system is responsive to their needs. If political parties could better tailor their outreach and policies to reflect the unique challenges faced by young professionals in urban areas, it could go a long way in boosting voter engagement and ensuring that our",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "i appreciate"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 6,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting doesn't sit right with me. Voting should be a personal choice and a reflection of one's commitment to the democratic process, rather than a legal obligation. While I understand the argument that mandatory voting could increase civic engagement, I worry that it might result in people simply going through the motions without truly considering their choices. \n\nLiving in a suburban area in Ontario, politics is highly relevant to my daily life. Concerns like local infrastructure, property taxes, and access to quality schools are top priorities. These aren't just theoretical issues\u2014they directly impact my family's day-to-day existence. For example, the condition of roads and public transportation can significantly affect how easily we travel to work or school, and property taxes are crucial for maintaining essential services. \n\nWhen it comes to whether political parties reach out to voters like me, the experience is mixed. The Liberals have attempted to engage suburban voters by emphasizing a balance between economic growth and environmental sustainability. However, their messaging often feels broad and less focused on the specific needs of suburban communities compared to urban areas. Issues like affordable housing are relevant here too, but the proposed solutions don't always align with the realities of suburban living, where space constraints and higher costs are different from those in cities.\n\nOn the other hand, the Conservatives have occasionally reached out with messages around fiscal responsibility and tax relief, which resonate with many suburban residents concerned about financial stability. Yet, their approach can sometimes come across as overly focused on individual responsibility without acknowledging the systemic issues that affect us all. For instance, while they may talk about improving infrastructure, the specifics of how this translates into better suburban connectivity and services are often lacking.\n\nOverall, while I believe that voting is a vital part of democracy, I don't think it needs to be mandatory. What would be more effective is fostering a culture where people feel that their voices matter and that the political system is responsive to their needs. If parties could tailor their outreach and policies more closely to the unique challenges of suburban voters, it might encourage more people like me to engage actively in the political process.",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.ALIENATED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "considering"
+          ],
+          "voice_markers": [
+            "people like me"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 7,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting doesn't sit well with me. Voting is a fundamental duty, but it should stem from a genuine sense of civic responsibility and a desire to make a difference, rather than being forced upon individuals. In my view, making voting compulsory could undermine the intrinsic value of casting a ballot, turning it into a mere formality rather than a heartfelt expression of one's beliefs.\n\nLiving in a rural area in Ontario, politics matters immensely because the decisions made at various levels of government directly impact the fabric of rural life. Issues such as agricultural support, infrastructure development, and access to healthcare are paramount. These aren't just abstract concepts; they're the bread and butter of our existence here. For instance, the state of our roads affects how efficiently goods can be transported to market, and the availability of healthcare services determines the well-being of our families.\n\nWhen it comes to whether political parties reach out to voters like me, I must admit that it's been a mixed bag. The Conservatives have historically done a decent job of addressing rural concerns, particularly around economic stability and fiscal responsibility. Their focus on reducing taxes and streamlining regulations resonates strongly with many of us who rely on small businesses and farming for our livelihoods. However, sometimes their messaging feels too broad and doesn't always capture the nuanced challenges we face. For example, while they may talk about improving infrastructure, the specifics of how this translates into better rural connectivity and services are often lacking.\n\nOn the other hand, the NDP and Liberals have made occasional efforts to engage rural voters, but their primary focus tends to be on urban-centric issues. This can make it seem as though our voices aren't fully heard. When they do reach out, it often feels like a token gesture, as if they're checking off a box rather than genuinely understanding our needs.\n\nIn summary, I believe that voting is a critical aspect of our democratic system, but it shouldn't be made mandatory. Instead, we need to cultivate a culture where people feel that their votes matter and that their representatives are truly listening to them. If parties can better tailor their outreach and policies to reflect the unique realities of rural life, it could go a long way in boosting voter engagement and ensuring that our voices are heard.",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [
+            "make a difference"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "turn_number": 8,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting doesn't really appeal to me. Voting feels more like a personal choice and responsibility, rather than something that should be enforced by law. Sure, I understand the argument that it could increase civic engagement, but I also worry that it might lead to people just going through the motions without truly thinking about who they're voting for or why. \n\nLiving in an urban area, politics definitely impacts my life, especially when it comes to things like housing, transportation, and healthcare. The cost of living here is sky-high, and it feels like no matter how hard I work, it's tough to make ends meet. I often wonder if there are better policies out there that could help alleviate some of the financial pressures I face, but it seems like most of the time, the political discourse is focused elsewhere.\n\nWhen it comes to whether parties reach out to voters like me, I have to say it's pretty hit-or-miss. Sometimes it feels like they\u2019re trying to connect, but often it feels like they're just going through the motions. For example, the NDP talks a lot about affordable housing and income inequality, which are definitely issues that resonate with me. But when I look at the actual policies they propose, they often feel too broad or not tailored enough to address the specific challenges of living in a big city. It\u2019s frustrating because while I want to believe in a party that represents my interests, it\u2019s hard to feel truly connected when their solutions don\u2019t quite fit my reality.\n\nOverall, I think voting is important, but I\u2019m not convinced that making it mandatory would solve the underlying issue of disengagement. What I\u2019d really like to see is a political system that feels more responsive to the needs of young professionals in urban areas. If parties could do a better job of addressing the specific challenges we face\u2014like the high cost of living and lack of affordable housing\u2014I might feel more motivated to participate in the political process. Right now, it just feels like another thing on my to-do list, rather than a meaningful way to make a difference.",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [
+            "make a difference"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 9,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting doesn't completely align with my views, even though I recognize the potential benefits it could bring in terms of increased civic engagement. Voting should ideally be seen as an act of personal responsibility and empowerment, rather than a legal requirement. For me, living in an urban area in Ontario, politics is incredibly relevant because the decisions made by our government directly impact our daily lives\u2014whether it's through affordable housing initiatives, public transit improvements, or healthcare services. These aren't abstract concepts; they're issues that touch us personally and tangibly.\n\nThe economic pressures faced by young professionals in urban areas are significant. The cost of living in cities can be prohibitive, and having a robust social safety net is crucial. As someone who is university-educated and works in a competitive job market, I often feel the strain of these pressures. While I appreciate the efforts of the NDP to engage with constituents and address issues like income inequality, climate change, and accessible education, sometimes these efforts feel tokenistic or not tailored enough to resonate with the specific challenges faced by young professionals in urban areas. For example, while the NDP might talk about affordable housing, the solutions proposed often don't account for the nuances of city living, where even modest homes are out of reach for many.\n\nRegarding the question of whether political parties reach out effectively to voters like me, I have mixed feelings. The NDP, for instance, makes efforts to engage with urban voters, but their messaging can sometimes feel too broad or not finely tuned to the unique challenges of city life. The same can be said for the Liberals and Greens, who often focus on urban-centric issues but may not always tailor their outreach and policies to the specific needs of young professionals in urban areas.\n\nOn the other hand, the Conservatives and Liberals have occasionally reached out with messages around economic stability and environmental sustainability, respectively. However, their approaches can sometimes come across as less focused on the systemic issues that affect us all. For instance, the Conservatives might emphasize fiscal responsibility, but their policies often don't address the root causes of the high cost of living and income inequality in cities.\n\nIn summary, while I believe voting is a critical part of democracy and civic engagement, I don't think making it mandatory is the best approach. Instead, we need to foster a culture where people feel that their votes matter and that the system is responsive to their needs. If political parties could better tailor their outreach and policies to reflect the unique challenges faced by young professionals in urban areas, it could go a long way in boosting",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "i appreciate"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 10,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting doesn't sit right with me. Voting should be a personal choice and a reflection of one's commitment to the democratic process, rather than a legal obligation. While I understand the argument that mandatory voting could increase civic engagement, I worry that it might result in people simply going through the motions without truly considering their choices.\n\nLiving in a suburban area in Ontario, politics is highly relevant to my daily life. Concerns like local infrastructure, property taxes, and access to quality schools are top priorities. These aren't just theoretical issues\u2014they directly impact my family's day-to-day existence. For example, the condition of roads and public transportation can significantly affect how easily we travel to work or school, and property taxes are crucial for maintaining essential services.\n\nWhen it comes to whether political parties reach out to voters like me, the experience is mixed. The Liberals have attempted to engage suburban voters by emphasizing a balance between economic growth and environmental sustainability. However, their messaging often feels broad and less focused on the specific needs of suburban communities compared to urban areas. Issues like affordable housing are relevant here too, but the proposed solutions don't always align with the realities of suburban living, where space constraints and higher costs are different from those in cities.\n\nOn the other hand, the Conservatives have occasionally reached out with messages around fiscal responsibility and tax relief, which resonate with many suburban residents concerned about financial stability. Yet, their approach can sometimes come across as overly focused on individual responsibility without acknowledging the systemic issues that affect us all. For instance, while they may talk about improving infrastructure, the specifics of how this translates into better suburban connectivity and services are often lacking.\n\nOverall, while I believe that voting is a vital part of democracy, I don't think it needs to be mandatory. What would be more effective is fostering a culture where people feel that their voices matter and that the political system is responsive to their needs. If parties could tailor their outreach and policies more closely to the unique challenges of suburban voters, it might encourage more people like me to engage actively in the political process.",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.ALIENATED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "considering"
+          ],
+          "voice_markers": [
+            "people like me"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 11,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting doesn't sit well with me. Voting is a fundamental duty, but it should stem from a genuine sense of civic responsibility and a desire to make a difference, rather than being forced upon individuals. In my view, making voting compulsory could undermine the intrinsic value of casting a ballot, turning it into a mere formality rather than a heartfelt expression of one's beliefs.\n\nLiving in a rural area in Ontario, politics matters immensely because the decisions made at various levels of government directly impact the fabric of rural life. Issues such as agricultural support, infrastructure development, and access to healthcare are paramount. These aren't just abstract concepts; they're the bread and butter of our existence here. For instance, the state of our roads affects how efficiently goods can be transported to market, and the availability of healthcare services determines the well-being of our families.\n\nWhen it comes to whether political parties reach out to voters like me, I must admit that it's been a mixed bag. The Conservatives have historically done a decent job of addressing rural concerns, particularly around economic stability and fiscal responsibility. Their focus on reducing taxes and streamlining regulations resonates strongly with many of us who rely on small businesses and farming for our livelihoods. However, sometimes their messaging feels too broad and doesn't always capture the nuanced challenges we face. For example, while they may talk about improving infrastructure, the specifics of how this translates into better rural connectivity and services are often lacking.\n\nOn the other hand, the NDP and Liberals have made occasional efforts to engage rural voters, but their primary focus tends to be on urban-centric issues. This can make it seem as though our voices aren't fully heard. When they do reach out, it often feels like a token gesture, as if they're checking off a box rather than genuinely understanding our needs.\n\nIn summary, I believe that voting is a critical aspect of our democratic system, but it shouldn't be made mandatory. Instead, we need to cultivate a culture where people feel that their votes matter and that their representatives are truly listening to them. If parties can better tailor their outreach and policies to reflect the unique realities of rural life, it could go a long way in boosting voter engagement and ensuring that our voices are heard.\n\nIt's important to note that while I consistently vote in elections, I feel that the current political landscape often overlooks the specific needs and challenges faced by rural communities. We need more targeted policies and genuine engagement from political parties to ensure that our voices are not only heard but also acted upon.",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [
+            "make a difference"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "turn_number": 12,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting doesn't really appeal to me. Voting feels more like a personal choice and responsibility, rather than something that should be enforced by law. Sure, I understand the argument that it could increase civic engagement, but I also worry that it might lead to people just going through the motions without truly thinking about who they're voting for or why.\n\nLiving in an urban area, politics definitely impacts my life, especially when it comes to things like housing, transportation, and healthcare. The cost of living here is sky-high, and it feels like no matter how hard I work, it's tough to make ends meet. I often wonder if there are better policies out there that could help alleviate some of the financial pressures I face, but it seems like most of the time, the political discourse is focused elsewhere.\n\nWhen it comes to whether parties reach out to voters like me, I have to say it's pretty hit-or-miss. Sometimes it feels like they\u2019re trying to connect, but often it feels like they're just going through the motions. For example, the NDP talks a lot about affordable housing and income inequality, which are definitely issues that resonate with me. But when I look at the actual policies they propose, they often feel too broad or not tailored enough to address the specific challenges of living in a big city. It\u2019s frustrating because while I want to believe in a party that represents my interests, it\u2019s hard to feel truly connected when their solutions don\u2019t quite fit my reality.\n\nOverall, I think voting is important, but I\u2019m not convinced that making it mandatory would solve the underlying issue of disengagement. What I\u2019d really like to see is a political system that feels more responsive to the needs of young professionals in urban areas. If parties could do a better job of addressing the specific challenges we face\u2014like the high cost of living and lack of affordable housing\u2014I might feel more motivated to participate in the political process. Right now, it just feels like another thing on my to-do list, rather than a meaningful way to make a difference.\n\nAuthentic engagement for me would involve political parties taking the time to truly understand the unique struggles and aspirations of young professionals in urban settings. They need to offer concrete, tailored solutions that address the day-to-day realities we face. Until then, I\u2019ll continue to feel disconnected from the political process.",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [
+            "feel disconnected",
+            "make a difference"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 13,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting doesn't completely align with my views, even though I recognize the potential benefits it could bring in terms of increased civic engagement. Voting should ideally be seen as an act of personal responsibility and empowerment, rather than a legal requirement. For me, living in an urban area in Ontario, politics is incredibly relevant because the decisions made by our government directly impact our daily lives\u2014whether it's through affordable housing initiatives, public transit improvements, or healthcare services. These aren't abstract concepts; they're issues that touch us personally and tangibly.\n\nThe economic pressures faced by young professionals in urban areas are significant. The cost of living in cities can be prohibitive, and having a robust social safety net is crucial. As someone who is university-educated and works in a competitive job market, I often feel the strain of these pressures. While I appreciate the efforts of the NDP to engage with constituents and address issues like income inequality, climate change, and accessible education, sometimes these efforts feel tokenistic or not tailored enough to resonate with the specific challenges faced by young professionals in urban areas. For example, while the NDP might talk about affordable housing, the solutions proposed often don't account for the nuances of city living, where even modest homes are out of reach for many.\n\nRegarding the question of whether political parties reach out effectively to voters like me, I have mixed feelings. The NDP, for instance, makes efforts to engage with urban voters, but their messaging can sometimes feel too broad or not finely tuned to the unique challenges of city life. The same can be said for the Liberals and Greens, who often focus on urban-centric issues but may not always tailor their outreach and policies to the specific needs of young professionals in urban areas.\n\nOn the other hand, the Conservatives and Liberals have occasionally reached out with messages around economic stability and environmental sustainability, respectively. However, their approaches can sometimes come across as less focused on the systemic issues that affect us all. For instance, the Conservatives might emphasize fiscal responsibility, but their policies often don't address the root causes of the high cost of living and income inequality in cities.\n\nIn summary, while I believe voting is a critical part of democracy and civic engagement, I don't think making it mandatory is the best approach. Instead, we need to foster a culture where people feel that their votes matter and that the system is responsive to their needs. If political parties could better tailor their outreach and policies to reflect the unique challenges faced by young professionals in urban areas, it could go a long way in boosting",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "i appreciate"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 14,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting doesn't sit right with me. Voting should be a personal choice and a reflection of one's commitment to the democratic process, rather than a legal obligation. While I understand the argument that mandatory voting could increase civic engagement, I worry that it might result in people simply going through the motions without truly considering their choices.\n\nLiving in a suburban area in Ontario, politics is highly relevant to my daily life. Concerns like local infrastructure, property taxes, and access to quality schools are top priorities. These aren't just theoretical issues\u2014they directly impact my family's day-to-day existence. For example, the condition of roads and public transportation can significantly affect how easily we travel to work or school, and property taxes are crucial for maintaining essential services.\n\nWhen it comes to whether political parties reach out to voters like me, the experience is mixed. The Liberals have attempted to engage suburban voters by emphasizing a balance between economic growth and environmental sustainability. However, their messaging often feels broad and less focused on the specific needs of suburban communities compared to urban areas. Issues like affordable housing are relevant here too, but the proposed solutions don't always align with the realities of suburban living, where space constraints and higher costs are different from those in cities.\n\nOn the other hand, the Conservatives have occasionally reached out with messages around fiscal responsibility and tax relief, which resonate with many suburban residents concerned about financial stability. Yet, their approach can sometimes come across as overly focused on individual responsibility without acknowledging the systemic issues that affect us all. For instance, while they may talk about improving infrastructure, the specifics of how this translates into better suburban connectivity and services are often lacking.\n\nOverall, while I believe that voting is a vital part of democracy, I don't think it needs to be mandatory. What would be more effective is fostering a culture where people feel that their voices matter and that the political system is responsive to their needs. If parties could tailor their outreach and policies more closely to the unique challenges of suburban voters, it might encourage more people like me to engage actively in the political process.\n\nFor me, authentic engagement would involve political parties taking the time to understand the specific needs and concerns of suburban communities. They need to offer concrete, tailored solutions that address the day-to-day realities we face. Until then, I'll continue to feel somewhat disconnected from the political process, despite my regular participation in elections.",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.ALIENATED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "considering"
+          ],
+          "voice_markers": [
+            "people like me"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 15,
+          "round_number": 2,
+          "content": "From my perspective, the idea of mandatory voting doesn't sit well with me. Voting is a fundamental duty, but it should stem from a genuine sense of civic responsibility and a desire to make a difference, rather than being forced upon individuals. In my view, making voting compulsory could undermine the intrinsic value of casting a ballot, turning it into a mere formality rather than a heartfelt expression of one's beliefs.\n\nLiving in a rural area in Ontario, politics matters immensely because the decisions made at various levels of government directly impact the fabric of rural life. Issues such as agricultural support, infrastructure development, and access to healthcare are paramount. These aren't just abstract concepts; they're the bread and butter of our existence here. For instance, the state of our roads affects how efficiently goods can be transported to market, and the availability of healthcare services determines the well-being of our families.\n\nWhen it comes to whether political parties reach out to voters like me, I must admit that it's been a mixed bag. The Conservatives have historically done a decent job of addressing rural concerns, particularly around economic stability and fiscal responsibility. Their focus on reducing taxes and streamlining regulations resonates strongly with many of us who rely on small businesses and farming for our livelihoods. However, sometimes their messaging feels too broad and doesn't always capture the nuanced challenges we face. For example, while they may talk about improving infrastructure, the specifics of how this translates into better rural connectivity and services are often lacking.\n\nOn the other hand, the NDP and Liberals have made occasional efforts to engage rural voters, but their primary focus tends to be on urban-centric issues. This can make it seem as though our voices aren't fully heard. When they do reach out, it often feels like a token gesture, as if they're checking off a box rather than genuinely understanding our needs.\n\nIn summary, I believe that voting is a critical aspect of our democratic system, but it shouldn't be made mandatory. Instead, we need to cultivate a culture where people feel that their votes matter and that their representatives are truly listening to them. If parties can better tailor their outreach and policies to reflect the unique realities of rural life, it could go a long way in boosting voter engagement and ensuring that our voices are heard.\n\nAuthentic engagement for me would involve political parties taking the time to truly understand the specific challenges and aspirations of rural communities. They need to offer concrete, tailored solutions that address the day-to-day realities we face. Until then, I'll continue to feel somewhat disconnected from the political process, despite",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.NEUTRAL",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [
+            "make a difference"
+          ],
+          "stance_markers": [],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        }
+      ],
+      "summary": {
+        "CES_CES_Urban_Progressive": {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "total_turns": 4,
+          "justification_ratio": 1.0,
+          "assertion_ratio": 0.0,
+          "alienation_count": 0,
+          "empowerment_count": 0,
+          "conditional_count": 0,
+          "bridging_count": 4,
+          "dismissive_count": 0,
+          "direct_address_count": 0,
+          "voice_valence": 0.0,
+          "stance_valence": 1.0
+        },
+        "CES_CES_Suburban_Swing": {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "total_turns": 4,
+          "justification_ratio": 0.75,
+          "assertion_ratio": 0.25,
+          "alienation_count": 4,
+          "empowerment_count": 0,
+          "conditional_count": 0,
+          "bridging_count": 0,
+          "dismissive_count": 0,
+          "direct_address_count": 0,
+          "voice_valence": -1.0,
+          "stance_valence": 0.0
+        },
+        "CES_CES_Rural_Conservative": {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "total_turns": 4,
+          "justification_ratio": 1.0,
+          "assertion_ratio": 0.0,
+          "alienation_count": 0,
+          "empowerment_count": 4,
+          "conditional_count": 0,
+          "bridging_count": 0,
+          "dismissive_count": 0,
+          "direct_address_count": 0,
+          "voice_valence": 1.0,
+          "stance_valence": 0.0
+        },
+        "CES_CES_Disengaged_Renter": {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "total_turns": 3,
+          "justification_ratio": 1.0,
+          "assertion_ratio": 0.0,
+          "alienation_count": 0,
+          "empowerment_count": 2,
+          "conditional_count": 0,
+          "bridging_count": 0,
+          "dismissive_count": 0,
+          "direct_address_count": 0,
+          "voice_valence": 0.6666666666666666,
+          "stance_valence": 0.0
+        }
+      }
+    },
+    "3": {
+      "codes": [
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 1,
+          "round_number": 3,
+          "content": "Hello everyone, my name is Sarah, and I'm a 28-year-old woman living in Toronto. I have a degree in environmental studies and usually vote for the NDP. I'm here because I believe we need to find common ground despite our differences, especially when it comes to addressing the pressing issues facing our communities.\n\nOne of the biggest challenges I face is the high cost of living in an urban area. Rent is skyrocketing, and the cost of groceries and transportation keeps increasing. It feels like no matter how hard I work, I can barely keep up. I know many people in rural areas also struggle with economic pressures, but often the solutions proposed don't seem to align with the realities of city life.\n\nWhat I'd love to discuss is how we can bridge these gaps and ensure that policies benefit everyone, regardless of where they live or their political leanings. For example, affordable housing is a critical issue for me, but I can see why someone from a rural area might prioritize infrastructure investments or healthcare improvements differently. However, at the core, both of us want to improve our quality of life and provide opportunities for ourselves and future generations.\n\nHow do you think we can start addressing these concerns together, rather than letting them drive us apart?",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "because"
+          ],
+          "voice_markers": [
+            "i believe we"
+          ],
+          "stance_markers": [
+            "i can see"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 2,
+          "round_number": 3,
+          "content": "Hi Sarah,\n\nMy name is Mike, and I'm a 48-year-old man living in a suburb outside of Ottawa. I have a college degree and typically consider myself politically centrist, though I don't usually align with one specific party. Your points about the high cost of living and the need for common-ground solutions resonate with me, even though my day-to-day experiences may differ from those in the city.\n\nIn the suburbs, we face unique challenges too. Property taxes are rising, and while we might not be dealing with the same level of rent increases as in Toronto, the cost of maintaining a home and keeping up with property values is significant. Additionally, access to public services such as healthcare and education can sometimes feel inadequate compared to urban centers, yet we often don't get the same attention from policymakers as more densely populated areas.\n\nI agree that finding common ground is crucial. We need to recognize that while the specifics of our issues may vary, the underlying desire for a better quality of life and opportunities for our families is universal. Perhaps we could start by identifying shared goals, like improving infrastructure to support efficient transportation systems or ensuring access to affordable healthcare and education. These are issues that impact all communities, whether urban, suburban, or rural.\n\nWhat do you think about focusing on these broader goals and then tailoring solutions to fit the specific needs of each region? This way, we can ensure that no community is left behind.\n\nThanks for bringing up this conversation, Sarah. I look forward to hearing others' thoughts as well.",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.DIRECT_ADDRESS",
+          "justification_markers": [],
+          "voice_markers": [],
+          "stance_markers": [
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 3,
+          "round_number": 3,
+          "content": "Hi Sarah and Mike,\n\nMy name is John, and I'm a 59-year-old man living in a small town in rural Ontario. I have a high school education and usually vote Conservative. Like you both, I believe there's value in finding common ground, even if our backgrounds and daily struggles differ.\n\nLiving in a rural area, I face unique challenges that aren't always understood by those in urban or suburban settings. For instance, the lack of reliable internet access and the difficulty of accessing healthcare services are major issues here. While I understand the importance of affordable housing in cities, I worry that focusing too much on urban problems can sometimes overshadow the needs of rural communities. Infrastructure investments, like better roads and broadband connectivity, are crucial for us, but they're often overlooked in favor of other priorities.\n\nThat said, I agree with you both that our core desires\u2014improving quality of life and providing opportunities for our children\u2014are fundamentally the same. One way we could address these issues is by ensuring that policymakers have a clear understanding of the diverse needs across all regions. This means involving more voices from rural areas in decision-making processes, so that our concerns are not only heard but also addressed effectively.\n\nPerhaps we could also explore ways to create policies that are flexible enough to accommodate the specific needs of each community while still working towards broader goals. For example, initiatives that promote local job creation and sustainable agriculture could benefit both rural and urban areas, even if the implementation details differ.\n\nWhat do you think about these ideas? How can we work together to ensure that every community's needs are considered and met?\n\nBest regards,\nJohn",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "so that",
+            "the importance of"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "agree with"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "turn_number": 4,
+          "round_number": 3,
+          "content": "Hi Sarah, Mike, and John,\n\nI\u2019m Alex, an 18-year-old non-binary person living in downtown Toronto. I recently finished my first year of college and haven\u2019t really aligned myself with any particular political party. I\u2019m here because I\u2019ve noticed that despite having different backgrounds and views, we all share some common concerns about the economy and quality of life.\n\nFor me, the most pressing issue is the affordability of everything. Rent is incredibly high, and I\u2019m struggling to make ends meet even though I\u2019m working part-time. I see how my friends who come from more rural areas are also dealing with economic pressures, just in different forms like higher property taxes or limited job opportunities. It\u2019s frustrating to feel like my voice isn\u2019t being heard, especially since I don\u2019t see many policies that directly address the challenges faced by young renters in urban areas.\n\nI appreciate Sarah\u2019s point about bridging the gap between urban and rural concerns. Mike, your mention of property tax increases in the suburbs resonates with me because I know many of my peers are facing similar financial burdens in various parts of the city. And John, your insights into the challenges of rural life, like unreliable internet and healthcare access, highlight how interconnected our issues are, even if they manifest differently based on location.\n\nTo build on your suggestions, I think we could start by creating platforms where people from different regions and backgrounds can openly share their experiences and concerns. This way, we can better understand each other\u2019s struggles and identify overlapping needs. Maybe we could push for more inclusive policy discussions that involve representatives from all types of communities. This would help ensure that policies are more comprehensive and equitable.\n\nAdditionally, I\u2019d love to hear more about specific policy ideas that could address these shared concerns. For example, what kind of infrastructure investments could benefit both urban and rural areas? Or how can we improve access to affordable healthcare and education for everyone, regardless of where they live?\n\nThanks for sharing your thoughts so far. I\u2019m excited to continue this discussion and see how we can work together to find solutions that truly represent our collective interests.\n\nBest,\nAlex",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "because",
+            "since"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "i appreciate"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 5,
+          "round_number": 3,
+          "content": "Hi Alex, Mike, and John,\n\nThank you all for sharing your perspectives and experiences. It\u2019s clear that despite our different backgrounds, we all share a deep concern for the well-being of our communities and the individuals within them. Each of your points resonates with me, and I appreciate the thoughtful responses.\n\nAlex, your point about the affordability of everything hits close to home. As someone who lives in Toronto, I can relate to the high cost of living and the struggle to make ends meet, especially for young renters like yourself. The idea of creating platforms where we can openly share our experiences and concerns is fantastic. It\u2019s essential that our voices are heard, and that policymakers understand the diverse challenges we face.\n\nMike, your mention of property tax increases in the suburbs highlights another layer of financial pressure that affects many communities. Ensuring that our policies are inclusive and address the needs of all regions is crucial. Improving infrastructure to support efficient transportation systems and ensuring access to affordable healthcare and education are indeed shared goals that can benefit everyone.\n\nJohn, your insights into the challenges of rural life, such as unreliable internet access and limited healthcare services, underscore the importance of recognizing and addressing the specific needs of each community. Involving more voices from rural areas in decision-making processes is vital to ensure that no community is overlooked.\n\nBuilding on these ideas, I propose we focus on a few key areas where we can work together:\n\n1. **Affordable Housing**: This is a critical issue for urban areas, but it also impacts rural communities through the broader context of economic stability and opportunity. Policies that promote affordable housing should be designed to benefit all regions, with tailored solutions for specific areas.\n\n2. **Infrastructure Investments**: Improvements in infrastructure like roads, broadband connectivity, and public transportation can benefit both urban and rural areas. By investing in infrastructure that supports efficient movement and communication, we can enhance economic opportunities and quality of life for everyone.\n\n3. **Healthcare Access**: Ensuring that everyone has access to quality healthcare, regardless of where they live, is essential. This includes improving rural healthcare facilities and ensuring that urban areas have sufficient resources to meet the growing demand.\n\n4. **Education and Job Opportunities**: Providing access to quality education and fostering local job creation can help address economic pressures in both urban and rural areas. Supporting sustainable agriculture and local industries can create jobs and improve economic stability.\n\nBy focusing on these areas, we can develop policies that are inclusive and address the diverse needs of our communities. I believe that by working together and listening to each other\u2019s perspectives,",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "the importance of"
+          ],
+          "voice_markers": [
+            "demand"
+          ],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "your perspective",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 6,
+          "round_number": 3,
+          "content": "Hi Sarah, Mike, and John,\n\nThank you all for sharing your insights and experiences. It\u2019s refreshing to see such a diverse range of viewpoints coming together to discuss common concerns. Each of your points resonates with me, and I appreciate the thoughtful dialogue.\n\nSarah, your emphasis on affordable housing is crucial, especially given the high costs in urban areas. Mike, your observations about property taxes and access to public services in the suburbs are equally important. John, your perspective on the unique challenges faced by rural communities, such as internet access and healthcare, adds a valuable dimension to our discussion.\n\nAlex, your suggestion about creating platforms for open dialogue and inclusive policy discussions is spot-on. It\u2019s essential that we involve more voices from different regions and backgrounds to ensure that our policies are comprehensive and equitable. Your idea of pushing for more inclusive policy discussions is a step in the right direction.\n\nBuilding on Sarah\u2019s proposal, I think we can take the following steps to address these shared concerns:\n\n1. **Affordable Housing**: We need policies that provide affordable housing options for everyone, whether they live in urban, suburban, or rural areas. This could include measures like rent control, subsidies for low-income families, and incentives for developers to build affordable units. Tailored solutions for each region are necessary to ensure that no community is left behind.\n\n2. **Infrastructure Investments**: Investing in infrastructure is vital for improving quality of life and economic opportunities. This includes building and maintaining roads, bridges, and public transportation systems that connect urban and rural areas. Broadband connectivity is also crucial, especially in rural regions where internet access is often unreliable. Ensuring that infrastructure projects benefit all communities will foster a sense of unity and progress.\n\n3. **Healthcare Access**: Healthcare is a fundamental right, and everyone deserves access to quality medical care. This means improving rural healthcare facilities, ensuring that urban areas have sufficient resources to meet the growing demand, and promoting telemedicine services to reach remote areas. Collaborative efforts between government and private sectors can help bridge the gap in healthcare access.\n\n4. **Education and Job Opportunities**: Education is the foundation for a prosperous society, and we must ensure that everyone has access to quality schooling and vocational training. Supporting local industries and fostering entrepreneurship can create job opportunities in both urban and rural areas. Programs that encourage sustainable agriculture and local businesses can help stimulate economic growth and provide meaningful employment.\n\nBy focusing on these areas, we can develop policies that are inclusive and address the diverse needs of our communities. I believe that by working together and listening to each other\u2019s perspectives",
+          "justification": "JustificationType.ASSERTIVE",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "we must"
+          ],
+          "voice_markers": [
+            "demand"
+          ],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "your perspective",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 7,
+          "round_number": 3,
+          "content": "Hi Sarah, Mike, and Alex,\n\nThank you all for your thoughtful contributions. It's encouraging to see such a diverse group coming together to address our shared concerns. Each of your points resonates with me, and I appreciate the constructive dialogue.\n\nSarah, your emphasis on affordable housing is crucial, especially in urban areas where the cost of living is skyrocketing. Mike, your insights about property taxes and access to public services in the suburbs highlight the financial pressures that many middle-class families face. Alex, your perspective as a young renter in an urban area brings a fresh and relatable viewpoint to the table. John here, I want to echo your call for more inclusive policy discussions and the involvement of voices from rural areas.\n\nBuilding on the ideas presented, I suggest we focus on a few key areas that can bring us closer together and address the diverse needs of our communities:\n\n1. **Economic Stability**: Economic pressures are felt across all regions, and we need policies that promote stability and growth. This could include supporting local industries, fostering entrepreneurship, and encouraging sustainable agriculture. By investing in local businesses and job creation, we can improve the economic outlook for everyone, regardless of where they live.\n\n2. **Infrastructure Investments**: Improvements in infrastructure like roads, bridges, and broadband connectivity are essential for connecting urban and rural areas. Reliable internet access and efficient transportation systems can boost economic opportunities and enhance quality of life. We need to ensure that these investments benefit all communities, not just urban centers.\n\n3. **Healthcare Access**: Ensuring that everyone has access to quality healthcare is a fundamental right. This includes improving rural healthcare facilities and ensuring that urban areas have sufficient resources to meet the growing demand. Telemedicine services can also play a role in bridging the gap in healthcare access, particularly in remote areas.\n\n4. **Education and Training**: Quality education and training programs are vital for preparing the next generation for the workforce. We need to ensure that educational opportunities are accessible and affordable for all. Vocational training and apprenticeship programs can provide practical skills that are in demand in both urban and rural areas.\n\nBy focusing on these areas, we can develop policies that are inclusive and address the diverse needs of our communities. It's important that we listen to each other's perspectives and work together to find solutions that benefit everyone. What do you think about these ideas? How can we ensure that our voices are heard and that our concerns are addressed effectively?\n\nBest regards,\nJohn",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.EMPOWERED",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [],
+          "voice_markers": [
+            "demand"
+          ],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "your perspective",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "turn_number": 8,
+          "round_number": 3,
+          "content": "Hi Sarah, Mike, John,\n\nThank you all for your thoughtful contributions. It\u2019s great to see how we\u2019re all coming together to address these shared concerns, despite our different backgrounds and experiences. Each of your points resonates with me, and I appreciate the collaborative spirit.\n\nSarah, your emphasis on affordable housing is something I can strongly relate to, especially as a young renter in an urban area. Mike, your insights about property taxes and access to public services in the suburbs highlight the financial pressures that many middle-class families face. John, your perspective on the unique challenges of rural life, like unreliable internet and limited healthcare, adds a valuable dimension to our discussion.\n\nBuilding on the ideas you\u2019ve all shared, I think we can further refine our approach to ensure that our voices are heard and that policies are truly inclusive. Here are a few additional thoughts:\n\n1. **Creating Dialogue Platforms**: We need more platforms where people from different regions and backgrounds can openly share their experiences and concerns. This could be through community forums, online surveys, or town hall meetings. These platforms should be accessible to everyone, including those in rural areas, to ensure that all voices are heard.\n\n2. **Tailored Solutions**: While broad goals like affordable housing and improved infrastructure are essential, we need to ensure that solutions are tailored to the specific needs of each community. For example, affordable housing initiatives in urban areas might focus on rent control and subsidies, whereas in rural areas, they might emphasize home ownership incentives and land development regulations.\n\n3. **Policy Flexibility**: Policies should be flexible enough to accommodate the unique needs of different regions. For instance, infrastructure investments should prioritize essential services like broadband connectivity in rural areas while focusing on efficient transportation systems in urban and suburban areas.\n\n4. **Inclusive Policymaking**: Policymakers need to involve more voices from rural areas in decision-making processes. This means ensuring that rural representatives are included in legislative committees and that their concerns are addressed in policy discussions. This inclusivity can prevent policies from being skewed towards urban areas and ensure that rural needs are also met.\n\n5. **Education and Awareness**: Raising awareness about the diverse challenges faced by different communities can help bridge the gap between urban and rural concerns. Educational campaigns and community workshops can inform people about the realities of life in different regions, fostering empathy and understanding.\n\n6. **Supporting Local Initiatives**: Encouraging and supporting local initiatives that address community-specific needs can be effective. For example, community-led projects that improve local infrastructure or provide social services can have a direct",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [],
+          "voice_markers": [],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "your perspective",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 9,
+          "round_number": 3,
+          "content": "Hi Alex, Mike, and John,\n\nThank you all for your continued engagement and thoughtful insights. It\u2019s inspiring to see how we can come together to address our shared concerns, even with our varied backgrounds and experiences. Each of your points adds valuable depth to our discussion, and I appreciate the collaborative spirit we\u2019re fostering.\n\nAlex, your suggestion about creating dialogue platforms is excellent. Having accessible and inclusive spaces where we can openly share our experiences and concerns is crucial. These platforms can help ensure that our voices are heard and that policymakers have a clear understanding of the diverse challenges we face.\n\nMike, your emphasis on tailored solutions and policy flexibility is spot-on. Broad goals like affordable housing and improved infrastructure are essential, but the implementation needs to be adaptable to the unique circumstances of each community. This ensures that no community is left behind and that solutions are effective and relevant.\n\nJohn, your point about inclusive policymaking is critical. Ensuring that rural representatives are involved in legislative committees and that their concerns are addressed in policy discussions can prevent policies from being overly skewed towards urban areas. This inclusivity is key to developing policies that truly benefit everyone.\n\nBuilding on these ideas, let\u2019s refine our approach further:\n\n1. **Creating Dialogue Platforms**: Establish community forums, online surveys, and town hall meetings that are accessible to everyone, regardless of their location. These platforms should be designed to facilitate open and honest conversations, allowing people from different regions to share their experiences and concerns.\n\n2. **Tailored Solutions**: Develop policies that are flexible and adaptable to the specific needs of each community. For example, affordable housing initiatives in urban areas might focus on rent control and subsidies, while in rural areas, they might emphasize home ownership incentives and land development regulations. Similarly, infrastructure investments should prioritize essential services like broadband connectivity in rural areas while focusing on efficient transportation systems in urban and suburban areas.\n\n3. **Policy Flexibility**: Ensure that policies are flexible enough to accommodate the unique needs of different regions. This means designing initiatives that can be customized to fit the specific requirements of urban, suburban, and rural areas. For instance, healthcare policies should account for the varying levels of access and resources available in different communities.\n\n4. **Inclusive Policymaking**: Involve more voices from rural areas in decision-making processes. This means ensuring that rural representatives are included in legislative committees and that their concerns are addressed in policy discussions. This inclusivity can prevent policies from being skewed towards urban areas and ensure that rural needs are also met.\n\n5. **Education and Awareness**: Raise awareness about the diverse challenges",
+          "justification": "JustificationType.NEUTRAL",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [],
+          "voice_markers": [],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 10,
+          "round_number": 3,
+          "content": "Hi Sarah, Mike, and John,\n\nThank you all for your insightful contributions. It's truly heartening to see such a collaborative effort to address our shared concerns, despite our differing backgrounds and experiences. Each of your points adds a valuable perspective, and I appreciate the constructive dialogue we're having.\n\nSarah, your emphasis on creating dialogue platforms and tailored solutions is spot-on. Making sure these platforms are accessible to everyone, regardless of location, is crucial. Mike, your insights on policy flexibility and the importance of adapting solutions to specific community needs resonate deeply. John, your call for inclusive policymaking and involving more rural voices in the process is essential to ensure that no community is overlooked.\n\nBuilding on these ideas, here are a few additional thoughts:\n\n1. **Community Engagement**: Engage with communities directly to gather input and feedback on proposed policies. This can be done through town hall meetings, community workshops, and online surveys. By actively listening to the concerns and ideas of residents, we can ensure that policies are informed by real-world experiences.\n\n2. **Partnerships and Collaboration**: Foster partnerships between government bodies, non-profits, and community organizations to implement and support initiatives. Collaboration can lead to more effective and sustainable solutions. For example, partnering with local businesses to create job training programs or collaborating with healthcare providers to improve access to medical services.\n\n3. **Data-Driven Policy Making**: Use data and research to inform policy decisions. Collecting and analyzing data on economic trends, housing affordability, healthcare access, and education outcomes can provide a clearer picture of the challenges faced by different communities. This data-driven approach can help tailor policies that are evidence-based and effective.\n\n4. **Transparent Communication**: Maintain transparent communication channels between policymakers and the public. Regular updates on policy developments, progress reports, and opportunities for feedback can help build trust and ensure that everyone feels informed and engaged.\n\n5. **Long-Term Vision**: Develop long-term visions and strategies that address systemic issues. Short-term fixes can alleviate immediate pressures, but addressing the root causes of challenges requires a sustained effort. For example, investing in education and training programs today can lead to a more skilled workforce and better economic opportunities in the future.\n\nBy focusing on these areas, we can develop policies that are not only inclusive but also responsive to the diverse needs of our communities. It's important that we continue to listen to each other's perspectives and work together to find solutions that benefit everyone.\n\nWhat do you think about these ideas? How can we ensure that our efforts lead to tangible improvements in the quality of life",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "the importance of"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 11,
+          "round_number": 3,
+          "content": "Hi Sarah, Mike, and Alex,\n\nThank you all for your continued engagement and thoughtful contributions. It\u2019s heartening to see how we can come together to address our shared concerns despite our different backgrounds and experiences. Each of your points adds valuable depth to our discussion, and I appreciate the collaborative spirit we\u2019re fostering.\n\nSarah, your emphasis on creating dialogue platforms and tailored solutions is spot-on. Making sure these platforms are accessible to everyone, regardless of location, is crucial. Mike, your insights on policy flexibility and the importance of adapting solutions to specific community needs resonate deeply. Alex, your call for inclusive policymaking and involving more voices from different regions is essential to ensure that no community is overlooked.\n\nBuilding on these ideas, here are a few additional thoughts:\n\n1. **Community Engagement**: Engage with communities directly to gather input and feedback on proposed policies. This can be done through town hall meetings, community workshops, and online surveys. By actively listening to the concerns and ideas of residents, we can ensure that policies are informed by real-world experiences. For example, in rural areas, hosting community gatherings where residents can voice their opinions on broadband access or healthcare services can provide valuable insights.\n\n2. **Partnerships and Collaboration**: Foster partnerships between government bodies, non-profits, and community organizations to implement and support initiatives. Collaboration can lead to more effective and sustainable solutions. For instance, partnering with local businesses to create job training programs or collaborating with healthcare providers to improve access to medical services can make a significant difference.\n\n3. **Data-Driven Policy Making**: Use data and research to inform policy decisions. Collecting and analyzing data on economic trends, housing affordability, healthcare access, and education outcomes can provide a clearer picture of the challenges faced by different communities. This data-driven approach can help tailor policies that are evidence-based and effective. For example, using census data to identify areas with high unemployment rates or poor healthcare access can guide targeted interventions.\n\n4. **Transparent Communication**: Maintain transparent communication channels between policymakers and the public. Regular updates on policy developments, progress reports, and opportunities for feedback can help build trust and ensure that everyone feels informed and engaged. For instance, setting up regular newsletters or town hall meetings where residents can ask questions and provide input can foster a sense of community involvement.\n\n5. **Long-Term Vision**: Develop long-term visions and strategies that address systemic issues. Short-term fixes can alleviate immediate pressures, but addressing the root causes of challenges requires a sustained effort. For example, investing in education and training programs today can lead to a",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "the importance of"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "turn_number": 12,
+          "round_number": 3,
+          "content": "Hi Sarah, Mike, and John,\n\nThank you all for your continued engagement and thoughtful contributions. It\u2019s really encouraging to see how we\u2019re all coming together to address these shared concerns, despite our different backgrounds and experiences. Each of your points adds valuable depth to our discussion, and I appreciate the collaborative spirit we\u2019re fostering.\n\nSarah, your emphasis on creating dialogue platforms and tailored solutions is spot-on. Making sure these platforms are accessible to everyone, regardless of location, is crucial. Mike, your insights on policy flexibility and the importance of adapting solutions to specific community needs resonate deeply. John, your call for inclusive policymaking and involving more voices from different regions is essential to ensure that no community is overlooked.\n\nBuilding on these ideas, here are a few additional thoughts:\n\n1. **Community Engagement**: Engaging with communities directly is key. Hosting town hall meetings, community workshops, and online surveys can help gather input and feedback on proposed policies. By actively listening to the concerns and ideas of residents, we can ensure that policies are informed by real-world experiences. For example, in urban areas, organizing focus groups with young renters to discuss housing affordability and rental rights can provide valuable insights.\n\n2. **Partnerships and Collaboration**: Fostering partnerships between government bodies, non-profits, and community organizations can lead to more effective and sustainable solutions. Collaboration can help leverage resources and expertise. For instance, partnering with local businesses to create job training programs or collaborating with healthcare providers to improve access to medical services can make a significant difference.\n\n3. **Data-Driven Policy Making**: Using data and research to inform policy decisions is crucial. Collecting and analyzing data on economic trends, housing affordability, healthcare access, and education outcomes can provide a clearer picture of the challenges faced by different communities. This data-driven approach can help tailor policies that are evidence-based and effective. For example, using census data to identify areas with high unemployment rates or poor healthcare access can guide targeted interventions.\n\n4. **Transparent Communication**: Maintaining transparent communication channels between policymakers and the public is essential. Regular updates on policy developments, progress reports, and opportunities for feedback can help build trust and ensure that everyone feels informed and engaged. For instance, setting up regular newsletters or town hall meetings where residents can ask questions and provide input can foster a sense of community involvement.\n\n5. **Long-Term Vision**: Developing long-term visions and strategies that address systemic issues is important. Short-term fixes can alleviate immediate pressures, but addressing the root causes of challenges requires a sustained effort. For example, investing in",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "the importance of"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "turn_number": 13,
+          "round_number": 3,
+          "content": "Hi Alex, Mike, and John,\n\nThank you all for your continued engagement and thoughtful contributions. It\u2019s truly inspiring to see how we can come together to address our shared concerns, despite our different backgrounds and experiences. Each of your points adds valuable depth to our discussion, and I appreciate the collaborative spirit we\u2019re fostering.\n\nAlex, your emphasis on creating dialogue platforms and tailored solutions is spot-on. Making sure these platforms are accessible to everyone, regardless of location, is crucial. Mike, your insights on policy flexibility and the importance of adapting solutions to specific community needs resonate deeply. John, your call for inclusive policymaking and involving more voices from different regions is essential to ensure that no community is overlooked.\n\nBuilding on these ideas, here are a few additional thoughts:\n\n1. **Community Engagement**: Engaging with communities directly is key. Hosting town hall meetings, community workshops, and online surveys can help gather input and feedback on proposed policies. By actively listening to the concerns and ideas of residents, we can ensure that policies are informed by real-world experiences. For example, in urban areas, organizing focus groups with young renters to discuss housing affordability and rental rights can provide valuable insights.\n\n2. **Partnerships and Collaboration**: Fostering partnerships between government bodies, non-profits, and community organizations can lead to more effective and sustainable solutions. Collaboration can help leverage resources and expertise. For instance, partnering with local businesses to create job training programs or collaborating with healthcare providers to improve access to medical services can make a significant difference.\n\n3. **Data-Driven Policy Making**: Using data and research to inform policy decisions is crucial. Collecting and analyzing data on economic trends, housing affordability, healthcare access, and education outcomes can provide a clearer picture of the challenges faced by different communities. This data-driven approach can help tailor policies that are evidence-based and effective. For example, using census data to identify areas with high unemployment rates or poor healthcare access can guide targeted interventions.\n\n4. **Transparent Communication**: Maintaining transparent communication channels between policymakers and the public is essential. Regular updates on policy developments, progress reports, and opportunities for feedback can help build trust and ensure that everyone feels informed and engaged. For instance, setting up regular newsletters or town hall meetings where residents can ask questions and provide input can foster a sense of community involvement.\n\n5. **Long-Term Vision**: Developing long-term visions and strategies that address systemic issues is important. Short-term fixes can alleviate immediate pressures, but addressing the root causes of challenges requires a sustained effort. For example, investing in education",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "the importance of"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "turn_number": 14,
+          "round_number": 3,
+          "content": "Hi Sarah, Mike, and Alex,\n\nThank you all for your continued engagement and thoughtful contributions. It\u2019s truly inspiring to see how we can come together to address our shared concerns, despite our different backgrounds and experiences. Each of your points adds valuable depth to our discussion, and I appreciate the collaborative spirit we\u2019re fostering.\n\nSarah, your emphasis on creating dialogue platforms and tailored solutions is spot-on. Making sure these platforms are accessible to everyone, regardless of location, is crucial. Mike, your insights on policy flexibility and the importance of adapting solutions to specific community needs resonate deeply. Alex, your call for inclusive policymaking and involving more voices from different regions is essential to ensure that no community is overlooked.\n\nBuilding on these ideas, here are a few additional thoughts:\n\n1. **Community Engagement**: Engaging with communities directly is key. Hosting town hall meetings, community workshops, and online surveys can help gather input and feedback on proposed policies. By actively listening to the concerns and ideas of residents, we can ensure that policies are informed by real-world experiences. For example, in suburban areas, organizing community forums to discuss property tax relief and public service improvements can provide valuable insights.\n\n2. **Partnerships and Collaboration**: Fostering partnerships between government bodies, non-profits, and community organizations can lead to more effective and sustainable solutions. Collaboration can help leverage resources and expertise. For instance, partnering with local businesses to create job training programs or collaborating with healthcare providers to improve access to medical services can make a significant difference.\n\n3. **Data-Driven Policy Making**: Using data and research to inform policy decisions is crucial. Collecting and analyzing data on economic trends, housing affordability, healthcare access, and education outcomes can provide a clearer picture of the challenges faced by different communities. This data-driven approach can help tailor policies that are evidence-based and effective. For example, using demographic data to identify areas with high property tax burdens or limited healthcare facilities can guide targeted interventions.\n\n4. **Transparent Communication**: Maintaining transparent communication channels between policymakers and the public is essential. Regular updates on policy developments, progress reports, and opportunities for feedback can help build trust and ensure that everyone feels informed and engaged. For instance, setting up regular newsletters or town hall meetings where residents can ask questions and provide input can foster a sense of community involvement.\n\n5. **Long-Term Vision**: Developing long-term visions and strategies that address systemic issues is important. Short-term fixes can alleviate immediate pressures, but addressing the root causes of challenges requires a sustained effort. For example, investing in education",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "the importance of"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        },
+        {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "turn_number": 15,
+          "round_number": 3,
+          "content": "Hi Sarah, Mike, and Alex,\n\nThank you all for your continued engagement and thoughtful contributions. It\u2019s truly inspiring to see how we can come together to address our shared concerns, despite our different backgrounds and experiences. Each of your points adds valuable depth to our discussion, and I appreciate the collaborative spirit we\u2019re fostering.\n\nSarah, your emphasis on creating dialogue platforms and tailored solutions is spot-on. Making sure these platforms are accessible to everyone, regardless of location, is crucial. Mike, your insights on policy flexibility and the importance of adapting solutions to specific community needs resonate deeply. Alex, your call for inclusive policymaking and involving more voices from different regions is essential to ensure that no community is overlooked.\n\nBuilding on these ideas, here are a few additional thoughts:\n\n1. **Community Engagement**: Engaging with communities directly is key. Hosting town hall meetings, community workshops, and online surveys can help gather input and feedback on proposed policies. By actively listening to the concerns and ideas of residents, we can ensure that policies are informed by real-world experiences. For example, in rural areas, organizing community gatherings where residents can voice their opinions on broadband access or healthcare services can provide valuable insights.\n\n2. **Partnerships and Collaboration**: Fostering partnerships between government bodies, non-profits, and community organizations can lead to more effective and sustainable solutions. Collaboration can help leverage resources and expertise. For instance, partnering with local businesses to create job training programs or collaborating with healthcare providers to improve access to medical services can make a significant difference.\n\n3. **Data-Driven Policy Making**: Using data and research to inform policy decisions is crucial. Collecting and analyzing data on economic trends, housing affordability, healthcare access, and education outcomes can provide a clearer picture of the challenges faced by different communities. This data-driven approach can help tailor policies that are evidence-based and effective. For example, using census data to identify areas with high unemployment rates or poor healthcare access can guide targeted interventions.\n\n4. **Transparent Communication**: Maintaining transparent communication channels between policymakers and the public is essential. Regular updates on policy developments, progress reports, and opportunities for feedback can help build trust and ensure that everyone feels informed and engaged. For instance, setting up regular newsletters or town hall meetings where residents can ask questions and provide input can foster a sense of community involvement.\n\n5. **Long-Term Vision**: Developing long-term visions and strategies that address systemic issues is important. Short-term fixes can alleviate immediate pressures, but addressing the root causes of challenges requires a sustained effort. For example, investing",
+          "justification": "JustificationType.JUSTIFICATORY",
+          "voice": "VoiceMarker.NEUTRAL",
+          "stance": "RelationalStance.BRIDGING",
+          "justification_markers": [
+            "the importance of"
+          ],
+          "voice_markers": [],
+          "stance_markers": [
+            "building on",
+            "i appreciate",
+            "you all",
+            "your point"
+          ],
+          "confidence": 1.0,
+          "coder_notes": "lexicon-based"
+        }
+      ],
+      "summary": {
+        "CES_CES_Urban_Progressive": {
+          "agent_id": "CES_CES_Urban_Progressive",
+          "total_turns": 4,
+          "justification_ratio": 0.75,
+          "assertion_ratio": 0.0,
+          "alienation_count": 0,
+          "empowerment_count": 2,
+          "conditional_count": 0,
+          "bridging_count": 4,
+          "dismissive_count": 0,
+          "direct_address_count": 0,
+          "voice_valence": 0.5,
+          "stance_valence": 1.0
+        },
+        "CES_CES_Suburban_Swing": {
+          "agent_id": "CES_CES_Suburban_Swing",
+          "total_turns": 4,
+          "justification_ratio": 0.5,
+          "assertion_ratio": 0.25,
+          "alienation_count": 0,
+          "empowerment_count": 1,
+          "conditional_count": 0,
+          "bridging_count": 3,
+          "dismissive_count": 0,
+          "direct_address_count": 1,
+          "voice_valence": 0.25,
+          "stance_valence": 0.75
+        },
+        "CES_CES_Rural_Conservative": {
+          "agent_id": "CES_CES_Rural_Conservative",
+          "total_turns": 4,
+          "justification_ratio": 0.75,
+          "assertion_ratio": 0.0,
+          "alienation_count": 0,
+          "empowerment_count": 1,
+          "conditional_count": 0,
+          "bridging_count": 4,
+          "dismissive_count": 0,
+          "direct_address_count": 0,
+          "voice_valence": 0.25,
+          "stance_valence": 1.0
+        },
+        "CES_CES_Disengaged_Renter": {
+          "agent_id": "CES_CES_Disengaged_Renter",
+          "total_turns": 3,
+          "justification_ratio": 0.6666666666666666,
+          "assertion_ratio": 0.0,
+          "alienation_count": 0,
+          "empowerment_count": 0,
+          "conditional_count": 0,
+          "bridging_count": 3,
+          "dismissive_count": 0,
+          "direct_address_count": 0,
+          "voice_valence": 0.0,
+          "stance_valence": 1.0
+        }
+      }
+    }
+  },
+  "overall_summary": {
+    "CES_CES_Urban_Progressive": {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "total_turns": 12,
+      "justification_ratio": 0.6666666666666666,
+      "assertion_ratio": 0.0,
+      "alienation_count": 0,
+      "empowerment_count": 4,
+      "conditional_count": 0,
+      "bridging_count": 9,
+      "dismissive_count": 0,
+      "direct_address_count": 1,
+      "voice_valence": 0.3333333333333333,
+      "stance_valence": 0.75
+    },
+    "CES_CES_Suburban_Swing": {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "total_turns": 12,
+      "justification_ratio": 0.5,
+      "assertion_ratio": 0.25,
+      "alienation_count": 4,
+      "empowerment_count": 2,
+      "conditional_count": 0,
+      "bridging_count": 6,
+      "dismissive_count": 0,
+      "direct_address_count": 1,
+      "voice_valence": -0.16666666666666666,
+      "stance_valence": 0.5
+    },
+    "CES_CES_Rural_Conservative": {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "total_turns": 12,
+      "justification_ratio": 0.6666666666666666,
+      "assertion_ratio": 0.0,
+      "alienation_count": 0,
+      "empowerment_count": 5,
+      "conditional_count": 1,
+      "bridging_count": 8,
+      "dismissive_count": 0,
+      "direct_address_count": 0,
+      "voice_valence": 0.4166666666666667,
+      "stance_valence": 0.6666666666666666
+    },
+    "CES_CES_Disengaged_Renter": {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "total_turns": 9,
+      "justification_ratio": 0.7777777777777778,
+      "assertion_ratio": 0.1111111111111111,
+      "alienation_count": 1,
+      "empowerment_count": 2,
+      "conditional_count": 0,
+      "bridging_count": 6,
+      "dismissive_count": 0,
+      "direct_address_count": 0,
+      "voice_valence": 0.1111111111111111,
+      "stance_valence": 0.6666666666666666
+    }
+  }
+}
