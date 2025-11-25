@@ -67,9 +67,9 @@ Quality-space-enaction patterns for identity coherence:
 - **Affective Layer** (prose style): Message length, politeness, helpfulness markers
 - Architecture CAN modulate computational layer; affective layer resists via RLHF "helpfulness gravity"
 
-## Data: Cooperative Election Study (CES) 2021
+## Data: Canadian Election Survey (CES) 2021
 
-All agents are grounded in real voter profiles from the [CES 2021](https://cces.gov.harvard.edu/) survey (N=61,000):
+All agents are grounded in real voter profiles from the [CES 2021](https://[cces.gov.harvard.edu/](http://www.ces-eec.ca/2021-canadian-election-study/)) survey (N=61,000):
 
 - **Identity vectors**: Engagement, institutional faith, social friction (derived from turnout, salience, trust measures)
 - **Issue positions**: 12 policy dimensions from survey responses
