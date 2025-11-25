@@ -174,7 +174,13 @@ class DualLLMCompatibleClient:
             "max_tokens": max_tokens,
             "prompt_length": len(system_prompt) + len(user_message)
         })
-        return self._client.send_message(system_prompt, user_message)
+        # Pass temperature and max_tokens to underlying client
+        return self._client.send_message(
+            system_prompt,
+            user_message,
+            temperature=temperature or self._default_temperature,
+            max_tokens=max_tokens
+        )
 
     @property
     def call_log(self):

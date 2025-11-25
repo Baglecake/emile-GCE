@@ -1,0 +1,26 @@
+{
+  "experiment_id": "token_throttle_fixed",
+  "context_mode": "adaptive",
+  "challenge_mode": "adaptive",
+  "rounds": [
+    {
+      "round_number": 1,
+      "regime": "ENGAGED_HARMONY",
+      "raw_metrics": {
+        "engagement": 0.6642310368823939,
+        "voice_valence": 1.0,
+        "stance_valence": 1.0,
+        "justificatory_pct": 0.5
+      },
+      "ema_metrics": {
+        "engagement": 0.5574808629088379,
+        "voice_valence": 0.35,
+        "stance_valence": 0.675,
+        "justificatory_pct": 0.435
+      },
+      "collapse_type": "none",
+      "divergence_injected": null
+    }
+  ],
+  "divergence_log": []
+}
