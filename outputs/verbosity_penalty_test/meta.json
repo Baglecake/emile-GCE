@@ -1,0 +1,29 @@
+{
+  "experiment_id": "verbosity_penalty_test",
+  "experiment_type": "CES-grounded",
+  "framework": "Social Aesthetics",
+  "data_source": "CES 2021 (simulated)",
+  "agents": [
+    "CES_Urban_Progressive",
+    "CES_Suburban_Swing",
+    "CES_Rural_Conservative",
+    "CES_Disengaged_Renter"
+  ],
+  "model": "Qwen/Qwen2.5-7B-Instruct",
+  "provider": "vllm",
+  "rounds_executed": 3,
+  "timestamp": "2025-11-25T04:26:17.393870",
+  "condition": "G",
+  "seed": 10,
+  "context_mode": "adaptive",
+  "challenge_mode": "adaptive",
+  "dual_llm": true,
+  "true_dual_llm": null,
+  "regime_trajectory": [
+    "UNKNOWN",
+    "UNKNOWN",
+    "UNKNOWN"
+  ],
+  "final_regime": "UNKNOWN",
+  "divergence_events": 0
+}

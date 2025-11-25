@@ -1,0 +1,191 @@
+Yeah, a little identity “capsule” in the repo will make your life (and Claude’s) *way* easier.
+
+Here’s how I’d organize it and exactly what to commit from what you have.
+
+---
+
+## 1. Overall layout
+
+I’d keep the existing high-level structure but carve out **identity-specific subspaces** under `data/` and `analysis/`:
+
+```text
+emile-gce/
+  data/
+    CES_2021.parquet
+    CES_2021_codebook_variables_weights.csv
+    identity/
+      identity_weights_2021.v0.json
+      identity_group_means_2021.csv
+      clean_variable_mapping_2021.csv   # optional but nice
+  analysis/
+    identity/
+      build_identity_weights_2021.py    # future / or merged into propose_…
+      propose_mapping_2021.py
+      compute_identity_group_means_2021.py
+      check_grouping_2021.py            # optional, see below
+  agents/
+    identity_core/
+      core.py                           # already there
+```
+
+So identity stuff is “first-class”, but still lives in the existing `data`/`analysis` namespaces.
+
+---
+
+## 2. What to put where (and what to rename)
+
+You currently have these files from the Gemini run:
+
+* `identity_mapping.json`
+* `identity_group_means_2021.csv`
+* `compute_and_summarize.py`
+* `check_grouping.py`
+* `propose_mapping.py`
+* `clean_variable_mapping.csv`
+
+### ✅ Definitely commit
+
+**a) Mapping JSON**
+
+* **From:** `identity_mapping.json`
+* **To:** `data/identity/identity_weights_2021.v0.json`
+
+This is your v0 **identity weights config**. Keep the `.v0` suffix to remind yourself it’s auto-generated / heuristic.
+
+Later, when you hand-tune it, you can:
+
+* create `identity_weights_2021.json` as the “blessed” version,
+* keep `v0` as archival or delete it.
+
+---
+
+**b) Group means**
+
+* **From:** `identity_group_means_2021.csv`
+* **To:** `data/identity/identity_group_means_2021.csv`
+
+This is super valuable for priors & checking realism. It contains:
+
+* group_id (Region × rural/urban × household type),
+* mean engagement / institutional_faith / social_friction,
+* N.
+
+Treat it as *derived data* but very much part of the project.
+
+---
+
+**c) Main computation script**
+
+* **From:** `compute_and_summarize.py`
+* **To:** `analysis/identity/compute_identity_group_means_2021.py`
+
+This is the pipeline that:
+
+* loads CES 2021,
+* uses the mapping JSON,
+* computes identity vectors per respondent,
+* aggregates to group means → `identity_group_means_2021.csv`.
+
+Add a docstring at the top like:
+
+```python
+"""
+Compute CES 2021 identity vectors and group-level means.
+
+Input:
+  - data/CES_2021.parquet
+  - data/identity/identity_weights_2021.v0.json
+
+Output:
+  - data/identity/identity_group_means_2021.csv
+"""
+```
+
+This script *definitely* belongs in the repo.
+
+---
+
+**d) Mapping helper**
+
+* **From:** `propose_mapping.py`
+* **To:** `analysis/identity/propose_mapping_2021.py`
+
+This is your “generate candidate mapping from codebook keywords” tool.
+
+Even if you don’t run it often, it’s super handy for:
+
+* regenerating the mapping after you tweak the CSV,
+* extending to 2015/2019 later.
+
+I’d keep it.
+
+---
+
+**e) Clean variable mapping**
+
+* **From:** `clean_variable_mapping.csv`
+* **To:** `data/identity/clean_variable_mapping_2021.csv`
+
+If this file is a nice table like:
+
+* `variable_name, description, selected_for_identity, suggested_dimension`
+
+then it’s worth keeping. It documents *how* you filtered/understood the CES variables.
+
+If it’s just a messy debug dump, you can skip it, but 90% of the time it becomes useful when you revisit mapping choices.
+
+---
+
+## 3. Optional / scratch
+
+**`check_grouping.py`**
+
+* If it’s short and relatively clean (e.g., prints out which grouping vars exist and experiments with region × rural/urban × household):
+
+  * **From:** `check_grouping.py`
+  * **To:** `analysis/identity/check_grouping_2021.py`
+
+  And you’re done.
+
+* If it’s truly messy scratch, you can:
+
+  * copy any useful logic/comments into docstrings in `compute_identity_group_means_2021.py`,
+  * then leave the file out of Git.
+
+Up to you — it’s not core infrastructure.
+
+---
+
+## 4. What *not* to commit
+
+Just to underline:
+
+* Don’t add the **CES .dta** file Gemini used.
+* Stick with your existing `CES_2021.parquet` and `CES_2021_codebook_variables_weights.csv` in `data/`.
+
+Those, plus the identity files above, are all you need for reproducibility.
+
+---
+
+## 5. Tiny glue for docs
+
+Since you already have `docs/identity_grounding.md`, I’d just add a short section like:
+
+```md
+## CES-Based Identity Artifacts
+
+- `data/identity/identity_weights_2021.v0.json`  
+  Auto-generated mapping from CES variables → identity dimensions (prototype).
+
+- `analysis/identity/compute_identity_group_means_2021.py`  
+  Script to compute per-respondent identity vectors and group-level priors.
+
+- `data/identity/identity_group_means_2021.csv`  
+  Empirical group-level means of identity dimensions (Region × rural/urban × household).
+```
+
+So future-you (and future-models) immediately know where the empirical identity backbone lives.
+
+---
+
+If you follow that layout, you get the “dedicated identity space” you’re craving *without* creating yet another top-level directory — everything stays coherent inside the existing `data/` + `analysis/` + `agents/identity_core/` structure.

@@ -160,7 +160,8 @@ class DualLLMClient:
         agent_id: str,
         rules: List[str],
         context: Optional[Dict[str, Any]] = None,
-        turn_number: int = 0
+        turn_number: int = 0,
+        max_tokens: Optional[int] = None
     ) -> GenerationResult:
         """
         Generate a response with coach validation.
@@ -185,7 +186,7 @@ class DualLLMClient:
         retries = 0
 
         # Initial generation
-        content = self.generate(system_prompt, user_message, mode="performer")
+        content = self.generate(system_prompt, user_message, mode="performer", max_tokens=max_tokens)
 
         # Validation loop
         for attempt in range(self.config.max_validation_retries + 1):
@@ -220,7 +221,7 @@ class DualLLMClient:
                 corrective_prompt = self._build_corrective_prompt(
                     system_prompt, violations, suggested
                 )
-                content = self.generate(corrective_prompt, user_message, mode="performer")
+                content = self.generate(corrective_prompt, user_message, mode="performer", max_tokens=max_tokens)
 
         duration = time.time() - start_time
 

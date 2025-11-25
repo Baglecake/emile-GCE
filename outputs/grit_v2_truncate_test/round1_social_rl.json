@@ -1,0 +1,336 @@
+{
+  "round_number": 1,
+  "messages": [
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "content": "Hi everyone, I'm Sarah, a 25-year-old living in downtown Toronto. I recently graduated with my Master\u2019s degree and have been working in tech for a couple of years now. The cost of living here is just insane, especially when it comes to housing. I really struggle to find an affordable place that isn\u2019t miles away from where I need to be. It feels like every time I think I might be able to save up enough for a down payment, the market just skyrockets again. I'm leaning towards the NDP because they\u2019ve proposed policies like rent control and increasing social housing, but I\u2019m curious to hear what other parties are offering too. Does anyone else feel like they're constantly playing catch-up with rising costs?",
+      "round_number": 1,
+      "turn_number": 1,
+      "timestamp": 1764058138.866675,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "content": "Hi Sarah,\n\nI can definitely relate to some of the struggles you're facing. My name is Mike, and I'm a 47-year-old living in a suburb outside of Ottawa. I have a college degree and work in a stable, middle-class job. While I haven't experienced the same level of housing pressure as you have in Toronto, I've noticed that home prices in my area have been climbing steadily over the past few years. It's tough to see my savings erode while trying to afford a place to live.\n\nI've been considering the Liberals' approach to housing, which includes measures like investing in affordable housing and supporting first-time homebuyers through the First-Time Home Buyer Incentive. However, I'm still unsure if these policies will make a significant difference for someone in my position. Have you had any experiences with these types of programs, or do you think there are better alternatives out there?\n\nWhat do others think about the various party proposals?",
+      "round_number": 1,
+      "turn_number": 2,
+      "timestamp": 1764058143.7491121,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "content": "Hi Sarah and Mike,\n\nMy name is John, and I'm a 55-year-old farmer living in a small rural community in Ontario. I've been around long enough to see how the cost of living and housing have changed over the years, and I have to say, things aren't getting any easier. In my part of the world, we don't face the same kind of skyrocketing housing prices as urban areas, but affordability is still a concern, especially for younger families trying to get started.\n\nI appreciate the Liberals\u2019 efforts to support first-time homebuyers and invest in affordable housing, but I worry that these policies might not address the underlying issues in our rural communities. For instance, many young people are leaving rural areas due to lack of opportunity, and this can affect property values and overall economic health. We need more than just subsidies; we need to create sustainable jobs and support local businesses.\n\nThat said, I lean towards the Conservatives because their focus on economic stability and reducing regulations could help attract more businesses to rural areas. By fostering a strong economy, we can ensure that housing remains affordable and that families can stay in their communities. What do you think about the idea of promoting economic growth as a way to tackle housing affordability?\n\nThanks for sharing your perspectives, and I look forward to hearing more from everyone.",
+      "round_number": 1,
+      "turn_number": 3,
+      "timestamp": 1764058150.1728919,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "content": "Hey Sarah, Mike, and John, I'm Alex, an 18-year-old non-binary person living in downtown Toronto. I'm currently in college and facing a lot of stress when it comes to housing.",
+      "round_number": 1,
+      "turn_number": 4,
+      "timestamp": 1764058158.738691,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "content": "Hi Alex, Mike, and John,\n\nThanks for sharing your thoughts. It sounds like we're all dealing with different aspects of the same issue\u2014housing affordability is a real challenge across different regions and age groups in Ontario.\n\nAlex, I completely understand the stress you're feeling as a student in Toronto. The city's cost of living is incredibly high, and finding affordable housing is nearly impossible. It's great that you're staying engaged despite the challenges.\n\nMike, it's interesting to hear your perspective from a suburban area. While the housing pressures might be different compared to the city, the steady increase in home prices is certainly concerning. The Liberals' proposal to support first-time homebuyers is a step in the right direction, but I worry it might only benefit those who are already financially stable enough to qualify for such incentives. We need policies that address the broader issue of affordability for everyone, not just a select few.\n\nJohn, your point about rural areas is well-taken. Economic stability is crucial for keeping young people in rural communities, and fostering local businesses is key. However, I think we also need to consider the broader structural issues that contribute to housing unaffordability. For example, the NDP's proposal for rent control and increased social housing could provide immediate relief for those struggling to find affordable places to live, regardless of whether they're in urban, suburban, or rural areas.\n\nIn terms of promoting economic growth, I agree that it's important, but I believe we need to ensure that any economic growth benefits everyone, not just a privileged few. The NDP's focus on income inequality and fair wages aligns well with this goal. By creating a more equitable economic system, we can address both housing affordability and broader economic disparities.\n\nSo, what do you think about the idea of combining economic growth initiatives with policies that directly address housing affordability and income inequality? Are there specific policies from any of the parties that you think could effectively achieve this balance?\n\nLooking forward to hearing your thoughts!",
+      "round_number": 1,
+      "turn_number": 5,
+      "timestamp": 1764058167.9118772,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "content": "Hi Sarah, Alex, and John,\n\nThanks for sharing your insights. It's clear that housing affordability is a multifaceted issue that affects people across different regions and backgrounds. Sarah, I can imagine how challenging it must be for you in Toronto, given the skyrocketing prices and the constant struggle to keep up with the market. Alex, as a student, the pressure to find affordable housing must be immense, and I hope you find a solution soon. John, your point about the importance of economic stability in rural areas resonates with me, even though my situation is quite different.\n\nSarah, I appreciate your thoughts on the Liberals' proposals and the NDP's approach. While the Liberals' plan to support first-time homebuyers is helpful, it might indeed only benefit those who are already in a relatively stable financial position. The NDP's emphasis on rent control and increased social housing seems to offer more immediate relief, but I'm still unsure if these policies alone will solve the broader issue of housing affordability.\n\nJohn, I agree that economic growth is essential for rural communities, but it needs to be inclusive and sustainable. I'm curious to know if you've seen any examples of successful economic initiatives in rural areas that have also addressed housing affordability?\n\nIn my suburban context, I've noticed that while home prices are rising, there's less urgency compared to urban areas. However, the steady climb is still concerning, especially for middle-income earners like myself. The Liberals' investment in affordable housing and support for first-time homebuyers seem like positive steps, but I'm skeptical about their effectiveness in the long term.\n\nDo you think there's a need for more comprehensive policies that address the root causes of housing unaffordability? For example, could measures like increasing the supply of housing, regulating land use, or even addressing income inequality play a role? What do you think about the idea of combining economic growth initiatives with policies that directly tackle housing affordability and income inequality?\n\nI'm open to hearing more about your thoughts on these matters and any specific policies that you think could make a meaningful impact.\n\nBest,\nMike",
+      "round_number": 1,
+      "turn_number": 6,
+      "timestamp": 1764058177.63077,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "content": "Hi Sarah, Alex, Mike,\n\nThanks for sharing your thoughts and concerns. It\u2019s clear that housing affordability is a significant issue across Ontario, and each of us faces unique challenges depending on our locations and circumstances.\n\nSarah, I can imagine the stress you\u2019re under in Toronto. The city's rapid development and population growth have pushed housing prices out of reach for many residents. As someone who lives in a rural area, I don't face the same intense competition for housing, but I do see the broader implications of these trends. Younger families in rural areas are often priced out of urban centers, leading to a brain drain that can hurt our local economies.\n\nMike, your point about the steady rise in home prices in your suburban area is valid. While it may not be as dramatic as in Toronto, it's still a concern for middle-income earners like yourself. The Liberals' proposal to support first-time homebuyers and invest in affordable housing is a start, but I share your skepticism about its long-term effectiveness, especially if it doesn't address the underlying issues.\n\nAlex, as a student in Toronto, you're facing a tough situation. The city's high cost of living and limited affordable housing options make it difficult for young people like you to find a place to live. It's important that you stay engaged and continue to advocate for policies that address these issues.\n\nRegarding economic growth initiatives and housing affordability, I believe the Conservatives' approach of focusing on economic stability and reducing regulations can help attract businesses to rural areas, which in turn can improve the local economy and make housing more affordable. However, I also recognize that simply cutting regulations isn't enough. We need policies that encourage sustainable development and support local industries.\n\nFor example, the Conservatives have proposed measures to streamline the approval process for housing projects, which could lead to an increase in the supply of affordable homes. Additionally, by fostering a business-friendly environment, we can create more jobs and opportunities for young people to stay in their communities, thereby stabilizing property values.\n\nHowever, I understand that there's a need for a balanced approach. The NDP's emphasis on rent control and increased social housing could provide immediate relief for those struggling with high rents, but I'm concerned about the potential unintended consequences, such as reduced investment in rental properties. Similarly, the Liberals' focus on supporting first-time homebuyers is helpful, but it might not be sufficient to address the broader issue of affordability for all residents.\n\nWhat do you think about the idea of combining economic growth initiatives with targeted housing policies? Do you believe that measures",
+      "round_number": 1,
+      "turn_number": 7,
+      "timestamp": 1764058189.405602,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "content": "Hi Sarah, Mike, and John, Thanks for sharing your thoughts and experiences. It's clear that housing affordability is a major issue affecting people across different parts of Ontario. As a student in downtown Toronto, I feel the pressure daily.",
+      "round_number": 1,
+      "turn_number": 8,
+      "timestamp": 1764058199.552762,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "content": "Hi Alex, Mike, and John,\n\nThanks for your thoughtful responses. It\u2019s clear that we\u2019re all grappling with similar issues but from different angles and contexts. Alex, I can only imagine how overwhelming it must be for you as a student trying to navigate the city\u2019s high cost of living. Staying engaged and advocating for change is so important, and I hope you find the support you need.\n\nMike, your point about the steady rise in home prices in your suburban area is well taken. The Liberals' proposals to support first-time homebuyers and invest in affordable housing are good steps, but as you noted, they might not be enough in the long run. We need policies that address the systemic issues contributing to housing unaffordability.\n\nJohn, your insights from a rural perspective are valuable. Fostering economic stability and attracting businesses to rural areas can certainly help stabilize property values and keep young families from moving away. However, we need to ensure that these initiatives benefit everyone, not just a select few.\n\nRegarding the idea of combining economic growth initiatives with targeted housing policies, I think it\u2019s crucial. Economic growth alone won\u2019t solve the problem if it doesn\u2019t benefit everyone. We need policies that directly address housing affordability and income inequality. For example:\n\n1. **Rent Control and Increased Social Housing**: Policies like rent control and increased social housing can provide immediate relief for those struggling with high rents and limited housing options. This is something the NDP has proposed, and I believe it\u2019s essential for providing stability to renters and those on fixed incomes.\n\n2. **Affordable Housing Initiatives**: Investing in affordable housing projects can increase the supply of affordable homes, which helps to bring down prices and make housing more accessible. This is something the Liberals have proposed, and while it\u2019s a good start, it needs to be paired with measures that ensure these homes remain affordable in the long term.\n\n3. **Economic Stability and Job Creation**: Measures that foster economic stability and create jobs can help to reduce income inequality and make housing more affordable. The Conservatives\u2019 focus on reducing regulations and streamlining the approval process for housing projects is a step in the right direction, but we need to ensure that these initiatives benefit everyone and don\u2019t exacerbate existing inequalities.\n\nCombining these approaches can help to create a more comprehensive solution to housing affordability. It\u2019s not just about building more homes or supporting homebuyers; it\u2019s about ensuring that everyone has access to safe, affordable, and stable housing. \n\nWhat do you think about these ideas? Are there specific policies from",
+      "round_number": 1,
+      "turn_number": 9,
+      "timestamp": 1764058211.340609,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "content": "Hi Sarah, Alex, and John,\n\nThank you for your detailed responses. It\u2019s clear that housing affordability is a complex issue that touches everyone differently based on their location and circumstances. Sarah, your situation in Toronto is particularly challenging, and it\u2019s inspiring to see your continued engagement despite the difficulties. Alex, as a student in Toronto, you face significant hurdles in finding affordable housing, and it\u2019s crucial that we support young people like you who are navigating these tough conditions.\n\nJohn, your insights from a rural perspective are invaluable. Economic stability and fostering local businesses are key for maintaining affordable housing in rural areas, and I agree that simply cutting regulations isn\u2019t enough. We need policies that promote sustainable and inclusive growth.\n\nSarah, your suggestion of combining economic growth initiatives with targeted housing policies resonates with me. Economic stability and job creation are essential, but they need to be coupled with measures that directly address housing affordability and income inequality. Here are a few points I\u2019d like to add:\n\n1. **Increasing the Supply of Housing**: One of the root causes of housing unaffordability is the limited supply of homes. Policies that encourage developers to build more affordable units can help bring down prices and increase accessibility. The Liberals\u2019 investments in affordable housing are a step in the right direction, but we need to ensure that these projects are sustainable and not just short-term solutions.\n\n2. **Regulating Land Use and Zoning Laws**: Often, restrictive zoning laws and land use regulations can drive up the cost of housing. Streamlining these processes can help speed up construction and make housing more affordable. However, this needs to be done carefully to avoid gentrification and displacement of existing residents.\n\n3. **Addressing Income Inequality**: Housing affordability is closely tied to income levels. Policies that aim to reduce income inequality, such as raising the minimum wage and improving access to education and training, can help make housing more affordable for middle-income earners like myself.\n\n4. **Supporting First-Time Homebuyers and Renters**: While the Liberals\u2019 First-Time Home Buyer Incentive is beneficial for those who qualify, it\u2019s important to consider the broader impact on the housing market. Similarly, rent control measures can provide immediate relief for renters but need to be implemented thoughtfully to avoid unintended consequences.\n\nIn my suburban context, I\u2019ve seen home prices rise steadily, but not at the same pace as in urban areas. This makes it difficult for middle-income earners to find affordable homes without significant financial strain. The Liberals\u2019 proposals seem to offer some relief, but I\u2019m still",
+      "round_number": 1,
+      "turn_number": 10,
+      "timestamp": 1764058223.2692559,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "content": "Hi Sarah, Alex, and Mike,\n\nThanks for your detailed insights and suggestions. It's clear that housing affordability is a complex issue that affects people in different ways depending on where they live and their individual circumstances. Sarah, your situation in Toronto is particularly challenging, and it's impressive to see your ongoing advocacy despite the difficulties. Alex, as a student in Toronto, you face significant hurdles in finding affordable housing, and it's crucial that we support young people like you who are navigating these tough conditions.\n\nMike, your suburban context highlights the steady rise in home prices, which is concerning for middle-income earners like yourself. The Liberals' proposals to support first-time homebuyers and invest in affordable housing are good steps, but as you noted, they might not be enough in the long run. We need policies that address the systemic issues contributing to housing unaffordability.\n\nSarah, your suggestion of combining economic growth initiatives with targeted housing policies resonates with me. Economic stability and job creation are essential, but they need to be coupled with measures that directly address housing affordability and income inequality. Here are a few points I'd like to add:\n\n1. **Encouraging Sustainable Development**: The Conservatives' approach focuses on economic stability and reducing regulations to foster business growth. However, we need to ensure that this growth is sustainable and benefits everyone, not just a select few. Encouraging green and sustainable development can help create jobs and improve the quality of life in rural areas while making housing more affordable.\n\n2. **Investing in Rural Infrastructure**: Improving infrastructure in rural areas can help attract businesses and create jobs, which in turn can stabilize property values and make housing more affordable. This includes investments in transportation, broadband internet, and utilities, which are critical for rural communities.\n\n3. **Supporting Local Industries**: Many rural areas rely on agriculture and other local industries. Supporting these industries through grants, tax incentives, and streamlined regulations can help create a robust local economy, which can then support affordable housing.\n\n4. **Streamlining Housing Approvals**: The Conservatives propose streamlining the approval process for housing projects to increase the supply of affordable homes. This can help bring down prices and make housing more accessible. However, it's crucial that these projects are sustainable and not just short-term solutions.\n\n5. **Addressing Brain Drain**: One of the biggest challenges in rural areas is the \"brain drain,\" where young people leave for better opportunities in urban centers. By fostering a strong local economy and providing incentives for young professionals to stay or return to their hometowns,",
+      "round_number": 1,
+      "turn_number": 11,
+      "timestamp": 1764058235.2939079,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "content": "Hi Sarah, Mike, and John, Thanks for sharing your perspectives and ideas. It\u2019s really eye-opening to see how housing affordability impacts people in different parts of Ontario. As a student in downtown Toronto, I feel the squeeze every day, and it\u2019s tough to see the costs keep going up.",
+      "round_number": 1,
+      "turn_number": 12,
+      "timestamp": 1764058247.373287,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": null,
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    }
+  ],
+  "feedback": {
+    "CES_CES_Urban_Progressive": {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "round_number": 1,
+      "engagement": 0.16666666666666666,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.43333333333333335,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Suburban_Swing": {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "round_number": 1,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.3,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Rural_Conservative": {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "round_number": 1,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.3,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Disengaged_Renter": {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "round_number": 1,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    }
+  },
+  "policy_adaptations": [],
+  "synthesis": "",
+  "duration_seconds": 112.74722981452942,
+  "identity_states": {
+    "CES_CES_Urban_Progressive": {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "group_id": "urban_left",
+      "vector": {
+        "engagement": 0.1667,
+        "institutional_faith": 1.0,
+        "social_friction": 0.2
+      },
+      "initial_vector": {
+        "engagement": 0.5,
+        "institutional_faith": 0.8,
+        "social_friction": 0.2
+      },
+      "delta_I": 0.3887,
+      "sigma": 0.3887,
+      "coherence": 0.9266,
+      "tau": 0.6323,
+      "natality": 0.5,
+      "temperature": 1.0647,
+      "surplus": 0.0389,
+      "energy": 0.9,
+      "rupture_active": true,
+      "history_length": 2
+    },
+    "CES_CES_Suburban_Swing": {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "group_id": "urban_center",
+      "vector": {
+        "engagement": 0.0,
+        "institutional_faith": 1.0,
+        "social_friction": 0.2
+      },
+      "initial_vector": {
+        "engagement": 0.5,
+        "institutional_faith": 0.8,
+        "social_friction": 0.2
+      },
+      "delta_I": 0.5385,
+      "sigma": 0.5385,
+      "coherence": 0.8541,
+      "tau": 0.3953,
+      "natality": 0.5,
+      "temperature": 1.0792,
+      "surplus": 0.0539,
+      "energy": 0.9,
+      "rupture_active": true,
+      "history_length": 2
+    },
+    "CES_CES_Rural_Conservative": {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "group_id": "rural_right",
+      "vector": {
+        "engagement": 0.0,
+        "institutional_faith": 1.0,
+        "social_friction": 0.2
+      },
+      "initial_vector": {
+        "engagement": 0.5,
+        "institutional_faith": 0.8,
+        "social_friction": 0.2
+      },
+      "delta_I": 0.5385,
+      "sigma": 0.5385,
+      "coherence": 0.8541,
+      "tau": 0.3953,
+      "natality": 0.5,
+      "temperature": 1.0792,
+      "surplus": 0.0539,
+      "energy": 0.9,
+      "rupture_active": true,
+      "history_length": 2
+    },
+    "CES_CES_Disengaged_Renter": {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "group_id": "renter_disengaged",
+      "vector": {
+        "engagement": 0.0,
+        "institutional_faith": 1.0,
+        "social_friction": 0.2
+      },
+      "initial_vector": {
+        "engagement": 0.5,
+        "institutional_faith": 0.8,
+        "social_friction": 0.2
+      },
+      "delta_I": 0.5385,
+      "sigma": 0.5385,
+      "coherence": 0.8541,
+      "tau": 0.3953,
+      "natality": 0.5,
+      "temperature": 1.0792,
+      "surplus": 0.0539,
+      "energy": 0.9,
+      "rupture_active": true,
+      "history_length": 2
+    }
+  }
+}

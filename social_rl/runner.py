@@ -111,6 +111,12 @@ class SocialRLConfig:
     verbosity_penalty_alpha: float = 0.15  # Penalty scaling factor
     verbosity_max_penalty: float = 0.25    # Maximum penalty cap
 
+    # Phase 2b: Token cap throttling (hard enforcement)
+    # If agent overshoots word limit, reduce max_tokens for next turn
+    token_throttle_enabled: bool = True
+    token_throttle_factor: float = 0.75    # Multiply cap by this after overshoot
+    token_min_cap: int = 80                # Floor for token cap (~40 words)
+
 
 @dataclass
 class SocialRLMessage:
@@ -225,6 +231,10 @@ class SocialRLRunner:
         # Phase 2b: Dynamic grit states (per-agent grit level calibrated each turn)
         # Maps agent_id -> current GritLevel (updated by calibrate_grit_to_ces)
         self.grit_states: Dict[str, str] = {}  # agent_id -> "NONE"/"LIGHT"/"MODERATE"/"STRONG"
+
+        # Phase 2b: Token caps (per-agent max_tokens, reduced after verbosity overshoot)
+        # Maps agent_id -> current max_tokens limit
+        self.token_caps: Dict[str, int] = {}  # agent_id -> max_tokens
 
         # Setup output directory
         if self.config.output_dir:
@@ -411,29 +421,8 @@ class SocialRLRunner:
         # 4. Build user message (conversation context)
         user_message = self._build_user_message(history, agent, round_config)
 
-        # 5. Generate response (with validation if enabled)
-        if self.config.use_coach_validation:
-            content, validation_meta = self._generate_with_validation(
-                system_prompt, user_message, round_config.get("rules", ""),
-                agent.get("behaviors", {}).get("raw", ""),
-                agent_id=agent_id,
-                turn_number=turn_number
-            )
-        else:
-            content = self._generate_simple(system_prompt, user_message)
-            validation_meta = None
-
-        # 5b. DYNAMIC GRIT CALIBRATION: Adjust grit level based on engagement vs CES target
-        # This is the "active dynamics" - grit level changes per-turn based on overshoot
-        # See dev-notes.md for design rationale (smoothing, clamping, CES targets)
-        current_engagement = agent_feedback.get('engagement', 0.5)
+        # 4b. Get current grit state (needed for token cap initialization)
         agent_prompt = agent.get("prompt", "")
-
-        # Grit level ordering for smoothing (NONE=0, LIGHT=1, MODERATE=2, STRONG=3)
-        GRIT_LEVELS = {"NONE": 0, "LIGHT": 1, "MODERATE": 2, "STRONG": 3}
-        GRIT_NAMES = {0: "NONE", 1: "LIGHT", 2: "MODERATE", 3: "STRONG"}
-
-        # Get current grit state (default from prompt if not yet set)
         old_grit = self.grit_states.get(agent_id)
         if old_grit is None:
             # Initialize from prompt
@@ -446,6 +435,46 @@ class SocialRLRunner:
             else:
                 old_grit = "NONE"
 
+        # 5. TOKEN CAP THROTTLING: Get max_tokens for this turn
+        # Token caps per grit level (from grit_config.py)
+        TOKEN_CAPS_BY_GRIT = {
+            "STRONG": 100,   # ~50 words
+            "MODERATE": 150, # ~75 words
+            "LIGHT": 256,    # ~128 words
+            "NONE": 512      # default
+        }
+
+        # Get persisted cap or initialize from grit level
+        if agent_id in self.token_caps:
+            max_tokens = self.token_caps[agent_id]
+        else:
+            # Initialize from grit level
+            max_tokens = TOKEN_CAPS_BY_GRIT.get(old_grit, 512)
+            self.token_caps[agent_id] = max_tokens
+
+        # 5. Generate response (with validation if enabled)
+        if self.config.use_coach_validation:
+            content, validation_meta = self._generate_with_validation(
+                system_prompt, user_message, round_config.get("rules", ""),
+                agent.get("behaviors", {}).get("raw", ""),
+                agent_id=agent_id,
+                turn_number=turn_number,
+                max_tokens=max_tokens
+            )
+        else:
+            content = self._generate_simple(system_prompt, user_message)
+            validation_meta = None
+
+        # 5b. DYNAMIC GRIT CALIBRATION: Adjust grit level based on engagement vs CES target
+        # This is the "active dynamics" - grit level changes per-turn based on overshoot
+        # See dev-notes.md for design rationale (smoothing, clamping, CES targets)
+        current_engagement = agent_feedback.get('engagement', 0.5)
+
+        # Grit level ordering for smoothing (NONE=0, LIGHT=1, MODERATE=2, STRONG=3)
+        GRIT_LEVELS = {"NONE": 0, "LIGHT": 1, "MODERATE": 2, "STRONG": 3}
+        GRIT_NAMES = {0: "NONE", 1: "LIGHT", 2: "MODERATE", 3: "STRONG"}
+
+        # old_grit already computed in step 4b
         grit_level = old_grit  # Default: keep current level
 
         # Dynamic calibration if enabled
@@ -526,7 +555,20 @@ class SocialRLRunner:
             self.accumulated_feedback[agent_id]['word_count'] = len(words)
             self.accumulated_feedback[agent_id]['word_limit'] = word_limit
 
-            if self.config.verbose and verbosity_penalty > 0.01:
+            # TOKEN CAP THROTTLING: Reduce max_tokens for next turn
+            if self.config.token_throttle_enabled:
+                old_cap = self.token_caps.get(agent_id, 512)
+                new_cap = max(
+                    self.config.token_min_cap,
+                    int(old_cap * self.config.token_throttle_factor)
+                )
+                self.token_caps[agent_id] = new_cap
+
+                if self.config.verbose and verbosity_penalty > 0.01:
+                    print(f"    [VERBOSITY] {agent_id}: {len(words)} words > {word_limit} limit → "
+                          f"eng {engagement_base:.2f}→{penalized_engagement:.2f} (penalty={verbosity_penalty:.2f})")
+                    print(f"    [TOKEN-CAP] {agent_id}: {old_cap}→{new_cap} tokens (throttle={self.config.token_throttle_factor})")
+            elif self.config.verbose and verbosity_penalty > 0.01:
                 print(f"    [VERBOSITY] {agent_id}: {len(words)} words > {word_limit} limit → "
                       f"eng {engagement_base:.2f}→{penalized_engagement:.2f} (penalty={verbosity_penalty:.2f})")
 
@@ -548,6 +590,7 @@ class SocialRLRunner:
         feedback_snapshot['word_limit'] = word_limit
         feedback_snapshot['grit_level'] = grit_level
         feedback_snapshot['verbosity_penalty'] = verbosity_penalty
+        feedback_snapshot['max_tokens'] = self.token_caps.get(agent_id, 512)  # Current cap for next turn
         if verbosity_penalty > 0:
             feedback_snapshot['engagement_base'] = engagement_base
 
@@ -586,10 +629,13 @@ class SocialRLRunner:
         rules: str,
         behaviors: str,
         agent_id: str = "Unknown",
-        turn_number: int = 0
+        turn_number: int = 0,
+        max_tokens: Optional[int] = None
     ) -> tuple:
         """Generate with Coach/Performer validation pattern."""
         metadata = {"attempts": 0, "validations": [], "filtered": False, "used_dual_llm": False}
+        if max_tokens:
+            metadata["max_tokens"] = max_tokens
 
         # Use DualLLMClient if available
         if self.dual_llm is not None:
@@ -602,7 +648,8 @@ class SocialRLRunner:
                 agent_id=agent_id,
                 rules=rules_list,
                 context={"behaviors": behaviors},
-                turn_number=turn_number
+                turn_number=turn_number,
+                max_tokens=max_tokens
             )
 
             metadata["attempts"] = result.retries + 1

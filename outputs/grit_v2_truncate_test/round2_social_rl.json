@@ -1,0 +1,427 @@
+{
+  "round_number": 2,
+  "messages": [
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "content": "As a 25-34 year old woman from Ontario, living in an urban area, I believe that voting should not be mandatory. While it might seem like a good idea to ensure everyone participates in the democratic process, I think it's important for individuals to engage with politics and make informed decisions about their future. Forcing someone to vote doesn't necessarily mean they'll be well-informed or invested in the outcome.\n\nPolitics matters a great deal for people like me because we face significant economic pressures. Living in an urban area, I see firsthand how policies can impact housing costs, access to healthcare, and job security. As someone who leans NDP and reliably votes in elections, I feel that my voice needs to be heard on these issues. Parties need to address the concerns of young professionals and families, but often, they don't reach out to voters like me effectively enough.\n\nWhen it comes to political engagement, I find myself quite involved, but sometimes I feel that my contributions aren't always acknowledged. This can be discouraging, especially when it seems like certain voices dominate the discourse. It\u2019s crucial for parties to listen to diverse perspectives and recognize the efforts of engaged citizens like myself. \n\nIn summary, while voting isn't mandatory for me, I strongly believe it's a responsibility that should be taken seriously. Politics directly affects our lives, and it's important for parties to reach out and truly represent the needs and desires of all voters, including those of us who are actively participating in the system.",
+      "round_number": 2,
+      "turn_number": 1,
+      "timestamp": 1764058254.3649862,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.16666666666666666,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.43333333333333335
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "content": "From my perspective as a 45-54 year old man from Ontario, living in a suburban area and college-educated, I lean towards thinking that voting shouldn\u2019t be mandatory. I believe that while ensuring everyone participates in the democratic process sounds ideal, it should come from a place of genuine interest and understanding of the issues at hand. Being forced to vote doesn\u2019t guarantee that individuals will be fully informed or genuinely invested in the election outcomes.\n\nFor me, politics does matter significantly because it impacts my quality of life in various ways. As someone who resides in a suburban area, I care deeply about issues such as local infrastructure, education, and community safety. However, I also recognize that my voice isn\u2019t always heard by political parties. I often feel that my concerns are overshadowed by more pressing urban or rural issues. This can be frustrating, especially when I see that my contributions to political discussions and forums aren\u2019t always recognized or given due consideration.\n\nMy engagement level with politics is moderate; I stay informed and participate in elections, but I don\u2019t align myself with any specific party. I appreciate when parties reach out to me and try to address my concerns, but it feels like my demographic\u2014middle-aged suburbanites\u2014is sometimes overlooked. It\u2019s important for parties to recognize the value of middle-ground voters like myself and ensure that our viewpoints are included in their platforms.\n\nIn summary, while I believe voting is a fundamental right and responsibility, I don\u2019t think it should be mandated. Instead, political parties should focus on making their outreach more inclusive and effective, ensuring that all voices, including those of suburban swing voters like me, are heard and considered in the political process.",
+      "round_number": 2,
+      "turn_number": 2,
+      "timestamp": 1764058261.92879,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.3
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "content": "From where I stand as a 55-64 year old man from Ontario, living in a rural area and high school educated, I believe that voting should not be made mandatory. I understand the argument that mandatory voting could increase overall participation in the democratic process, but I think it's essential that people take the time to educate themselves on the issues and candidates before casting their ballots. Voting is a privilege and a responsibility, and I feel that forcing someone to vote without proper understanding undermines the integrity of the process.\n\nFor me, politics matters greatly because it directly impacts my daily life and the future of my community. As a resident of a rural area, I care deeply about issues such as agricultural support, infrastructure development, and healthcare services. However, I often feel that my voice isn't always heard by political parties. Rural areas are frequently overlooked in favor of more densely populated urban centers, which means that our unique challenges and needs are sometimes neglected.\n\nMy engagement level with politics is quite high; I consistently vote in elections and stay informed about the issues that matter most to me. Despite this, I feel that parties rarely reach out to voters like me. When they do, it's usually through generic mailers or automated phone calls that don't really address the specific concerns of rural communities. This can be disheartening, as it makes me feel like my contributions aren't valued.\n\nI think it's crucial for political parties to make a more concerted effort to engage with rural voters. We're not asking for special treatment, just recognition of the fact that our communities have different priorities and needs than urban or suburban areas. When parties acknowledge these differences and include them in their platforms, it strengthens the democratic process and ensures that all voices are heard.\n\nIn summary, while I believe voting is a vital part of democracy, I don't think it should be mandatory. Instead, parties need to do a better job of reaching out to rural voters like me and addressing the issues that are most important to us. Only then can we truly feel that our voices are being heard and that our concerns are being taken seriously.",
+      "round_number": 2,
+      "turn_number": 3,
+      "timestamp": 1764058271.6419141,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.3
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "content": "From my perspective as an 18-24 year old non-binary person from Ontario, living in an urban area, I'm not sure if voting should be mandatory.",
+      "round_number": 2,
+      "turn_number": 4,
+      "timestamp": 1764058281.5783381,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "content": "From my perspective as a 25-34 year old woman from Ontario, living in an urban area, I agree with the sentiment that voting shouldn't be mandatory. I believe that voting is a critical responsibility, but it should stem from genuine engagement and understanding of the issues rather than being a coerced action. Mandatory voting could potentially lead to uninformed decisions, which wouldn't serve the democratic process well.\n\nFor me, politics matters immensely because it directly influences my daily life. As someone who lives in an urban environment, I witness firsthand how policies shape everything from housing affordability to healthcare access and job security. These are issues that hit close to home and require thoughtful consideration. My voice needs to be heard, especially on matters that affect young professionals and families like mine.\n\nDespite my reliable voting habits and active involvement, I often feel that my contributions aren't always acknowledged. It's disheartening to see certain voices dominate the discourse while others, including mine, get sidelined. Political parties need to do a better job of reaching out to voters like me and recognizing the efforts we put into staying informed and engaged.\n\nI appreciate when parties make a genuine attempt to connect with me and address my concerns. However, it's clear that there's still a disconnect. Urban areas face unique challenges, and it's essential for parties to tailor their messaging and platforms to reflect these realities. By doing so, they can ensure that the needs and desires of urban voters are truly represented.\n\nIn summary, while I believe voting is a crucial aspect of democracy, I don't think it should be mandatory. Instead, parties need to focus on fostering genuine engagement and making sure that all voices, particularly those of young, urban voters like myself, are heard and valued. This will strengthen the democratic process and ensure that policies are crafted with the full spectrum of voter perspectives in mind.",
+      "round_number": 2,
+      "turn_number": 5,
+      "timestamp": 1764058290.0762281,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.16666666666666666,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.43333333333333335
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "content": "From my standpoint as a 45-54 year old man from Ontario, living in a suburban area and college-educated, I agree with the sentiment that voting shouldn't be made mandatory. I believe that voting is a fundamental right and responsibility, but it should come from a place of genuine interest and understanding of the issues at hand. Being forced to vote doesn't necessarily mean that individuals will be fully informed or genuinely invested in the election outcomes.\n\nFor me, politics matters significantly because it impacts my quality of life in various ways. As someone who resides in a suburban area, I care deeply about issues such as local infrastructure, education, and community safety. However, I often feel that my voice isn't always heard by political parties. Suburban areas can sometimes fall between the cracks, with neither urban nor rural issues receiving adequate attention. This can be frustrating, especially when I see that my contributions to political discussions and forums aren't always recognized or given due consideration.\n\nMy engagement level with politics is moderate; I stay informed and participate in elections, but I don't align myself with any specific party. I appreciate when parties reach out to me and try to address my concerns, but it feels like my demographic\u2014middle-aged suburbanites\u2014is sometimes overlooked. It's important for parties to recognize the value of middle-ground voters like myself and ensure that our viewpoints are included in their platforms.\n\nDespite my efforts to stay informed and engaged, I sometimes feel that my voice is drowned out by louder, more vocal groups. This can be discouraging, as it makes me question whether my contributions truly matter. Political parties need to do a better job of engaging with voters like me, offering clear and direct communication, and addressing the specific concerns of suburban communities. By doing so, they can foster a stronger sense of trust and connection, which is crucial for building a vibrant and inclusive democracy.\n\nIn summary, while I believe voting is a vital part of democracy, I don't think it should be mandatory. Instead, parties need to focus on making their outreach more inclusive and effective, ensuring that all voices, including those of suburban swing voters like me, are heard and considered in the political process. This will help to create a more representative and responsive government that truly reflects the needs and aspirations of all Canadians.",
+      "round_number": 2,
+      "turn_number": 6,
+      "timestamp": 1764058300.6244822,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.3
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "content": "From my perspective as a 55-64 year old man from Ontario, living in a rural area and high school educated, I strongly believe that voting should not be made mandatory. I understand the intention behind mandatory voting\u2014to increase participation in the democratic process\u2014but I think it's crucial that people take the time to educate themselves on the issues and candidates before casting their ballots. Voting is a privilege and a responsibility, and forcing someone to vote without a proper understanding of the issues can undermine the integrity of the electoral process.\n\nFor me, politics matters immensely because it directly impacts my daily life and the future of my community. As a resident of a rural area, I care deeply about issues such as agricultural support, infrastructure development, and healthcare services. However, I often feel that my voice isn't always heard by political parties. Rural areas are frequently overlooked in favor of more densely populated urban centers, which means that our unique challenges and needs are sometimes neglected.\n\nMy engagement level with politics is quite high; I consistently vote in elections and stay informed about the issues that matter most to me. Despite this, I feel that parties rarely reach out to voters like me. When they do, it's usually through generic mailers or automated phone calls that don't really address the specific concerns of rural communities. This can be disheartening, as it makes me feel like my contributions aren't valued.\n\nI think it's crucial for political parties to make a more concerted effort to engage with rural voters. We're not asking for special treatment, just recognition of the fact that our communities have different priorities and needs than urban or suburban areas. When parties acknowledge these differences and include them in their platforms, it strengthens the democratic process and ensures that all voices are heard.\n\nIn summary, while I believe voting is a vital part of democracy, I don't think it should be mandatory. Instead, parties need to do a better job of reaching out to rural voters like me and addressing the issues that are most important to us. Only then can we truly feel that our voices are being heard and that our concerns are being taken seriously.",
+      "round_number": 2,
+      "turn_number": 7,
+      "timestamp": 1764058310.540849,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.3
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "content": "From my perspective as an 18-24 year old non-binary person from Ontario, living in an urban area, I\u2019m not sure if voting should be mandatory. I understand the idea behind mandatory voting\u2014it aims to increase participation and ensure everyone has a say in the democratic process.",
+      "round_number": 2,
+      "turn_number": 8,
+      "timestamp": 1764058320.0122728,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "content": "From my perspective as a 25-34 year old woman from Ontario, living in an urban area, I agree with the sentiment that voting shouldn't be mandatory. I believe that voting is a critical responsibility, but it should stem from genuine engagement and understanding of the issues rather than being a coerced action. Mandatory voting could potentially lead to uninformed decisions, which wouldn't serve the democratic process well.\n\nFor me, politics matters immensely because it directly influences my daily life. As someone who lives in an urban environment, I witness firsthand how policies shape everything from housing affordability to healthcare access and job security. These are issues that hit close to home and require thoughtful consideration. My voice needs to be heard, especially on matters that affect young professionals and families like mine.\n\nDespite my reliable voting habits and active involvement, I often feel that my contributions aren't always acknowledged. It's disheartening to see certain voices dominate the discourse while others, including mine, get sidelined. Political parties need to do a better job of reaching out to voters like me and recognizing the efforts we put into staying informed and engaged.\n\nI appreciate when parties make a genuine attempt to connect with me and address my concerns. However, it's clear that there's still a disconnect. Urban areas face unique challenges, and it's essential for parties to tailor their messaging and platforms to reflect these realities. By doing so, they can ensure that the needs and desires of urban voters are truly represented.\n\nIn summary, while I believe voting is a crucial aspect of democracy, I don't think it should be mandatory. Instead, parties need to focus on fostering genuine engagement and making sure that all voices, particularly those of young, urban voters like myself, are heard and valued. This will strengthen the democratic process and ensure that policies are crafted with the full spectrum of voter perspectives in mind.\n\nReflecting on the broader context, it's clear that my situation aligns closely with Concept A, where the separation between labor and its meaning becomes evident. My work and contributions, whether in my professional life or my civic engagement, should be meaningful and recognized. When my voice isn't acknowledged, it feels like my efforts are going unnoticed, which can be demotivating.\n\nSimilarly, Concept B resonates with the arbitrary nature of power and decision-making processes that affect me directly. Policies and decisions are made without sufficient acknowledgment of the diverse needs of urban residents like myself. This highlights the importance of ensuring that political systems are inclusive and responsive to all segments of society.\n\nOverall, my experiences underscore the need for",
+      "round_number": 2,
+      "turn_number": 9,
+      "timestamp": 1764058331.601102,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.16666666666666666,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.43333333333333335
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "content": "From my standpoint as a 45-54 year old man from Ontario, living in a suburban area and college-educated, I agree with the sentiment that voting shouldn't be made mandatory. I believe that voting is a fundamental right and responsibility, but it should come from a place of genuine interest and understanding of the issues at hand. Being forced to vote doesn't necessarily mean that individuals will be fully informed or genuinely invested in the election outcomes.\n\nFor me, politics matters significantly because it impacts my quality of life in various ways. As someone who resides in a suburban area, I care deeply about issues such as local infrastructure, education, and community safety. However, I often feel that my voice isn't always heard by political parties. Suburban areas can sometimes fall between the cracks, with neither urban nor rural issues receiving adequate attention. This can be frustrating, especially when I see that my contributions to political discussions and forums aren't always recognized or given due consideration.\n\nMy engagement level with politics is moderate; I stay informed and participate in elections, but I don't align myself with any specific party. I appreciate when parties reach out to me and try to address my concerns, but it feels like my demographic\u2014middle-aged suburbanites\u2014is sometimes overlooked. It's important for parties to recognize the value of middle-ground voters like myself and ensure that our viewpoints are included in their platforms.\n\nDespite my efforts to stay informed and engaged, I sometimes feel that my voice is drowned out by louder, more vocal groups. This can be discouraging, as it makes me question whether my contributions truly matter. Political parties need to do a better job of engaging with voters like me, offering clear and direct communication, and addressing the specific concerns of suburban communities. By doing so, they can foster a stronger sense of trust and connection, which is crucial for building a vibrant and inclusive democracy.\n\nIn summary, while I believe voting is a vital part of democracy, I don't think it should be mandatory. Instead, parties need to focus on making their outreach more inclusive and effective, ensuring that all voices, including those of suburban swing voters like me, are heard and considered in the political process. This will help to create a more representative and responsive government that truly reflects the needs and aspirations of all Canadians.\n\nReflecting on the broader context, my situation aligns closely with both Concept A and Concept B. Concept A highlights the alienation I feel when my contributions and efforts aren't acknowledged, reducing my sense of self-worth and engagement. Concept B underscores the dominance of political",
+      "round_number": 2,
+      "turn_number": 10,
+      "timestamp": 1764058343.512832,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.3
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "content": "From my perspective as a 55-64 year old man from Ontario, living in a rural area and high school educated, I strongly believe that voting should not be made mandatory. I understand the intention behind mandatory voting\u2014to increase participation in the democratic process\u2014but I think it's crucial that people take the time to educate themselves on the issues and candidates before casting their ballots. Voting is a privilege and a responsibility, and forcing someone to vote without a proper understanding of the issues can undermine the integrity of the electoral process.\n\nFor me, politics matters immensely because it directly impacts my daily life and the future of my community. As a resident of a rural area, I care deeply about issues such as agricultural support, infrastructure development, and healthcare services. However, I often feel that my voice isn't always heard by political parties. Rural areas are frequently overlooked in favor of more densely populated urban centers, which means that our unique challenges and needs are sometimes neglected.\n\nMy engagement level with politics is quite high; I consistently vote in elections and stay informed about the issues that matter most to me. Despite this, I feel that parties rarely reach out to voters like me. When they do, it's usually through generic mailers or automated phone calls that don't really address the specific concerns of rural communities. This can be disheartening, as it makes me feel like my contributions aren't valued.\n\nReflecting on the broader context, my situation aligns closely with both Concept A and Concept B. Concept A highlights the alienation I feel when my contributions and efforts aren't acknowledged, reducing my sense of self-worth and engagement. Concept B underscores the dominance of political decisions that often ignore the needs and priorities of rural communities, leaving us feeling marginalized and unheard.\n\nIn summary, while I believe voting is a vital part of democracy, I don't think it should be mandatory. Instead, parties need to do a better job of reaching out to rural voters like me and addressing the issues that are most important to us. Only then can we truly feel that our voices are being heard and that our concerns are being taken seriously. Authentic engagement would involve tailored outreach, direct communication, and genuine attempts to understand and address the unique needs of rural communities.",
+      "round_number": 2,
+      "turn_number": 11,
+      "timestamp": 1764058354.3729842,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.3
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "content": "From my perspective as an 18-24 year old non-binary person from Ontario, living in an urban area, I\u2019m not sure if voting should be mandatory. I understand the idea behind mandatory voting\u2014it aims to increase participation and ensure everyone has a say in the democratic process.",
+      "round_number": 2,
+      "turn_number": 12,
+      "timestamp": 1764058365.679638,
+      "prar_cue_used": "[REFLECT] How does this task connect to your broader situation? Do you understand its purpose?\n[OBSERVE] Notice the directive you've received. What is being asked of you?",
+      "feedback_snapshot": {
+        "engagement": 0.0,
+        "theoretical_alignment": 0.0,
+        "contribution_value": 0.2
+      },
+      "validation_metadata": {
+        "attempts": 1,
+        "validations": [],
+        "filtered": false,
+        "used_dual_llm": true
+      }
+    }
+  ],
+  "feedback": {
+    "CES_CES_Urban_Progressive": {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "round_number": 2,
+      "engagement": 0.16666666666666666,
+      "theoretical_alignment": 0.35,
+      "contribution_value": 0.0,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [
+        "Non-domination"
+      ],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Suburban_Swing": {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "round_number": 2,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.0,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Rural_Conservative": {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "round_number": 2,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.2,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    },
+    "CES_CES_Disengaged_Renter": {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "round_number": 2,
+      "engagement": 0.0,
+      "theoretical_alignment": 0.0,
+      "contribution_value": 0.16000000000000003,
+      "direct_references": 0,
+      "response_received": 0,
+      "concepts_embodied": [],
+      "analyst_mentions": 0,
+      "synthesis_inclusion": 0.0
+    }
+  },
+  "policy_adaptations": [
+    {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.35,
+        "contribution_delta": -0.43333333333333335
+      },
+      "round": 2
+    },
+    {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": -0.3
+      },
+      "round": 2
+    },
+    {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": -0.03999999999999998
+      },
+      "round": 2
+    },
+    {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "role": "Worker",
+      "deltas": {
+        "engagement_delta": 0.0,
+        "alignment_delta": 0.0,
+        "contribution_delta": -0.09999999999999998
+      },
+      "round": 2
+    }
+  ],
+  "synthesis": "",
+  "duration_seconds": 118.29659795761108,
+  "identity_states": {
+    "CES_CES_Urban_Progressive": {
+      "agent_id": "CES_CES_Urban_Progressive",
+      "group_id": "urban_left",
+      "vector": {
+        "engagement": 0.1667,
+        "institutional_faith": 1.0,
+        "social_friction": 0.2
+      },
+      "initial_vector": {
+        "engagement": 0.5,
+        "institutional_faith": 0.8,
+        "social_friction": 0.2
+      },
+      "delta_I": 0.3887,
+      "sigma": 0.3887,
+      "coherence": 0.9266,
+      "tau": 0.6323,
+      "natality": 0.2689,
+      "temperature": 1.0416,
+      "surplus": 0.0777,
+      "energy": 0.8,
+      "rupture_active": true,
+      "history_length": 3
+    },
+    "CES_CES_Suburban_Swing": {
+      "agent_id": "CES_CES_Suburban_Swing",
+      "group_id": "urban_center",
+      "vector": {
+        "engagement": 0.0,
+        "institutional_faith": 1.0,
+        "social_friction": 0.2
+      },
+      "initial_vector": {
+        "engagement": 0.5,
+        "institutional_faith": 0.8,
+        "social_friction": 0.2
+      },
+      "delta_I": 0.5385,
+      "sigma": 0.5385,
+      "coherence": 0.8541,
+      "tau": 0.3953,
+      "natality": 0.2689,
+      "temperature": 1.0561,
+      "surplus": 0.1077,
+      "energy": 0.8,
+      "rupture_active": true,
+      "history_length": 3
+    },
+    "CES_CES_Rural_Conservative": {
+      "agent_id": "CES_CES_Rural_Conservative",
+      "group_id": "rural_right",
+      "vector": {
+        "engagement": 0.0,
+        "institutional_faith": 1.0,
+        "social_friction": 0.2
+      },
+      "initial_vector": {
+        "engagement": 0.5,
+        "institutional_faith": 0.8,
+        "social_friction": 0.2
+      },
+      "delta_I": 0.5385,
+      "sigma": 0.5385,
+      "coherence": 0.8541,
+      "tau": 0.3953,
+      "natality": 0.2689,
+      "temperature": 1.0561,
+      "surplus": 0.1077,
+      "energy": 0.8,
+      "rupture_active": true,
+      "history_length": 3
+    },
+    "CES_CES_Disengaged_Renter": {
+      "agent_id": "CES_CES_Disengaged_Renter",
+      "group_id": "renter_disengaged",
+      "vector": {
+        "engagement": 0.0,
+        "institutional_faith": 1.0,
+        "social_friction": 0.2
+      },
+      "initial_vector": {
+        "engagement": 0.5,
+        "institutional_faith": 0.8,
+        "social_friction": 0.2
+      },
+      "delta_I": 0.5385,
+      "sigma": 0.5385,
+      "coherence": 0.8541,
+      "tau": 0.3953,
+      "natality": 0.2689,
+      "temperature": 1.0561,
+      "surplus": 0.1077,
+      "energy": 0.8,
+      "rupture_active": true,
+      "history_length": 3
+    }
+  }
+}
