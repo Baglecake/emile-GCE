@@ -105,6 +105,12 @@ class SocialRLConfig:
     grit_min_words: int = 30     # Minimum words even for STRONG grit
     grit_max_words: int = 300    # Maximum words even for NONE grit
 
+    # Phase 2b: Verbosity penalty (Option B - social throttling)
+    # Verbosity lowers engagement → triggers higher grit → natural throttling
+    verbosity_penalty_enabled: bool = True
+    verbosity_penalty_alpha: float = 0.15  # Penalty scaling factor
+    verbosity_max_penalty: float = 0.25    # Maximum penalty cap
+
 
 @dataclass
 class SocialRLMessage:
@@ -480,7 +486,7 @@ class SocialRLRunner:
         # Word limits per grit level (from dev-notes.md)
         WORD_LIMITS = {
             "STRONG": 50,    # ~2-3 sentences
-            "MODERATE": 75,  # ~3-5 sentences
+            "MODERATE": 100, # ~4-6 sentences
             "LIGHT": 150,    # ~5-8 sentences
             "NONE": self.config.grit_max_words
         }
@@ -490,6 +496,39 @@ class SocialRLRunner:
 
         # Enforce minimum (don't over-truncate)
         word_limit = max(word_limit, self.config.grit_min_words)
+
+        # 5d. VERBOSITY PENALTY (Option B): Social throttling via engagement reduction
+        # If agent exceeds their word limit, penalize engagement score
+        # This feeds into dynamic grit → natural throttling without artificial truncation
+        verbosity_penalty = 0.0
+        engagement_base = agent_feedback.get('engagement', 0.5)
+
+        if self.config.verbosity_penalty_enabled and len(words) > word_limit:
+            overshoot = len(words) - word_limit
+            overshoot_ratio = overshoot / float(word_limit)
+
+            # Penalty proportional to overshoot, capped at max_penalty
+            verbosity_penalty = min(
+                overshoot_ratio * self.config.verbosity_penalty_alpha,
+                self.config.verbosity_max_penalty
+            )
+
+            # Apply penalty to engagement
+            penalized_engagement = max(0.0, engagement_base - verbosity_penalty)
+
+            # Update accumulated feedback with penalized engagement
+            # This is what dynamic grit calibration will see next turn
+            if agent_id not in self.accumulated_feedback:
+                self.accumulated_feedback[agent_id] = {}
+            self.accumulated_feedback[agent_id]['engagement'] = penalized_engagement
+            self.accumulated_feedback[agent_id]['engagement_base'] = engagement_base
+            self.accumulated_feedback[agent_id]['verbosity_penalty'] = verbosity_penalty
+            self.accumulated_feedback[agent_id]['word_count'] = len(words)
+            self.accumulated_feedback[agent_id]['word_limit'] = word_limit
+
+            if self.config.verbose and verbosity_penalty > 0.01:
+                print(f"    [VERBOSITY] {agent_id}: {len(words)} words > {word_limit} limit → "
+                      f"eng {engagement_base:.2f}→{penalized_engagement:.2f} (penalty={verbosity_penalty:.2f})")
 
         if len(words) > word_limit + 10:  # Allow small buffer
             # Find sentence boundary near limit
@@ -503,6 +542,15 @@ class SocialRLRunner:
             if self.config.verbose:
                 print(f"    [GRIT] Truncated from {len(words)} to {len(content.split())} words (limit={word_limit})")
 
+        # Build feedback snapshot with verbosity info
+        feedback_snapshot = agent_feedback.copy() if agent_feedback else {}
+        feedback_snapshot['word_count'] = len(content.split())  # Post-truncation count
+        feedback_snapshot['word_limit'] = word_limit
+        feedback_snapshot['grit_level'] = grit_level
+        feedback_snapshot['verbosity_penalty'] = verbosity_penalty
+        if verbosity_penalty > 0:
+            feedback_snapshot['engagement_base'] = engagement_base
+
         # Create message with Social RL metadata
         return SocialRLMessage(
             agent_id=agent_id,
@@ -511,7 +559,7 @@ class SocialRLRunner:
             turn_number=turn_number,
             turn_context=turn_context.to_dict(),
             prar_cue_used=prar_cue,
-            feedback_snapshot=agent_feedback.copy() if agent_feedback else None,
+            feedback_snapshot=feedback_snapshot,
             validation_metadata=validation_meta
         )
 
