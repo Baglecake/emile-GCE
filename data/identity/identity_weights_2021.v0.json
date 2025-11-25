@@ -1,0 +1,128 @@
+{
+  "engagement": [
+    {
+      "variable": "pes21_dem_sat",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_campatt",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_where_info",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_contact1",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_formgovt",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_keepromises",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_turnout2021",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_notvotereason1",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_howvote",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_votechoice2021",
+      "weight": 0.1
+    }
+  ],
+  "institutional_faith": [
+    {
+      "variable": "pes21_paymed",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_senate",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_hatespeech",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_govtprograms",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_foreign",
+      "weight": 0.1
+    },
+    {
+      "variable": "cps21_interest_gen_1",
+      "weight": 0.1
+    },
+    {
+      "variable": "cps21_interest_elxn_1",
+      "weight": 0.1
+    },
+    {
+      "variable": "cps21_demsat",
+      "weight": 0.1
+    },
+    {
+      "variable": "cps21_fed_gov_sat",
+      "weight": 0.1
+    },
+    {
+      "variable": "cps21_prov_gov_sat",
+      "weight": 0.1
+    }
+  ],
+  "social_friction": [
+    {
+      "variable": "pes21_donerm",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_donew",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_donegl",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_doneqc",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_inequal",
+      "weight": 0.1
+    },
+    {
+      "variable": "pes21_gap",
+      "weight": 0.1
+    },
+    {
+      "variable": "cps21_groupdiscrim_1",
+      "weight": 0.1
+    },
+    {
+      "variable": "cps21_groupdiscrim_2",
+      "weight": 0.1
+    },
+    {
+      "variable": "cps21_groupdiscrim_3",
+      "weight": 0.1
+    },
+    {
+      "variable": "cps21_groupdiscrim_4",
+      "weight": 0.1
+    }
+  ]
+}

@@ -10,6 +10,17 @@ Reduce Condition G's **residual +50% hyper-enfranchisement** (0.256 vs CES expec
 - **Phase 2**: IN PROGRESS 🔄 - Identity-grounding
 - **Phase 3**: PLANNED ⏭️ - Sociogeographic embodiment
 
+## CES-Based Identity Artifacts
+
+- `data/identity/identity_weights_2021.v0.json`
+  Auto-generated mapping from CES variables → identity dimensions (prototype).
+
+- `analysis/identity/compute_identity_group_means_2021.py`
+  Script to compute per-respondent identity vectors and group-level priors.
+
+- `data/identity/identity_group_means_2021.csv`
+  Empirical group-level means of identity dimensions (Region × rural/urban × household).
+
 ## Phase 2 Roadmap
 
 ### Immediate: Per-Round Vector Extraction
