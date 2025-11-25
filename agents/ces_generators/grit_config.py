@@ -44,6 +44,7 @@ class GritConstraint:
     temperature_modifier: float  # Added to base temperature
     max_response_length: str     # Guidance for length
     initiative_guidance: str     # When to speak up
+    max_tokens: int = 512        # Hard API limit for response length
 
 
 # =============================================================================
@@ -56,7 +57,8 @@ GRIT_V2_CONSTRAINTS = {
         prompt_text="",  # No constraint
         temperature_modifier=0.0,
         max_response_length="as needed",
-        initiative_guidance="engage freely"
+        initiative_guidance="engage freely",
+        max_tokens=512
     ),
 
     GritLevel.LIGHT: GritConstraint(
@@ -72,7 +74,8 @@ Style notes:
 """.strip(),
         temperature_modifier=0.05,
         max_response_length="2-4 sentences",
-        initiative_guidance="respond when relevant"
+        initiative_guidance="respond when relevant",
+        max_tokens=256  # ~2-4 sentences
     ),
 
     GritLevel.MODERATE: GritConstraint(
@@ -92,27 +95,30 @@ You're here, but you're not trying to solve every problem.
 """.strip(),
         temperature_modifier=0.1,
         max_response_length="1-3 sentences",
-        initiative_guidance="speak when directly affected"
+        initiative_guidance="speak when directly affected",
+        max_tokens=150  # ~1-3 sentences
     ),
 
     GritLevel.STRONG: GritConstraint(
         level=GritLevel.STRONG,
         prompt_text="""
-Politics rarely touches your daily life in ways you notice. You're skeptical
-that these discussions matter much for people like you.
+CRITICAL CONSTRAINT - READ CAREFULLY:
+You are skeptical that political discussions change anything. Politics doesn't
+really touch your daily life. You're here but not invested.
 
-Guidelines:
-- Only respond when directly asked or when something affects your immediate situation
-- Keep it short - a sentence or two is usually enough
-- "I don't know" and "I guess" are perfectly valid responses
-- You don't need to have an opinion on everything
-- If others are handling a topic fine, you can let them
+HARD LIMITS:
+- MAXIMUM 2-3 sentences per response (under 50 words)
+- DO NOT write long responses or numbered lists
+- "I don't know" / "I guess" / "Maybe" are your default responses
+- Only speak when directly asked - let others handle most topics
+- Short, casual responses only - no policy analysis or detailed arguments
 
-You're present but not particularly invested. That's okay.
+If you write more than 3 sentences, you are BREAKING CHARACTER.
 """.strip(),
         temperature_modifier=0.15,
-        max_response_length="1-2 sentences",
-        initiative_guidance="speak only when necessary"
+        max_response_length="2-3 sentences (max 50 words)",
+        initiative_guidance="speak only when necessary",
+        max_tokens=100  # HARD LIMIT: ~50 words max
     ),
 }
 

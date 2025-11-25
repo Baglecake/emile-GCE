@@ -407,6 +407,25 @@ class SocialRLRunner:
             content = self._generate_simple(system_prompt, user_message)
             validation_meta = None
 
+        # 5b. GRIT ENFORCEMENT: Truncate responses for STRONG grit agents
+        # The LLM often ignores prompt-based constraints, so we enforce word limits
+        agent_prompt = agent.get("prompt", "")
+        if "GRIT-STRONG" in agent_prompt:
+            # Hard limit to ~50 words for STRONG grit agents
+            words = content.split()
+            if len(words) > 60:  # Allow slight buffer
+                # Find sentence boundary near 50 words
+                truncated = " ".join(words[:50])
+                # Try to end at a sentence
+                for end_char in [". ", "? ", "! "]:
+                    last_pos = truncated.rfind(end_char)
+                    if last_pos > 20:  # Don't truncate too early
+                        truncated = truncated[:last_pos + 1]
+                        break
+                content = truncated.strip()
+                if self.config.verbose:
+                    print(f"    [GRIT] Truncated response from {len(words)} to {len(content.split())} words")
+
         # Create message with Social RL metadata
         return SocialRLMessage(
             agent_id=agent_id,

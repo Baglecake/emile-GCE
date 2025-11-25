@@ -342,7 +342,15 @@ def build_ces_canvas(
 
 def _build_agent_prompt(agent: CESAgentConfig) -> str:
     """Build agent prompt from CES configuration."""
-    return f"""ROLE: You are a Canadian voter with the following CES-derived profile.
+    # Separate grit constraints from other constraints
+    grit_constraints = [c for c in agent.constraints if c.startswith('[GRIT-')]
+    other_constraints = [c for c in agent.constraints if not c.startswith('[GRIT-')]
+
+    # Check if this is a STRONG grit agent (needs special handling)
+    is_strong_grit = any('GRIT-STRONG' in c for c in agent.constraints)
+
+    # Build base prompt
+    prompt = f"""ROLE: You are a Canadian voter with the following CES-derived profile.
 
 PROFILE:
 - Location: {agent.province_name} ({agent.urban_rural})
@@ -354,11 +362,21 @@ PROFILE:
 PERSONA: {agent.persona_description}
 
 CONSTRAINTS:
-{chr(10).join('- ' + c for c in agent.constraints) if agent.constraints else '- Speak authentically from your socioeconomic position'}
+{chr(10).join('- ' + c for c in other_constraints) if other_constraints else '- Speak authentically from your socioeconomic position'}
 
-GOALS: {agent._generate_goal()}
+GOALS: {agent._generate_goal()}"""
 
-Respond naturally as this person would in a political discussion. Your views should reflect your actual CES profile - don't suddenly become someone you're not."""
+    # Add grit constraints at the END (recency bias)
+    if grit_constraints:
+        prompt += f"\n\n{''.join(grit_constraints)}"
+
+    # Final instruction - different for grit vs non-grit agents
+    if is_strong_grit:
+        prompt += "\n\nREMEMBER: Keep responses SHORT (2-3 sentences max). You are not invested in this discussion."
+    else:
+        prompt += "\n\nRespond naturally as this person would in a political discussion."
+
+    return prompt
 
 
 # =============================================================================
@@ -505,10 +523,13 @@ def run_ces_experiment(
         use_coach_validation=use_dual_llm,
         verbose=verbose,
         auto_save=True,
-        challenge_mode=challenge_mode  # For A/B testing: "off", "adaptive", "always"
+        challenge_mode=challenge_mode,  # For A/B testing: "off", "adaptive", "always"
+        use_identity_cores=True,  # Phase 2a: IdentityCore tracking with QSE mechanics
+        identity_modulates_temperature=True,  # Let coherence/rupture affect temperature
     )
     print(f"Context mode: {context_mode}")
     print(f"Challenge mode: {challenge_mode}")
+    print(f"IdentityCore: ENABLED (Phase 2a)")
 
     # Create runner
     runner = SocialRLRunner(
