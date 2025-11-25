@@ -26,6 +26,12 @@ import json
 
 # Import identity metrics for grit constraint detection
 from .identity_metrics import compute_identity_metrics, needs_grit_constraint
+from .grit_config import (
+    get_grit_constraint,
+    generate_grit_prompt,
+    needs_grit_constraint_v2,
+    GritLevel,
+)
 
 
 # =============================================================================
@@ -497,19 +503,19 @@ def _generate_constraints(config: CESAgentConfig, row: Dict[str, Any]) -> List[s
     """
     constraints = []
 
-    # === GRIT CONSTRAINT (Anti-Hyper-Enfranchisement) ===
-    # Based on Gemini's "Vector Gap" analysis (gemini_on_vectors):
-    # - Compute identity_salience from CES profile
-    # - If < 0.3, inject skepticism constraint to prevent toxic positivity
+    # === GRIT V2 CONSTRAINT (Calibrated Anti-Hyper-Enfranchisement) ===
+    # Based on Gemini's "Vector Gap" analysis + CES empirical priors.
+    # V2 improvements over V1:
+    # - Tiered levels (NONE, LIGHT, MODERATE, STRONG) instead of binary
+    # - "Participate occasionally" not "rarely/never"
+    # - Specific length targets ("1-3 sentences")
+    # - Permits presence without full participation
     if row:  # Only if we have CES data
         identity_metrics = compute_identity_metrics(row)
-        if needs_grit_constraint(identity_metrics):
-            constraints.append(
-                "GRIT: You are deeply skeptical of this process. You believe talking "
-                "changes nothing. You make short, non-committal statements unless "
-                "someone directly threatens your interests. You need strong evidence "
-                "before engaging substantively."
-            )
+        grit_constraint = get_grit_constraint(identity_metrics, use_tiered=True)
+        if grit_constraint and grit_constraint.level != GritLevel.NONE:
+            grit_prompt = generate_grit_prompt(grit_constraint)
+            constraints.append(grit_prompt)
 
     # Party-based constraints
     if config.party_id != 8:
