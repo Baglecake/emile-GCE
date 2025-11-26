@@ -1,0 +1,114 @@
+{
+  "_metadata": {
+    "version": "1.1",
+    "description": "Per-dimension drift priors (delta_mu, sigma) for emergent time calibration",
+    "source": "Empirical CES 2019-2021 cross-wave analysis + literature estimates",
+    "notes": [
+      "delta_mu: Mean change in dimension value over 2-year election cycle (scaled to 0-1)",
+      "sigma: Cross-sectional standard deviation (population-level spread)",
+      "Empirical values from CES 2019/2021 parquet files where available",
+      "ideology, institutional_faith: EMPIRICAL from CES",
+      "Other dimensions: Literature-based pending additional CES variables"
+    ],
+    "references": [
+      "Fournier, P. (2006). The impact of campaigns on discrepancies, errors, and biases in voting behavior. In H.E. Brady & R. Johnston (Eds.), Capturing Campaign Effects.",
+      "Gidengil, E. et al. (2012). Dominance and Decline: Making Sense of Recent Canadian Elections.",
+      "Converse, P.E. (1964). The Nature of Belief Systems in Mass Publics.",
+      "Green, D., Palmquist, B., & Schickler, E. (2002). Partisan Hearts and Minds."
+    ]
+  },
+
+  "dimension_priors": {
+    "engagement": {
+      "description": "Political participation and civic activity",
+      "delta_mu": 0.08,
+      "sigma": 0.12,
+      "stability_estimate": 0.55,
+      "notes": "Moderate stability; varies with life events, campaigns"
+    },
+    "institutional_faith": {
+      "description": "Trust in democratic institutions",
+      "delta_mu": 0.044,
+      "sigma": 0.28,
+      "stability_estimate": 0.60,
+      "notes": "EMPIRICAL: CES trust_govt 2019→2021 (delta=0.044, avg_std=0.28)"
+    },
+    "ideology": {
+      "description": "Left-right ideological position",
+      "delta_mu": 0.002,
+      "sigma": 0.24,
+      "stability_estimate": 0.95,
+      "notes": "EMPIRICAL: CES ideology 2019→2021 (delta=0.002, avg_std=0.24) - highly stable"
+    },
+    "partisanship": {
+      "description": "Party identification strength",
+      "delta_mu": 0.04,
+      "sigma": 0.05,
+      "stability_estimate": 0.85,
+      "notes": "Highly stable; 'unmoved mover' in Canadian politics"
+    },
+    "sociogeographic": {
+      "description": "Urban-rural context and regional identity",
+      "delta_mu": 0.03,
+      "sigma": 0.06,
+      "stability_estimate": 0.88,
+      "notes": "Very stable; changes mainly with migration"
+    },
+    "social_friction": {
+      "description": "Perceived social conflict and grievances",
+      "delta_mu": 0.12,
+      "sigma": 0.14,
+      "stability_estimate": 0.50,
+      "notes": "Event-responsive; media-influenced; volatile"
+    },
+    "tie_to_place": {
+      "description": "Rootedness in geographic/social community",
+      "delta_mu": 0.05,
+      "sigma": 0.08,
+      "stability_estimate": 0.78,
+      "notes": "Stable unless major life transition (move, job change)"
+    }
+  },
+
+  "group_modifiers": {
+    "_description": "Multiplicative adjustments to base delta_mu/sigma by group characteristics",
+
+    "age": {
+      "young": {"delta_mu_mult": 1.4, "sigma_mult": 1.3, "notes": "Under 30: higher volatility"},
+      "middle": {"delta_mu_mult": 1.0, "sigma_mult": 1.0, "notes": "30-55: baseline"},
+      "older": {"delta_mu_mult": 0.7, "sigma_mult": 0.8, "notes": "55+: crystallized attitudes"}
+    },
+
+    "education": {
+      "low": {"delta_mu_mult": 1.2, "sigma_mult": 1.3, "notes": "Less crystallized attitudes"},
+      "medium": {"delta_mu_mult": 1.0, "sigma_mult": 1.0, "notes": "Baseline"},
+      "high": {"delta_mu_mult": 0.85, "sigma_mult": 0.9, "notes": "More stable political attitudes"}
+    },
+
+    "partisanship_strength": {
+      "strong": {"delta_mu_mult": 0.6, "sigma_mult": 0.7, "notes": "Strong partisans very stable"},
+      "weak": {"delta_mu_mult": 1.0, "sigma_mult": 1.0, "notes": "Baseline"},
+      "none": {"delta_mu_mult": 1.5, "sigma_mult": 1.4, "notes": "Independents most volatile"}
+    },
+
+    "urban_rural": {
+      "urban": {"delta_mu_mult": 1.1, "sigma_mult": 1.1, "notes": "Slightly more exposure to change"},
+      "suburban": {"delta_mu_mult": 1.0, "sigma_mult": 1.0, "notes": "Baseline"},
+      "rural": {"delta_mu_mult": 0.85, "sigma_mult": 0.9, "notes": "More stable social networks"}
+    },
+
+    "region": {
+      "Quebec": {"delta_mu_mult": 1.1, "sigma_mult": 1.15, "notes": "Higher political volatility historically"},
+      "West": {"delta_mu_mult": 1.05, "sigma_mult": 1.1, "notes": "Slightly more volatile"},
+      "Ontario": {"delta_mu_mult": 1.0, "sigma_mult": 1.0, "notes": "Baseline"},
+      "Atlantic": {"delta_mu_mult": 0.9, "sigma_mult": 0.95, "notes": "More stable political culture"}
+    }
+  },
+
+  "aggregate_priors": {
+    "_description": "Pre-computed aggregate delta_mu/sigma for quick lookup (weighted mean of dimensions)",
+    "overall_delta_mu": 0.069,
+    "overall_sigma": 0.090,
+    "notes": "Equal-weighted mean across 7 dimensions; use dimension-specific for tau calibration"
+  }
+}

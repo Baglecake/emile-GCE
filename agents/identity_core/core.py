@@ -282,6 +282,34 @@ class IdentityCore:
         if self.natality_t is None:
             self.natality_t = self.compute_natality_baseline()
 
+    def load_drift_priors(self, profile: Optional[Dict[str, Any]] = None) -> None:
+        """
+        Load empirical drift priors from CES profile for tau calibration.
+
+        Sets empirical_delta_mu and empirical_delta_sigma based on:
+        1. Literature-based dimension priors
+        2. Group modifiers (age, education, region, etc.) from profile
+
+        Args:
+            profile: CES profile dict with demographic variables.
+                     If None, uses global defaults.
+
+        Phase 2b implementation: Enables empirical normalization in tau_from_delta().
+        """
+        try:
+            from analysis.identity.drift_prior_loader import get_aggregate_drift
+            delta_mu, sigma = get_aggregate_drift(profile)
+            self.empirical_delta_mu = delta_mu
+            self.empirical_delta_sigma = sigma
+        except ImportError:
+            # Fallback if drift_prior_loader not available
+            self.empirical_delta_mu = 0.069
+            self.empirical_delta_sigma = 0.090
+        except Exception:
+            # Any other error, use defaults
+            self.empirical_delta_mu = 0.069
+            self.empirical_delta_sigma = 0.090
+
     # =========================================================================
     # Core Update Methods
     # =========================================================================

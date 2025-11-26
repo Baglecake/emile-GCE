@@ -1065,6 +1065,17 @@ class SocialRLRunner:
                 tie_to_place=tie_to_place,
             )
 
+            # Phase 2b: Load drift priors for tau calibration
+            # Build profile from agent attributes for group modifiers
+            profile = attrs.get("ces_profile", {})
+            if not profile:
+                # Infer basic profile from agent attributes if no CES profile
+                profile = {
+                    "Region": attrs.get("region", "Ontario"),
+                    "cps21_urban_rural": 1 if "urban" in agent_id.lower() else (3 if "rural" in agent_id.lower() else 2),
+                }
+            self.identity_cores[agent_id].load_drift_priors(profile)
+
         if self.config.verbose and self.identity_cores:
             print(f"  IdentityCore: Initialized {len(self.identity_cores)} identity cores")
 

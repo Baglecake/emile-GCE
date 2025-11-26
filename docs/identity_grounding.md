@@ -515,14 +515,32 @@ for agent in agents:
 | Identity salience/tie_to_place wiring | COMPLETE |
 | 7D identity weights (v1.json) | COMPLETE |
 | 7D vector loader + runner wiring | COMPLETE |
-| Multi-wave CES priors | Phase 2b |
+| Multi-wave CES drift priors | COMPLETE |
 | Mortality mechanics | Phase 3 |
 | Coach-as-field | Phase 3 |
 | Multi-generation experiments | Phase 3 |
 
-## Next Steps (Phase 2b)
+## Multi-wave CES Drift Priors (Phase 2b - COMPLETE)
 
-1. **CES priors**: Load multi-wave empirical delta_mu/sigma per group
+**Files:**
+- `data/identity/identity_drift_priors.v1.json` - Per-dimension delta_mu/sigma priors
+- `analysis/identity/drift_prior_loader.py` - Loader with group modifiers
+- `agents/identity_core/core.py` - `load_drift_priors()` method
+
+**Implementation:**
+- Literature-based drift priors for all 7 identity dimensions
+- Group modifiers for age, education, partisanship strength, urban/rural, region
+- Integrated into IdentityCore.compute_tau() for empirical normalization:
+  ```
+  z = (delta - empirical_mu) / empirical_sigma
+  tau = logistic(z)
+  ```
+- Runner automatically loads drift priors during agent initialization
+
+**Empirical values (v1.1):**
+- `ideology`: delta_mu=0.002, sigma=0.24 (CES 2019→2021, highly stable)
+- `institutional_faith`: delta_mu=0.044, sigma=0.28 (CES 2019→2021)
+- Other dimensions: Literature-based pending additional CES variable mapping
 
 ## Future (Phase 3)
 
