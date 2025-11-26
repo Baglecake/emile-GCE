@@ -166,6 +166,10 @@ class CESAgentConfig:
     # 7D Identity vector (from identity_vector_loader.py)
     identity_vector_7d: Dict[str, float] = field(default_factory=dict)
 
+    # Group ID for WorldState integration (computed from CES variables)
+    # Format: "{location}_{tenure}_{lean}" e.g., "urban_renter_left"
+    group_id: str = ""
+
     # Generated persona (compiled from above)
     persona_description: str = ""
     constraints: List[str] = field(default_factory=list)
@@ -195,6 +199,7 @@ class CESAgentConfig:
                 "identity_salience": self.identity_salience,
                 "tie_to_place": self.tie_to_place,
                 "identity_vector_7d": self.identity_vector_7d,
+                "group_id": self.group_id,
             },
             "persona": self.persona_description,
             "goal": self._generate_goal(),
@@ -326,6 +331,35 @@ class CESVariableMapper:
 # Dynamic Agent Generation Functions
 # =============================================================================
 
+def _compute_group_id(config: CESAgentConfig) -> str:
+    """
+    Compute WorldState group_id from CES agent configuration.
+
+    Format: "{location}_{lean}" where:
+    - location: urban, suburban, rural
+    - lean: left, right, center
+
+    This produces groups like "urban_left", "rural_right", "suburban_center"
+    that WorldState can use to determine event valence and stakes.
+    """
+    # Location from urban_rural
+    location = config.urban_rural.lower() if config.urban_rural else "unknown"
+
+    # Political lean from ideology_lr (0-10 scale)
+    if config.ideology_lr < 4:
+        lean = "left"
+    elif config.ideology_lr > 6:
+        lean = "right"
+    else:
+        lean = "center"
+
+    # Add tenure marker if turnout is very low (disengaged)
+    if config.turnout_likelihood < 0.4:
+        return f"{location}_disengaged"
+
+    return f"{location}_{lean}"
+
+
 def ces_row_to_agent(
     row: Dict[str, Any],
     mapper: CESVariableMapper,
@@ -389,6 +423,9 @@ def ces_row_to_agent(
 
     # Compute 7D identity vector from CES profile (Phase 2.4)
     config.identity_vector_7d = compute_identity_vector(row)
+
+    # Compute group_id for WorldState integration (Phase 2c)
+    config.group_id = _compute_group_id(config)
 
     # Generate persona if requested
     if include_persona:

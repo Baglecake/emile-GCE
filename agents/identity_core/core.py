@@ -66,6 +66,43 @@ class SurplusTrace:
         }
 
 
+@dataclass
+class RoundFeedback:
+    """
+    Unified feedback from a round of interaction.
+
+    This is the ONLY input the runner should pass to IdentityCore.
+    IdentityCore handles all internal state management (decay, revalorization,
+    energy recovery, natality updates) based on this feedback.
+
+    Runner remains feature-agnostic: it just passes what happened in the round.
+    """
+    # Round context
+    round_number: int
+    turn_number: int
+    semiotic_regime: str = "UNKNOWN"
+
+    # Field response (from coach feedback)
+    recognition_score: float = 0.0
+    contribution_value: float = 0.0
+    engagement: float = 0.0
+
+    # Expression behavior
+    overshoot_ratio: float = 0.0  # How much agent exceeded token limit
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Export for logging."""
+        return {
+            'round': self.round_number,
+            'turn': self.turn_number,
+            'regime': self.semiotic_regime,
+            'recognition': round(self.recognition_score, 4),
+            'contribution': round(self.contribution_value, 4),
+            'engagement': round(self.engagement, 4),
+            'overshoot': round(self.overshoot_ratio, 4),
+        }
+
+
 # CANONICAL dimension order for N-dimensional identity vectors
 # DO NOT use sorted(keys()) - this fixed order ensures consistent array operations
 IDENTITY_DIMS = [
@@ -271,6 +308,7 @@ class IdentityCore:
     k_rupture: float = 0.3
     k_coherence: float = 0.2
     k_natality: float = 0.1
+    k_frustration: float = 0.15  # Frustrated agents are more erratic
 
     def __post_init__(self):
         """Initialize vector and history if not provided."""
@@ -879,17 +917,21 @@ class IdentityCore:
     # Temperature Modulation
     # =========================================================================
 
-    def compute_temperature(self) -> float:
+    def compute_temperature(self, frustration: float = 0.0) -> float:
         """
         Compute dynamic temperature for LLM generation.
 
-        T_t = T_base + k_r * rupture + k_c * (1 - coherence) + k_n * natality
+        T_t = T_base + k_r * rupture + k_c * (1 - coherence) + k_n * natality + k_f * frustration
 
         High coherence → low T → stable voice
         Low coherence → high T → exploratory, variable prose
         Rupture → high T → frantic exploration
+        Frustration → high T → erratic, volatile expression
 
         Uses stateful natality_t (updated by recognition/overshoot) not computed natality.
+
+        Args:
+            frustration: WorldState frustration scalar (0-1), passed from runner
         """
         rupture_signal = 1.0 if self.rupture_active else 0.0
         coherence = self.compute_coherence()
@@ -899,10 +941,154 @@ class IdentityCore:
         T = (self.T_base
              + self.k_rupture * rupture_signal
              + self.k_coherence * (1 - coherence)
-             + self.k_natality * natality)
+             + self.k_natality * natality
+             + self.k_frustration * frustration)
 
         # Clamp to reasonable range
         return float(np.clip(T, 0.2, 1.2))
+
+    def compute_temperature_capacity_factor(self) -> float:
+        """
+        Compute expression capacity multiplier from temperature.
+
+        High temperature (exploratory state) → more tokens needed for expression
+        Floor emerges from τ (emergent time), NOT hardcoded.
+
+        f_T = τ_baseline + (1 - τ_baseline) * t_normalized
+
+        Where:
+        - τ_baseline ∈ [0.2, 0.8] from compute_natality_baseline()
+        - t_normalized = (T - T_min) / (T_max - T_min)
+        - T ∈ [0.2, 1.2] from compute_temperature()
+
+        Returns float in range [τ_baseline, 1.0]
+        """
+        T_MIN, T_MAX = 0.2, 1.2
+        temperature = self.compute_temperature()
+        tau_baseline = self.compute_natality_baseline()
+
+        t_normalized = (temperature - T_MIN) / (T_MAX - T_MIN)
+        t_normalized = max(0.0, min(1.0, t_normalized))  # Clamp
+
+        # Floor emerges from τ, ceiling is 1.0
+        return tau_baseline + (1.0 - tau_baseline) * t_normalized
+
+    # =========================================================================
+    # Energy Management (Embodiment)
+    # =========================================================================
+
+    def recover_energy(self, recognition_score: float, recovery_rate: float = 0.05) -> None:
+        """
+        Recover energy based on recognition.
+
+        Recognition = social existence = metabolic sustenance.
+        Being seen by the field sustains the agent's capacity to exist.
+
+        Args:
+            recognition_score: How much the field recognized this agent (0-1)
+            recovery_rate: Base recovery rate per recognition unit
+
+        Implements the Émile pattern: existence requires social recognition.
+        """
+        recovery = recovery_rate * recognition_score
+        self.energy = min(1.0, self.energy + recovery)
+
+    def compute_energy_capacity_factor(self) -> float:
+        """
+        Compute expression capacity multiplier from energy.
+
+        Low energy → constrained expression (survival mode).
+        f_E = 0.3 + 0.7 * energy  # [0.3, 1.0]
+
+        Floor at 0.3: even depleted agents can speak (death throes).
+
+        Returns:
+            Float in range [0.3, 1.0]
+        """
+        return 0.3 + 0.7 * self.energy
+
+    def is_dead(self) -> bool:
+        """
+        Check if agent has died from energy depletion.
+
+        Mortality threshold: energy ≤ 0.
+
+        Returns:
+            True if agent should be considered dead
+        """
+        return self.energy <= 0.0
+
+    # =========================================================================
+    # Unified Round Processing (Runner Interface)
+    # =========================================================================
+
+    def process_round_feedback(self, feedback: 'RoundFeedback') -> Dict[str, Any]:
+        """
+        Process feedback from a round of interaction.
+
+        This is the SINGLE method the runner should call after each turn.
+        All internal state management is encapsulated here:
+        - Natality updates (recognition/overshoot)
+        - Trace decay
+        - Trace creation (on high surplus + recognition)
+        - Trace revalorization (on similar enactments)
+        - Energy recovery (from recognition)
+
+        Args:
+            feedback: RoundFeedback containing recognition, engagement, overshoot, etc.
+
+        Returns:
+            Dict with summary of what changed (for verbose logging)
+        """
+        result = {
+            'natality_changed': False,
+            'trace_created': False,
+            'traces_revalorized': 0,
+            'energy_recovered': 0.0,
+            'old_natality': self.natality_t,
+            'new_natality': self.natality_t,
+        }
+
+        # 1. Update natality based on recognition/overshoot
+        old_natality = self.natality_t
+        self.update_natality(
+            recognition_score=feedback.recognition_score,
+            overshoot_ratio=feedback.overshoot_ratio
+        )
+        result['new_natality'] = self.natality_t
+        result['natality_changed'] = abs(self.natality_t - old_natality) > 0.01
+
+        # 2. Decay existing traces (channels lose efficacy unless re-cohered)
+        self.decay_traces()
+
+        # 3. Try to create trace on high-surplus, high-recognition events
+        trace = self.maybe_create_trace(
+            round_number=feedback.round_number,
+            turn_number=feedback.turn_number,
+            semiotic_regime=feedback.semiotic_regime,
+            recognition_score=feedback.recognition_score,
+            contribution_value=feedback.contribution_value,
+            engagement=feedback.engagement,
+        )
+        result['trace_created'] = trace is not None
+
+        # 4. Revalorize existing traces if current ΔI is similar
+        if len(self.history) >= 2:
+            prev_vec = self.history[-2][1]
+            curr_vec = self.vector
+            delta_I_vec = curr_vec - prev_vec
+            delta_I_arr = delta_I_vec.to_array()
+
+            result['traces_revalorized'] = self.revalorize_traces(
+                delta_I_arr, feedback.recognition_score
+            )
+
+        # 5. Energy recovery from recognition
+        old_energy = self.energy
+        self.recover_energy(feedback.recognition_score)
+        result['energy_recovered'] = self.energy - old_energy
+
+        return result
 
     # =========================================================================
     # State Export

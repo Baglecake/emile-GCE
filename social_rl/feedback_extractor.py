@@ -497,20 +497,20 @@ if __name__ == "__main__":
 
     extractor = SocialFeedbackExtractor(ConceptMarkers.for_option_a())
 
-    # Test messages
+    # Test messages - CES-style agents discussing policy
     test_messages = [
-        {"agent_id": "Owner+Marta", "content": "Alice, you will work on the assembly line today. No questions."},
-        {"agent_id": "Worker+Alice", "content": "I understand, Marta. I'll head there now. Though I don't really understand why we changed the process."},
-        {"agent_id": "Worker+Ben", "content": "Alice, did you hear about the new quotas? They've increased again."},
-        {"agent_id": "Worker+Alice", "content": "Yes, Ben. It feels meaningless - we just follow orders without any say in how things work."},
-        {"agent_id": "Owner+Marta", "content": "Less talking, more working. Ben, you must complete your station first."},
-        {"agent_id": "Worker+Ben", "content": "Yes, okay. I'll get to it right away."},
+        {"agent_id": "CES_Rural_Conservative", "content": "The new housing policy won't help rural communities at all. We need different solutions out here."},
+        {"agent_id": "CES_Urban_Progressive", "content": "I see your point about regional differences. Though I think housing affordability is a nationwide issue that affects all of us."},
+        {"agent_id": "CES_Suburban_Swing", "content": "Both of you make valid points. Maybe we need targeted approaches for different areas?"},
+        {"agent_id": "CES_Urban_Progressive", "content": "That's a fair compromise. It feels like our voices aren't heard in policy decisions though."},
+        {"agent_id": "CES_Rural_Conservative", "content": "Exactly - urban-focused policies get all the attention. We need more local control."},
+        {"agent_id": "CES_Suburban_Swing", "content": "I agree we need balance. Let's focus on what we have in common."},
     ]
 
     feedback = extractor.extract_round_feedback(
         round_number=1,
         messages=test_messages,
-        participants=["Owner+Marta", "Worker+Alice", "Worker+Ben"]
+        participants=["CES_Rural_Conservative", "CES_Urban_Progressive", "CES_Suburban_Swing"]
     )
 
     print(extractor.generate_feedback_report(1))

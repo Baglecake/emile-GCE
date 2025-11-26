@@ -81,7 +81,8 @@
    - Identity blending: `I_new = I_current + eta * T`
 
 3. **Expression capacity** (`social_rl/runner.py`)
-   - `soft_cap = base_cap * f_salience * f_natality`
+   - `soft_cap = base_cap * f_salience * f_natality * f_temperature`
+   - Temperature-coupled capacity: high T (exploratory) → more tokens
    - Identity-grounded token limits (not crude punishment)
 
 4. **TRUE dual-LLM** (`social_rl/dual_llm_client.py`)
@@ -146,7 +147,7 @@
 
 - `world_state.py`: WorldState engine providing identity-grounded environmental context (see below)
 - `runner.py`: Multi-round deliberation orchestrator (1130+ lines) with:
-  - Expression capacity: `soft_cap = base_cap * f_salience * f_natality`
+  - Expression capacity: `soft_cap = base_cap * f_salience * f_natality * f_temperature`
   - SurplusTrace management (decay, creation, revalorization)
   - IdentityCore integration per agent
   - Per-agent temperature modulation
@@ -451,14 +452,37 @@ class IdentityCore:
         """T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality"""
 ```
 
-**Expression Capacity** (`social_rl/runner.py:444-472`):
+**Expression Capacity** (`social_rl/runner.py:569-616`):
 
 ```python
-# Identity-grounded token limits
+# Identity-grounded token limits WITH embodied factors
 f_salience = 0.5 + 0.5 * identity_salience  # [0.5, 1.0]
 f_natality = 0.5 + 0.5 * natality_t         # [0.5, 1.0]
-soft_cap = int(base_cap * f_salience * f_natality)
+
+# Temperature coupling: delegated to IdentityCore
+f_temperature = identity_core.compute_temperature_capacity_factor()  # [τ, 1.0]
+
+# Energy coupling: low energy → constrained expression
+f_energy = identity_core.compute_energy_capacity_factor()  # [0.3, 1.0]
+
+# Embodied scalars from WorldState
+f_fatigue = 1.0 - 0.3 * fatigue  # [0.7, 1.0]
+
+# Frustration: non-monotonic (venting then withdrawal)
+f_frustration = ...  # [0.96, 1.08]
+
+soft_cap = int(base_cap * f_salience * f_natality * f_temperature * f_energy * f_fatigue * f_frustration)
 ```
+
+**Temperature Formula** (`agents/identity_core/core.py:883-911`):
+```python
+T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality + k_f*frustration
+```
+
+**Energy Management** (`agents/identity_core/core.py:933-976`):
+- `recover_energy(recognition)`: Recognition = social existence = metabolic sustenance
+- `is_dead()`: Mortality check (energy ≤ 0)
+- Energy decrements on rupture (-0.1), recovers on recognition (+0.05 × score)
 
 ## Running Experiments
 
@@ -513,8 +537,9 @@ See `experiments/run_ces_experiment.py --help` for full options:
 - [x] Stateful natality with tau-based baseline
 - [x] Qualitative surplus with f_tau, f_natality, f_recognition modulation
 - [x] SurplusTrace buffer (decay, revalorization, blending)
-- [x] Expression capacity: `soft_cap = base_cap * f_salience * f_natality`
+- [x] Expression capacity: `soft_cap = base_cap * f_salience * f_natality * f_temperature`
 - [x] Temperature modulation: `T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality`
+- [x] Temperature-capacity coupling: max_tokens co-varies with temperature
 - [x] TRUE dual-LLM with separate 14B/7B endpoints
 - [x] Grit v2: Tiered constraints (NONE/LIGHT/MODERATE/STRONG)
 - [x] Per-round identity state logging

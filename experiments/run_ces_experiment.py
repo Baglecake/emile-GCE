@@ -188,15 +188,29 @@ class DualLLMCompatibleClient:
 
 
 # =============================================================================
-# Simulated CES Data (representative profiles)
+# Simulated CES Data (fixed archetypal profiles)
 # =============================================================================
 
 def create_ces_profiles() -> List[Dict[str, Any]]:
     """
-    Create simulated CES profiles representing key voter clusters.
+    Create FIXED archetypal profiles representing key voter clusters.
 
-    These are based on real CES 2021 distributions, not fantasy personas.
-    Each represents a meaningfully different sociogeographic position.
+    IMPORTANT: These are hand-crafted archetypes, NOT dynamically sampled
+    from real CES 2021 data. The variable names follow CES conventions, and
+    values are set to plausible ranges, but these 4 profiles are static.
+
+    For true dynamic generation from CES microdata, use:
+    - agents/ces_generators/row_to_agent.py with actual CES CSV data
+    - agents/ces_generators/ces_sampler.py for stratified sampling
+
+    Current archetypes cover four key voter positions:
+    1. CES_Urban_Progressive - young urban left
+    2. CES_Suburban_Swing - middle-aged suburban centrist
+    3. CES_Rural_Conservative - older rural right
+    4. CES_Disengaged_Renter - young disengaged non-voter
+
+    Each profile includes WorldState-compatible group_id computed from
+    location (urban/suburban/rural) and ideology (left/center/right).
     """
     return [
         # Urban progressive - GTA, young, university-educated, NDP-leaning

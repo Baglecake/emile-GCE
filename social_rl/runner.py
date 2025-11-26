@@ -35,7 +35,7 @@ from .dual_llm_client import DualLLMClient, DualLLMConfig, GenerationResult
 
 # Phase 2a: IdentityCore integration (optional)
 try:
-    from agents.identity_core import IdentityCore, IdentityVector
+    from agents.identity_core import IdentityCore, IdentityVector, RoundFeedback
     IDENTITY_CORE_AVAILABLE = True
 except ImportError:
     IDENTITY_CORE_AVAILABLE = False
@@ -251,6 +251,10 @@ class SocialRLRunner:
         # Maps agent_id -> current max_tokens limit
         self.token_caps: Dict[str, int] = {}  # agent_id -> max_tokens
 
+        # Phase 3: Dead agents (energy depleted)
+        # Agents in this set skip future turns
+        self.dead_agents: set = set()  # Set of agent_ids that have died
+
         # Phase 2b: WorldState - events, topics, frustration (optional)
         self.world_engine: Optional['WorldStateEngine'] = None
         if self.config.use_world_state and WORLD_STATE_AVAILABLE:
@@ -441,6 +445,21 @@ class SocialRLRunner:
         """
         agent_id = agent.get("identifier", "Unknown")
 
+        # 0. Mortality check: skip dead agents
+        if agent_id in self.dead_agents:
+            if self.config.verbose:
+                print(f"    [MORTALITY] {agent_id} is dead, skipping turn")
+            return None
+
+        # Check if agent just died (energy depleted)
+        if agent_id in self.identity_cores:
+            core = self.identity_cores[agent_id]
+            if core.is_dead():
+                self.dead_agents.add(agent_id)
+                if self.config.verbose:
+                    print(f"    [MORTALITY] {agent_id} has died (energy={core.energy:.3f})")
+                return None
+
         # 1. Generate dynamic turn context
         turn_context = self.context_injector.generate_turn_context(
             agent_id=agent_id,
@@ -518,14 +537,18 @@ class SocialRLRunner:
             else:
                 old_grit = "NONE"
 
-        # 5. IDENTITY-GROUNDED EXPRESSION CAPACITY
-        # Expression capacity emerges from the social field:
-        # - Identity salience: how invested in this political identity
-        # - Natality: capacity for new beginnings (τ-derived)
-        # The hard cap is just a safety rail; capacity is constituted by the field.
+        # 5. IDENTITY-GROUNDED EXPRESSION CAPACITY + TEMPERATURE COUPLING
+        # Expression capacity and temperature must co-vary (from expression_capacity_notes):
+        # - Low salience + no recognition → low T + brief (non-committal)
+        # - High rupture/low coherence → high T + more tokens (exploratory)
+        # - High coherence → low T + focused (stable voice)
         #
-        # Formula: cap = base_cap × f_salience × f_natality
-        # Where f_salience, f_natality ∈ [0.5, 1.0]
+        # This addresses the "two-layer LLM architecture problem":
+        # Grit works at computational layer but affective layer resists.
+        # Temperature+tokens together attack both layers.
+        #
+        # Formula: cap = base_cap × f_salience × f_natality × f_temperature
+        # Where f_salience, f_natality, f_temperature ∈ [0.7, 1.0] (modest effect)
 
         TOKEN_CAPS_BY_GRIT = {
             "STRONG": 100,   # ~50 words
@@ -548,17 +571,60 @@ class SocialRLRunner:
         if agent_id in self.identity_cores:
             natality_t = self.identity_cores[agent_id].get_natality()
 
-        # Compute identity-grounded capacity
+        # Get embodied scalars from WorldState (fatigue, frustration)
+        # NOTE: Must get frustration BEFORE computing temperature
+        fatigue = 0.0
+        frustration = 0.0
+        if self.world_engine and agent_id in self.world_engine.agent_states:
+            ws_state = self.world_engine.agent_states[agent_id]
+            fatigue = ws_state.fatigue
+            frustration = ws_state.frustration
+
+        # 5a. Compute temperature FIRST (needed for capacity coupling)
+        # T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality + k_f*frustration
+        identity_temperature = self._get_identity_temperature(agent_id, frustration)
+
+        # Compute identity-grounded capacity WITH temperature coupling
         base_cap = TOKEN_CAPS_BY_GRIT.get(old_grit, 512)
         f_salience = 0.5 + 0.5 * identity_salience  # [0.5, 1.0]
         f_natality = 0.5 + 0.5 * natality_t         # [0.5, 1.0]
-        soft_cap = int(base_cap * f_salience * f_natality)
+
+        # Temperature coupling: delegated to IdentityCore
+        # f_T = τ_baseline + (1 - τ_baseline) * t_normalized
+        # Floor emerges from τ (emergent time), NOT hardcoded
+        if agent_id in self.identity_cores:
+            f_temperature = self.identity_cores[agent_id].compute_temperature_capacity_factor()
+            f_energy = self.identity_cores[agent_id].compute_energy_capacity_factor()
+        else:
+            f_temperature = 0.5  # Neutral default (no IdentityCore)
+            f_energy = 1.0  # Full energy if no IdentityCore
+
+        # Fatigue factor: tired = fewer words
+        # f_fatigue = 1.0 - 0.3 * fatigue  # [0.7, 1.0]
+        f_fatigue = 1.0 - 0.3 * fatigue
+
+        # Frustration factor: non-monotonic (venting then withdrawal)
+        # Low frustration: normal
+        # Moderate frustration: MORE words (venting)
+        # High frustration: withdrawal (fewer words)
+        if frustration < 0.3:
+            f_frustration = 1.0
+        elif frustration < 0.7:
+            f_frustration = 1.0 + 0.2 * (frustration - 0.3)  # [1.0, 1.08] venting
+        else:
+            f_frustration = 1.08 - 0.4 * (frustration - 0.7)  # [1.08, 0.96] withdrawal
+
+        soft_cap = int(base_cap * f_salience * f_natality * f_temperature * f_energy * f_fatigue * f_frustration)
 
         # Safety rails (hard clamp)
         max_tokens = max(self.config.token_min_cap, min(512, soft_cap))
 
         # Persist for logging (but recompute each turn from identity state)
         self.token_caps[agent_id] = max_tokens
+
+        if agent_id in self.identity_cores and self.config.verbose:
+            T = self.identity_cores[agent_id].compute_temperature()
+            print(f"    [TEMP] {agent_id}: T={T:.3f}, f_T={f_temperature:.3f}, cap={max_tokens}")
 
         # 5. Generate response (with validation if enabled)
         if self.config.use_coach_validation:
@@ -567,7 +633,8 @@ class SocialRLRunner:
                 agent.get("behaviors", {}).get("raw", ""),
                 agent_id=agent_id,
                 turn_number=turn_number,
-                max_tokens=max_tokens
+                max_tokens=max_tokens,
+                temperature=identity_temperature
             )
         else:
             content = self._generate_simple(system_prompt, user_message)
@@ -655,55 +722,40 @@ class SocialRLRunner:
             overshoot = len(words) - word_limit
             overshoot_ratio = overshoot / float(word_limit)
 
-        # UPDATE NATALITY in IdentityCore (the identity mechanic lives there)
-        # This implements: overshoot + low recognition → natality drains ("talked over")
-        #                  overshoot + high recognition → natality rises ("held and amplified")
+        # Process round feedback through IdentityCore's unified interface
+        # All internal state management (natality, traces, energy) is encapsulated there
         if agent_id in self.identity_cores:
             core = self.identity_cores[agent_id]
-            old_natality = core.get_natality()
 
-            # Call IdentityCore's update_natality method
-            new_natality = core.update_natality(
-                recognition_score=recognition_score,
-                overshoot_ratio=overshoot_ratio
-            )
-
-            if self.config.verbose and abs(new_natality - old_natality) > 0.01:
-                print(f"    [NATALITY] {agent_id}: {old_natality:.2f}→{new_natality:.2f} "
-                      f"(recog={recognition_score:.2f}, overshoot={overshoot_ratio:.2f})")
-
-            # Stage 3: SurplusTrace management
-            # 1. Decay existing traces (channels lose efficacy unless re-cohered)
-            core.decay_traces()
-
-            # 2. Try to create trace on high-surplus, high-recognition events
+            # Build feedback from round context
             round_number = round_config.get("round_number", 1)
             semiotic_regime = round_config.get("semiotic_regime", "UNKNOWN")
             contribution_value = agent_feedback.get('contribution_value', 0.0) if agent_feedback else 0.0
             engagement_fb = agent_feedback.get('engagement', 0.0) if agent_feedback else 0.0
 
-            trace = core.maybe_create_trace(
+            feedback = RoundFeedback(
                 round_number=round_number,
                 turn_number=turn_number,
                 semiotic_regime=semiotic_regime,
                 recognition_score=recognition_score,
                 contribution_value=contribution_value,
                 engagement=engagement_fb,
+                overshoot_ratio=overshoot_ratio,
             )
-            if trace and self.config.verbose:
-                print(f"    [TRACE] Created for {agent_id}: weight={trace.weight:.3f}, "
-                      f"regime={semiotic_regime}")
 
-            # 3. Revalorize existing traces if current ΔI is similar
-            if len(core.history) >= 2:
-                prev_vec = core.history[-2][1]
-                curr_vec = core.vector
-                delta_I_vec = curr_vec - prev_vec
-                delta_I_arr = delta_I_vec.to_array()
+            # Single unified call - IdentityCore handles all internal state management
+            result = core.process_round_feedback(feedback)
 
-                num_revalorized = core.revalorize_traces(delta_I_arr, recognition_score)
-                if num_revalorized > 0 and self.config.verbose:
-                    print(f"    [TRACE] Revalorized {num_revalorized} trace(s) for {agent_id}")
+            # Verbose logging from unified result
+            if self.config.verbose:
+                if result['natality_changed']:
+                    print(f"    [NATALITY] {agent_id}: {result['old_natality']:.2f}→{result['new_natality']:.2f}")
+                if result['trace_created']:
+                    print(f"    [TRACE] Created for {agent_id}")
+                if result['traces_revalorized'] > 0:
+                    print(f"    [TRACE] Revalorized {result['traces_revalorized']} trace(s) for {agent_id}")
+                if result['energy_recovered'] != 0:
+                    print(f"    [ENERGY] {agent_id}: energy={core.energy:.3f} (+{result['energy_recovered']:.3f})")
 
         # Verbosity penalty (mild engagement nudge - main effect is via natality)
         if self.config.verbosity_penalty_enabled and overshoot_ratio > 0:
@@ -761,6 +813,14 @@ class SocialRLRunner:
         feedback_snapshot['recognition_score'] = recognition_score
         feedback_snapshot['f_salience'] = f_salience
         feedback_snapshot['f_natality'] = f_natality
+        feedback_snapshot['f_temperature'] = f_temperature  # Temperature-capacity coupling
+        feedback_snapshot['f_energy'] = f_energy  # Energy-capacity coupling
+        feedback_snapshot['f_fatigue'] = f_fatigue  # Fatigue-capacity coupling
+        feedback_snapshot['f_frustration'] = f_frustration  # Frustration-capacity coupling
+        feedback_snapshot['fatigue'] = fatigue  # Raw WorldState fatigue
+        feedback_snapshot['frustration'] = frustration  # Raw WorldState frustration
+        if identity_temperature is not None:
+            feedback_snapshot['identity_temperature'] = identity_temperature
         if verbosity_penalty > 0:
             feedback_snapshot['engagement_base'] = engagement_base
 
@@ -844,12 +904,15 @@ class SocialRLRunner:
         behaviors: str,
         agent_id: str = "Unknown",
         turn_number: int = 0,
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
+        temperature: Optional[float] = None
     ) -> tuple:
         """Generate with Coach/Performer validation pattern."""
         metadata = {"attempts": 0, "validations": [], "filtered": False, "used_dual_llm": False}
         if max_tokens:
             metadata["max_tokens"] = max_tokens
+        if temperature is not None:
+            metadata["identity_temperature"] = temperature
 
         # Use DualLLMClient if available
         if self.dual_llm is not None:
@@ -863,7 +926,8 @@ class SocialRLRunner:
                 rules=rules_list,
                 context={"behaviors": behaviors},
                 turn_number=turn_number,
-                max_tokens=max_tokens
+                max_tokens=max_tokens,
+                temperature=temperature
             )
 
             metadata["attempts"] = result.retries + 1
@@ -1148,11 +1212,11 @@ class SocialRLRunner:
             if not agent_id:
                 continue
 
-            # Infer group_id from agent identifier
-            group_id = self._infer_group_id(agent_id)
-
-            # Extract identity metrics from canvas attributes
+            # Extract attributes first to check for group_id
             attrs = agent.get("attributes", {})
+
+            # Use group_id from canvas attributes if available, otherwise infer
+            group_id = attrs.get("group_id") or self._infer_group_id(agent_id)
             identity_salience = attrs.get("identity_salience", 0.5)
             tie_to_place = attrs.get("tie_to_place", 0.5)
 
@@ -1278,10 +1342,19 @@ class SocialRLRunner:
 
         core.update(new_vec, sim_time)
 
-    def _get_identity_temperature(self, agent_id: str) -> Optional[float]:
-        """Get temperature from IdentityCore if available."""
+    def _get_identity_temperature(self, agent_id: str, frustration: float = 0.0) -> Optional[float]:
+        """
+        Get temperature from IdentityCore if available.
+
+        Args:
+            agent_id: The agent identifier
+            frustration: WorldState frustration scalar (0-1) for embodied temperature modulation
+
+        Returns:
+            Temperature value or None if no IdentityCore
+        """
         if agent_id in self.identity_cores:
-            return self.identity_cores[agent_id].compute_temperature()
+            return self.identity_cores[agent_id].compute_temperature(frustration)
         return None
 
     def get_identity_states(self) -> Dict[str, Dict[str, Any]]:

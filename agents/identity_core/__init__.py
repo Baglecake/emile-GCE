@@ -13,7 +13,7 @@ Designed for Phase 2b integration:
 - Temporal compression config
 """
 
-from .core import IdentityCore, IdentityVector
+from .core import IdentityCore, IdentityVector, RoundFeedback
 from .tau import compute_tau, tau_from_delta
 
-__all__ = ['IdentityCore', 'IdentityVector', 'compute_tau', 'tau_from_delta']
+__all__ = ['IdentityCore', 'IdentityVector', 'RoundFeedback', 'compute_tau', 'tau_from_delta']

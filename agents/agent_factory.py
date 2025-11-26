@@ -20,7 +20,7 @@ class AgentFactory:
 
     Usage:
         factory = AgentFactory.from_state_file("path/to/state.json")
-        alice = factory.create("Worker+Alice")
+        agent = factory.create("CES_Urban_Progressive")
         all_agents = factory.create_all()
     """
 
@@ -92,7 +92,7 @@ class AgentFactory:
         Create an AgentConfig for a specific agent by identifier.
 
         Args:
-            identifier: Agent identifier (e.g., "Worker+Alice")
+            identifier: Agent identifier (e.g., "CES_Urban_Progressive")
 
         Returns:
             AgentConfig for the specified agent

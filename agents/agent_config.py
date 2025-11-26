@@ -17,9 +17,9 @@ class AgentConfig:
     Each agent has a role, goal, persona, and behavioral parameters.
 
     Attributes:
-        identifier: Unique agent identifier (e.g., "Worker+Alice")
-        role: The agent's role in the simulation (e.g., "Worker", "Owner")
-        name: The agent's name (e.g., "Alice", "Marta")
+        identifier: Unique agent identifier (e.g., "CES_Urban_Progressive")
+        role: The agent's role in the simulation (e.g., "Citizen")
+        name: The agent's name (e.g., "Urban_Progressive")
         goal: What the agent is trying to achieve
         persona: Behavioral description and personality traits
         prompt: Compiled system prompt for LLM execution
@@ -56,7 +56,7 @@ class AgentConfig:
         """
         identifier = canvas_agent.get("identifier", "Unknown")
 
-        # Parse role and name from identifier (e.g., "Worker+Alice" -> "Worker", "Alice")
+        # Parse role and name from identifier (e.g., "CES_Urban_Progressive" -> "CES", "Urban_Progressive")
         if "+" in identifier:
             role, name = identifier.split("+", 1)
         else:

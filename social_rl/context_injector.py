@@ -953,21 +953,21 @@ if __name__ == "__main__":
     injector = ContextInjector(framework, mode=ManifestationType.PROGRESSIVE)
 
     # Test turn context generation
-    test_agent = {"identifier": "Worker+Alice", "goal": "Gain influence", "persona": "Thoughtful but hesitant", "role": "Worker"}
+    test_agent = {"identifier": "CES_Urban_Progressive", "goal": "Advocate for change", "persona": "Engaged urban voter with progressive views", "role": "Citizen"}
     test_round = {
         "round_number": 1,
-        "scenario": "Manufacturing workshop baseline",
-        "rules": "Workers can complete tasks, request clarification",
-        "tasks": "Complete three production cycles",
-        "concept_a_manifestation": "Alienation manifests as separation from decision-making",
-        "concept_b_manifestation": "Non-domination is absent",
+        "scenario": "Community housing policy forum",
+        "rules": "Participants share perspectives respectfully, acknowledge others' views",
+        "tasks": "Discuss housing affordability and reach common ground",
+        "concept_a_manifestation": "Alienation manifests as exclusion from policy decisions",
+        "concept_b_manifestation": "Democratic voice emerges through dialogue",
         "end_condition": "Total messages: 15"
     }
 
     # Generate contexts at different turns
     for turn in [1, 5, 12]:
         context = injector.generate_turn_context(
-            "Worker+Alice", test_agent, test_round, turn, []
+            "CES_Urban_Progressive", test_agent, test_round, turn, []
         )
         print(f"\n--- Turn {turn} (intensity: {injector._calculate_intensity(turn, 15)}) ---")
         print(f"Experiential: {context.experiential_context}")

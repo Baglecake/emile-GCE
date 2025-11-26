@@ -89,9 +89,9 @@ class DualLLMClient:
 
         # Generate with validation
         result = dual.generate_validated(
-            system_prompt="You are Alice, a factory worker...",
-            user_message="Respond to Marta's directive.",
-            agent_id="Worker+Alice",
+            system_prompt="You are an engaged urban voter with progressive views...",
+            user_message="Share your perspective on housing policy.",
+            agent_id="CES_Urban_Progressive",
             rules=["No direct confrontation", "Stay in character"],
             context={"round": 1, "turn": 3}
         )
@@ -121,7 +121,8 @@ class DualLLMClient:
         system_prompt: str,
         user_message: str,
         mode: str = "performer",
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
+        temperature: Optional[float] = None
     ) -> str:
         """
         Generate a response using the specified mode.
@@ -131,17 +132,18 @@ class DualLLMClient:
             user_message: User message/context
             mode: "performer" or "coach"
             max_tokens: Override default max tokens
+            temperature: Override default temperature (for identity-modulated generation)
 
         Returns:
             Generated text response
         """
         if mode == "performer":
             client = self.performer
-            temp = self.config.performer_temperature
+            temp = temperature if temperature is not None else self.config.performer_temperature
             tokens = max_tokens or self.config.performer_max_tokens
         elif mode == "coach":
             client = self.coach
-            temp = self.config.coach_temperature
+            temp = temperature if temperature is not None else self.config.coach_temperature
             tokens = max_tokens or self.config.coach_max_tokens
         else:
             raise ValueError(f"Unknown mode: {mode}. Use 'performer' or 'coach'.")
@@ -161,7 +163,8 @@ class DualLLMClient:
         rules: List[str],
         context: Optional[Dict[str, Any]] = None,
         turn_number: int = 0,
-        max_tokens: Optional[int] = None
+        max_tokens: Optional[int] = None,
+        temperature: Optional[float] = None
     ) -> GenerationResult:
         """
         Generate a response with coach validation.
@@ -177,6 +180,8 @@ class DualLLMClient:
             rules: List of rules to validate against
             context: Additional context for validation
             turn_number: Current turn number
+            max_tokens: Override default max tokens
+            temperature: Override temperature (for identity-modulated generation)
 
         Returns:
             GenerationResult with content, validation status, and critiques
@@ -185,8 +190,8 @@ class DualLLMClient:
         critiques = []
         retries = 0
 
-        # Initial generation
-        content = self.generate(system_prompt, user_message, mode="performer", max_tokens=max_tokens)
+        # Initial generation (with optional identity-modulated temperature)
+        content = self.generate(system_prompt, user_message, mode="performer", max_tokens=max_tokens, temperature=temperature)
 
         # Validation loop
         for attempt in range(self.config.max_validation_retries + 1):
@@ -216,20 +221,23 @@ class DualLLMClient:
             self._critique_log.append(critique)
 
             if attempt < self.config.max_validation_retries:
-                # Regenerate with corrective feedback
+                # Regenerate with corrective feedback (preserve temperature override)
                 retries += 1
                 corrective_prompt = self._build_corrective_prompt(
                     system_prompt, violations, suggested
                 )
-                content = self.generate(corrective_prompt, user_message, mode="performer", max_tokens=max_tokens)
+                content = self.generate(corrective_prompt, user_message, mode="performer", max_tokens=max_tokens, temperature=temperature)
 
         duration = time.time() - start_time
+
+        # Capture actual temperature used (override or default)
+        actual_temp = temperature if temperature is not None else self.config.performer_temperature
 
         return GenerationResult(
             content=content,
             agent_id=agent_id,
             mode="performer",
-            temperature=self.config.performer_temperature,
+            temperature=actual_temp,
             validation_passed=len(critiques) == 0 or critiques[-1].accepted if critiques else True,
             retries=retries,
             coach_critiques=critiques,
