@@ -138,20 +138,22 @@ delta_place = mean |σ_place(t) - σ_place(t-1)|
 - Test if ENGAGED_HARMONY has characteristic τ signatures (stable, slow)
 - Test if regime transitions show τ compression (rapid change)
 
-## Identity Coherence
+## Identity Coherence (IMPLEMENTED)
 
 ### Definition
 
 **Coherence** measures how well identity **predicts behavior** vs how much identity is **overwritten by social field**.
 
 ```python
-C_t = cos(I_t, I_0) × TE(I→B) / (TE(I→B) + TE(others→I))
+C_t = cos(I_t, I_0) × TE(I→B) / (TE(I→B) + TE(others→B))
 ```
 
 Where:
-- `cos(I_t, I_0)`: How much identity has drifted from initial state
+- `cos(I_t, I_0)`: How much identity has drifted from initial state (7D vector)
 - `TE(I→B)`: Transfer entropy from identity to behavior (predictive power)
-- `TE(others→I)`: Transfer entropy from social field to identity (overwriting)
+- `TE(others→B)`: Transfer entropy from others' behavior to this agent's behavior
+
+**Implementation**: `agents/identity_core/transfer_entropy.py` + `core.py:compute_coherence()`
 
 ### Components
 

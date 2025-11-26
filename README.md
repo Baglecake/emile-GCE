@@ -29,20 +29,24 @@ Unlike traditional social simulation (which tests hypotheses about individuals),
 - **Key finding**: Condition G (dual-LLM + adaptive context + challenge mode) is optimal
 - See: [FACTORIAL_ANALYSIS.md](FACTORIAL_ANALYSIS.md)
 
-### Phase 2: Identity-Grounding (Stages 1-4 Complete)
+### Phase 2: Identity-Grounding (Complete)
 
 **Implemented:**
+- **N-dimensional IdentityVector**: 7D identity space with canonical dimension order:
+  `[engagement, institutional_faith, ideology, partisanship, sociogeographic, social_friction, tie_to_place]`
 - **IdentityCore** with full QSE mechanics (surplus, rupture, emergent time tau)
 - **Stateful natality**: tau-based baseline with recognition-driven modulation
 - **Qualitative surplus**: `local_surplus = delta_I * f_tau * f_natality * f_recognition` (EMA-smoothed)
 - **SurplusTrace buffer**: Memory of enacted surplus events with decay/revalorization
 - **Identity blending**: `I_new = I_current + eta * T` (weighted trace direction)
 - **Expression capacity**: `soft_cap = base_cap * f_salience * f_natality` (identity-grounded)
+- **Transfer Entropy coherence**: `C_t = cos(I_t, I_0) × TE(I→B) / (TE(I→B) + TE(others→B))`
+  - TE ratio > 0.5: Identity drives behavior (authentic)
+  - TE ratio < 0.5: Others drive behavior (conformist)
 - **Temperature modulation**: `T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality`
 - **TRUE dual-LLM**: Separate 14B Performer + 7B Coach on distinct GPU endpoints
 
 **Remaining (Phase 2b):**
-- Transfer entropy: TE(I->B) vs TE(others->I) for coherence formula
 - Multi-wave CES priors for empirical delta_mu/sigma
 - Mortality mechanics (energy death, incoherence death, silencing death)
 
@@ -190,4 +194,4 @@ Delmar Coburn - [GitHub](https://github.com/delcoburn)
 
 ---
 
-**Status**: Phase 1 complete. Phase 2 Stages 1-4 complete (IdentityCore, natality, surplus, traces, expression capacity). Phase 2b (transfer entropy, mortality) in progress.
+**Status**: Phase 1 complete. Phase 2 complete (IdentityCore, N-dim vectors, transfer entropy coherence, natality, surplus, traces, expression capacity). Phase 2b (mortality) in progress.

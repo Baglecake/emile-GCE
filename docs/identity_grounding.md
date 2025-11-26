@@ -8,7 +8,7 @@ Reduce Condition G's **residual +50% hyper-enfranchisement** (0.256 vs CES expec
 
 - **Phase 1**: COMPLETE - Architecture optimization (G is optimal)
 - **Phase 2 Stages 1-4**: COMPLETE - Core identity mechanics implemented
-- **Phase 2b**: IN PROGRESS - Transfer entropy, mortality
+- **Phase 2.5**: COMPLETE - N-dimensional IdentityVector + Transfer Entropy
 - **Phase 3**: PLANNED - Sociogeographic embodiment, Coach-as-field
 
 ## CES-Based Identity Artifacts
@@ -165,54 +165,62 @@ def create_true_dual_llm(
 
 **Usage**: See `experiments/run_ces_experiment.py` with `--performer-url` and `--coach-url` flags.
 
-### Medium-term: Transfer Entropy
+### Stage 5: Transfer Entropy (COMPLETE)
 
-**Location**: `analysis/compute_transfer_entropy.py`
+**Location**: `agents/identity_core/transfer_entropy.py`
 
-**Goal**: Compute `TE(I→B)` and `TE(others→I)` for coherence formula.
+**Goal**: Compute autonomy ratio - "Am I driving my behavior or being dragged by others?"
 
-**Formulas**:
+**The Formula**:
 
 ```
-TE(I→B) = H(B_{t+1} | history) - H(B_{t+1} | history, I_t)
-TE(others→I) = H(I_{t+1} | history) - H(I_{t+1} | history, social_field_t)
+Coherence = cos(I_t, I_0) × TE(I→B) / (TE(I→B) + TE(others→B))
 ```
 
-**Simplifications for Phase 2**:
-
-Use **mutual information** as proxy:
+**Implementation**:
 
 ```python
-def compute_TE_proxy(identity_series, behavior_series):
-    """Simplified TE using mutual information."""
-    # Discretize continuous vectors
-    I_binned = discretize(identity_series, bins=5)
-    B_binned = discretize(behavior_series, bins=5)
+def te_ratio_proxy(
+    identity_history: np.ndarray,
+    behavior_history: np.ndarray,
+    others_history: np.ndarray,
+    min_len: int = 8,
+) -> float:
+    """
+    Compute TE ratio: TE(I→B) / (TE(I→B) + TE(others→B))
 
-    # Mutual information I(I_t; B_{t+1})
-    MI = mutual_info_score(I_binned[:-1], B_binned[1:])
+    Uses lag-1 mutual information as a proxy for transfer entropy.
 
-    return MI
+    Returns:
+        Float in [0, 1]:
+        - >0.5: Identity drives behavior more than others (authentic)
+        - <0.5: Others drive behavior more than identity (conformist)
+        - =1.0: Not enough data yet (early rounds)
+    """
 ```
 
-**Full implementation** (Phase 3):
+**Interpretation**:
 
-Use `jpype` + `JIDT` (Java Information Dynamics Toolkit):
+| TE Ratio | cos(I,I₀) | Interpretation |
+|----------|-----------|----------------|
+| High (>0.5) | High | **Authentic coherence** - identity stable AND driving behavior |
+| Low (<0.5) | High | **Conformist coherence** - identity stable BUT being dragged by field |
+| High (>0.5) | Low | **Authentic drift** - identity changing BUT from internal dynamics |
+| Low (<0.5) | Low | **Field-driven collapse** - identity shattered by external pressure |
+
+**Runner Integration** (`social_rl/runner.py`):
 
 ```python
-import jpype
-from jpype import JPackage
+# Update TE histories BEFORE identity core update (order matters!)
+for agent_id, ic in self.identity_cores.items():
+    identity_scalar = ic.compute_delta_I()
+    behavior_scalar = agent_engagements.get(agent_id, 0.0)
+    others_scalar = mean([v for k, v in agent_engagements.items() if k != agent_id])
 
-def compute_TE_full(source, target, k=1, tau=1):
-    """Full TE using JIDT."""
-    teCalc = JPackage('infodynamics.measures.discrete').TransferEntropyCalculatorDiscrete(256, k)
-    teCalc.initialise()
-    teCalc.addObservations(source, target)
-    te = teCalc.computeAverageLocalOfObservations()
-    return te
+    ic.update_te_histories(identity_scalar, behavior_scalar, others_scalar)
 ```
 
-**Deliverable**: `compute_transfer_entropy.py` with proxy and full implementations.
+**Note**: TE ratio starts at 1.0 when history < 8 rounds. This means early-round coherence = pure cosine similarity until sufficient data accumulates.
 
 ### Medium-term: Grit v2 (Calibrated Constraints)
 
@@ -493,6 +501,7 @@ for agent in agents:
 | Milestone | Status |
 |-----------|--------|
 | IdentityCore class (full implementation) | COMPLETE |
+| N-dimensional IdentityVector (7D) | COMPLETE |
 | Emergent time (tau) | COMPLETE |
 | Stateful natality | COMPLETE |
 | Qualitative surplus | COMPLETE |
@@ -502,7 +511,8 @@ for agent in agents:
 | TRUE dual-LLM (14B/7B) | COMPLETE |
 | Grit v2 (tiered constraints) | COMPLETE |
 | Per-round identity logging | COMPLETE |
-| Transfer entropy (TE) | Phase 2b |
+| Transfer entropy (TE) coherence | COMPLETE |
+| Identity salience/tie_to_place wiring | COMPLETE |
 | Multi-wave CES priors | Phase 2b |
 | Mortality mechanics | Phase 3 |
 | Coach-as-field | Phase 3 |
@@ -510,9 +520,8 @@ for agent in agents:
 
 ## Next Steps (Phase 2b)
 
-1. **Transfer entropy**: TE(I->B) vs TE(others->I) for coherence formula
-2. **CES priors**: Load multi-wave empirical delta_mu/sigma per group
-3. **Tie-to-place**: Integrate riding-level geographic attachment
+1. **CES priors**: Load multi-wave empirical delta_mu/sigma per group
+2. **7D weights**: Create identity_weights_2021.v1.json for full 7D initialization
 
 ## Future (Phase 3)
 
