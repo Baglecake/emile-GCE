@@ -190,7 +190,7 @@ MIT License - See LICENSE file
 
 ## Contact
 
-Delmar Coburn - [GitHub](https://github.com/delcoburn)
+Del Coburn - [GitHub](https://github.com/delcoburn)
 
 ---
 
