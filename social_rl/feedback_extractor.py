@@ -229,11 +229,38 @@ class SocialFeedbackExtractor:
         name_map = {}
         for pid in participants:
             names = {pid}  # Full identifier
+
+            # Handle "Role+Name" format
             if "+" in pid:
                 role, name = pid.split("+", 1)
                 names.add(name)
                 names.add(name.lower())
                 names.add(role)
+
+            # Handle CES-style IDs like "CES_CES_Urban_Progressive"
+            if "CES_" in pid:
+                # Extract the type part (e.g., "Urban_Progressive")
+                parts = pid.split("CES_")
+                if len(parts) > 1:
+                    type_part = parts[-1]  # Get last part after CES_
+                    names.add(type_part)
+                    names.add(type_part.lower())
+                    # Also add space-separated version (e.g., "urban progressive")
+                    names.add(type_part.replace("_", " ").lower())
+                    # Add individual words (e.g., "urban", "progressive")
+                    for word in type_part.split("_"):
+                        if len(word) > 3:  # Skip short words
+                            names.add(word.lower())
+
+            # Handle underscore-separated IDs generically
+            elif "_" in pid:
+                # Add space-separated version
+                names.add(pid.replace("_", " ").lower())
+                # Add individual significant words
+                for word in pid.split("_"):
+                    if len(word) > 3:
+                        names.add(word.lower())
+
             name_map[pid] = names
         return name_map
 

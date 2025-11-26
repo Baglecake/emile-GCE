@@ -334,9 +334,9 @@ class SocialRLRunner:
             adaptations = self._adapt_policies_from_feedback(round_number)
             policy_adaptations.extend(adaptations)
 
-        # Update accumulated feedback
+        # Update accumulated feedback (use to_dict to include direct_references, response_received)
         for agent_id, fb in round_feedback.items():
-            self.accumulated_feedback[agent_id] = fb.as_reward_signal()
+            self.accumulated_feedback[agent_id] = fb.to_dict()
 
         # Phase 2a: Update identity cores with observed behavior
         if self.identity_cores:
@@ -435,8 +435,15 @@ class SocialRLRunner:
             else:
                 old_grit = "NONE"
 
-        # 5. TOKEN CAP THROTTLING: Get max_tokens for this turn
-        # Token caps per grit level (from grit_config.py)
+        # 5. IDENTITY-GROUNDED EXPRESSION CAPACITY
+        # Expression capacity emerges from the social field:
+        # - Identity salience: how invested in this political identity
+        # - Natality: capacity for new beginnings (τ-derived)
+        # The hard cap is just a safety rail; capacity is constituted by the field.
+        #
+        # Formula: cap = base_cap × f_salience × f_natality
+        # Where f_salience, f_natality ∈ [0.5, 1.0]
+
         TOKEN_CAPS_BY_GRIT = {
             "STRONG": 100,   # ~50 words
             "MODERATE": 150, # ~75 words
@@ -444,13 +451,31 @@ class SocialRLRunner:
             "NONE": 512      # default
         }
 
-        # Get persisted cap or initialize from grit level
-        if agent_id in self.token_caps:
-            max_tokens = self.token_caps[agent_id]
-        else:
-            # Initialize from grit level
-            max_tokens = TOKEN_CAPS_BY_GRIT.get(old_grit, 512)
-            self.token_caps[agent_id] = max_tokens
+        # Get identity metrics for capacity computation
+        identity_salience = 0.5  # Default neutral salience
+        natality_t = 0.5  # Default neutral natality
+
+        # Get salience from grit level (inverse relationship)
+        # Higher grit = lower salience (more constrained identity)
+        salience_map = {"STRONG": 0.15, "MODERATE": 0.30, "LIGHT": 0.45, "NONE": 0.75}
+        identity_salience = salience_map.get(old_grit, 0.5)
+
+        # Get STATEFUL natality from IdentityCore if available
+        # This is the natality_t that gets updated by recognition/overshoot
+        if agent_id in self.identity_cores:
+            natality_t = self.identity_cores[agent_id].get_natality()
+
+        # Compute identity-grounded capacity
+        base_cap = TOKEN_CAPS_BY_GRIT.get(old_grit, 512)
+        f_salience = 0.5 + 0.5 * identity_salience  # [0.5, 1.0]
+        f_natality = 0.5 + 0.5 * natality_t         # [0.5, 1.0]
+        soft_cap = int(base_cap * f_salience * f_natality)
+
+        # Safety rails (hard clamp)
+        max_tokens = max(self.config.token_min_cap, min(512, soft_cap))
+
+        # Persist for logging (but recompute each turn from identity state)
+        self.token_caps[agent_id] = max_tokens
 
         # 5. Generate response (with validation if enabled)
         if self.config.use_coach_validation:
@@ -526,27 +551,89 @@ class SocialRLRunner:
         # Enforce minimum (don't over-truncate)
         word_limit = max(word_limit, self.config.grit_min_words)
 
-        # 5d. VERBOSITY PENALTY (Option B): Social throttling via engagement reduction
-        # If agent exceeds their word limit, penalize engagement score
-        # This feeds into dynamic grit → natural throttling without artificial truncation
+        # 5d. RECOGNITION-DRIVEN NATALITY UPDATE
+        # Expression capacity is constituted by the social field, not crude punishment.
+        # Identity mechanics live in IdentityCore - runner just orchestrates.
+
         verbosity_penalty = 0.0
         engagement_base = agent_feedback.get('engagement', 0.5)
 
-        if self.config.verbosity_penalty_enabled and len(words) > word_limit:
+        # Compute recognition_score from feedback
+        # Recognition = (direct_references + response_received) / expected
+        direct_refs = agent_feedback.get('direct_references', 0)
+        response_received = agent_feedback.get('response_received', 0)
+        num_other_agents = max(1, len(self.canvas.get("agents", [])) - 1)
+        raw_recognition = (direct_refs + response_received) / num_other_agents
+        recognition_score = max(0.0, min(1.0, raw_recognition))
+
+        # Compute overshoot ratio (if any)
+        overshoot_ratio = 0.0
+        if len(words) > word_limit:
             overshoot = len(words) - word_limit
             overshoot_ratio = overshoot / float(word_limit)
 
-            # Penalty proportional to overshoot, capped at max_penalty
+        # UPDATE NATALITY in IdentityCore (the identity mechanic lives there)
+        # This implements: overshoot + low recognition → natality drains ("talked over")
+        #                  overshoot + high recognition → natality rises ("held and amplified")
+        if agent_id in self.identity_cores:
+            core = self.identity_cores[agent_id]
+            old_natality = core.get_natality()
+
+            # Call IdentityCore's update_natality method
+            new_natality = core.update_natality(
+                recognition_score=recognition_score,
+                overshoot_ratio=overshoot_ratio
+            )
+
+            if self.config.verbose and abs(new_natality - old_natality) > 0.01:
+                print(f"    [NATALITY] {agent_id}: {old_natality:.2f}→{new_natality:.2f} "
+                      f"(recog={recognition_score:.2f}, overshoot={overshoot_ratio:.2f})")
+
+            # Stage 3: SurplusTrace management
+            # 1. Decay existing traces (channels lose efficacy unless re-cohered)
+            core.decay_traces()
+
+            # 2. Try to create trace on high-surplus, high-recognition events
+            round_number = round_config.get("round_number", 1)
+            semiotic_regime = round_config.get("semiotic_regime", "UNKNOWN")
+            contribution_value = agent_feedback.get('contribution_value', 0.0) if agent_feedback else 0.0
+            engagement_fb = agent_feedback.get('engagement', 0.0) if agent_feedback else 0.0
+
+            trace = core.maybe_create_trace(
+                round_number=round_number,
+                turn_number=turn_number,
+                semiotic_regime=semiotic_regime,
+                recognition_score=recognition_score,
+                contribution_value=contribution_value,
+                engagement=engagement_fb,
+            )
+            if trace and self.config.verbose:
+                print(f"    [TRACE] Created for {agent_id}: weight={trace.weight:.3f}, "
+                      f"regime={semiotic_regime}")
+
+            # 3. Revalorize existing traces if current ΔI is similar
+            if len(core.history) >= 2:
+                prev_vec = core.history[-2][1]
+                curr_vec = core.vector
+                delta_I_vec = curr_vec - prev_vec
+                delta_I_arr = delta_I_vec.to_array()
+
+                num_revalorized = core.revalorize_traces(delta_I_arr, recognition_score)
+                if num_revalorized > 0 and self.config.verbose:
+                    print(f"    [TRACE] Revalorized {num_revalorized} trace(s) for {agent_id}")
+
+        # Verbosity penalty (mild engagement nudge - main effect is via natality)
+        if self.config.verbosity_penalty_enabled and overshoot_ratio > 0:
+            # Small engagement penalty (mild nudge, not main effect)
             verbosity_penalty = min(
-                overshoot_ratio * self.config.verbosity_penalty_alpha,
-                self.config.verbosity_max_penalty
+                overshoot_ratio * self.config.verbosity_penalty_alpha * 0.5,  # Reduced
+                self.config.verbosity_max_penalty * 0.5
             )
 
             # Apply penalty to engagement
             penalized_engagement = max(0.0, engagement_base - verbosity_penalty)
 
-            # Update accumulated feedback with penalized engagement
-            # This is what dynamic grit calibration will see next turn
+            # Update accumulated feedback
             if agent_id not in self.accumulated_feedback:
                 self.accumulated_feedback[agent_id] = {}
             self.accumulated_feedback[agent_id]['engagement'] = penalized_engagement
@@ -554,21 +641,9 @@ class SocialRLRunner:
             self.accumulated_feedback[agent_id]['verbosity_penalty'] = verbosity_penalty
             self.accumulated_feedback[agent_id]['word_count'] = len(words)
             self.accumulated_feedback[agent_id]['word_limit'] = word_limit
+            self.accumulated_feedback[agent_id]['recognition_score'] = recognition_score
 
-            # TOKEN CAP THROTTLING: Reduce max_tokens for next turn
-            if self.config.token_throttle_enabled:
-                old_cap = self.token_caps.get(agent_id, 512)
-                new_cap = max(
-                    self.config.token_min_cap,
-                    int(old_cap * self.config.token_throttle_factor)
-                )
-                self.token_caps[agent_id] = new_cap
-
-                if self.config.verbose and verbosity_penalty > 0.01:
-                    print(f"    [VERBOSITY] {agent_id}: {len(words)} words > {word_limit} limit → "
-                          f"eng {engagement_base:.2f}→{penalized_engagement:.2f} (penalty={verbosity_penalty:.2f})")
-                    print(f"    [TOKEN-CAP] {agent_id}: {old_cap}→{new_cap} tokens (throttle={self.config.token_throttle_factor})")
-            elif self.config.verbose and verbosity_penalty > 0.01:
+            if self.config.verbose and verbosity_penalty > 0.01:
                 print(f"    [VERBOSITY] {agent_id}: {len(words)} words > {word_limit} limit → "
                       f"eng {engagement_base:.2f}→{penalized_engagement:.2f} (penalty={verbosity_penalty:.2f})")
 
@@ -584,13 +659,18 @@ class SocialRLRunner:
             if self.config.verbose:
                 print(f"    [GRIT] Truncated from {len(words)} to {len(content.split())} words (limit={word_limit})")
 
-        # Build feedback snapshot with verbosity info
+        # Build feedback snapshot with identity metrics
         feedback_snapshot = agent_feedback.copy() if agent_feedback else {}
         feedback_snapshot['word_count'] = len(content.split())  # Post-truncation count
         feedback_snapshot['word_limit'] = word_limit
         feedback_snapshot['grit_level'] = grit_level
         feedback_snapshot['verbosity_penalty'] = verbosity_penalty
-        feedback_snapshot['max_tokens'] = self.token_caps.get(agent_id, 512)  # Current cap for next turn
+        feedback_snapshot['max_tokens'] = max_tokens  # Identity-grounded capacity
+        feedback_snapshot['identity_salience'] = identity_salience
+        feedback_snapshot['natality_t'] = natality_t
+        feedback_snapshot['recognition_score'] = recognition_score
+        feedback_snapshot['f_salience'] = f_salience
+        feedback_snapshot['f_natality'] = f_natality
         if verbosity_penalty > 0:
             feedback_snapshot['engagement_base'] = engagement_base
 
