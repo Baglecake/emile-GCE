@@ -42,6 +42,15 @@ except ImportError:
     IdentityCore = None
     IdentityVector = None
 
+# Phase 2b: WorldState integration (optional) - gives agents a world to live in
+try:
+    from .world_state import WorldStateEngine, create_world_engine
+    WORLD_STATE_AVAILABLE = True
+except ImportError:
+    WORLD_STATE_AVAILABLE = False
+    WorldStateEngine = None
+    create_world_engine = None
+
 
 def _get_default_output_dir(experiment_id: str = None) -> str:
     """Get default output directory based on environment."""
@@ -116,6 +125,12 @@ class SocialRLConfig:
     token_throttle_enabled: bool = True
     token_throttle_factor: float = 0.75    # Multiply cap by this after overshoot
     token_min_cap: int = 80                # Floor for token cap (~40 words)
+
+    # Phase 2b: WorldState - give agents a world to live in
+    # Events, topics, frustration mechanics - differential experience of shared events
+    use_world_state: bool = False
+    world_event_probability: float = 0.4  # Chance of world event each round
+    world_topic_mode: str = "sequential"  # "sequential" or "random"
 
 
 @dataclass
@@ -236,6 +251,15 @@ class SocialRLRunner:
         # Maps agent_id -> current max_tokens limit
         self.token_caps: Dict[str, int] = {}  # agent_id -> max_tokens
 
+        # Phase 2b: WorldState - events, topics, frustration (optional)
+        self.world_engine: Optional['WorldStateEngine'] = None
+        if self.config.use_world_state and WORLD_STATE_AVAILABLE:
+            self.world_engine = create_world_engine(
+                seed=hash(experiment_id) if experiment_id else 42,
+                event_probability=self.config.world_event_probability,
+                topic_mode=self.config.world_topic_mode
+            )
+
         # Setup output directory
         if self.config.output_dir:
             self.output_dir = Path(self.config.output_dir)
@@ -252,6 +276,7 @@ class SocialRLRunner:
             print(f"  Manifestation mode: {self.config.manifestation_mode}")
             print(f"  PRAR cues: {self.config.use_prar_cues}")
             print(f"  Dual-LLM Client: {'enabled' if self.dual_llm else 'disabled'}")
+            print(f"  WorldState: {'enabled' if self.world_engine else 'disabled'}")
             if self.config.auto_save:
                 print(f"  Output dir: {self.output_dir}")
 
@@ -278,11 +303,21 @@ class SocialRLRunner:
         round_config = self._get_round_config(round_number)
         participants = self._get_participants(round_number)
 
+        # Advance world state for this round (events, topics, etc.)
+        world_event = None
+        world_topic = None
+        if self.world_engine:
+            world_event, world_topic = self.world_engine.advance_round()
+
         if self.config.verbose:
             print(f"\n{'='*60}")
             print(f"SOCIAL RL ROUND {round_number}")
             print(f"Scenario: {round_config.get('scenario', '')[:60]}...")
             print(f"Participants: {[p.get('identifier') for p in participants]}")
+            if world_event:
+                print(f"World Event: {world_event.headline}")
+            if world_topic:
+                print(f"Discussion Topic: {world_topic.question}")
             print(f"{'='*60}\n")
 
         # Parse max turns
@@ -441,8 +476,33 @@ class SocialRLRunner:
         if prar_cue:
             system_prompt += f"\n\n=== REASONING GUIDANCE ===\n{prar_cue}"
 
-        # 4. Build user message (conversation context)
-        user_message = self._build_user_message(history, agent, round_config)
+        # 3b. Inject world context (events, topics, frustration) if enabled
+        if self.world_engine and agent_id in self.identity_cores:
+            core = self.identity_cores[agent_id]
+            # Get identity vector as dict
+            identity_dict = {
+                'engagement': core.vector.engagement,
+                'institutional_faith': core.vector.institutional_faith,
+                'ideology': core.vector.ideology,
+                'partisanship': core.vector.partisanship,
+                'sociogeographic': core.vector.sociogeographic,
+                'social_friction': core.vector.social_friction,
+                'tie_to_place': core.vector.tie_to_place,
+            }
+            group_id = core.group_id if hasattr(core, 'group_id') else "unknown"
+            world_context = self.world_engine.get_world_context_injection(
+                agent_id, identity_dict, group_id
+            )
+            # Note: world_context is now passed to user message for better salience
+        else:
+            world_context = ""
+
+        # 4. Build user message (conversation context + world state)
+        user_message = self._build_user_message(
+            history, agent, round_config,
+            turn_number=turn_number,
+            world_context=world_context
+        )
 
         # 4b. Get current grit state (needed for token cap initialization)
         agent_prompt = agent.get("prompt", "")
@@ -666,6 +726,13 @@ class SocialRLRunner:
             self.accumulated_feedback[agent_id]['word_limit'] = word_limit
             self.accumulated_feedback[agent_id]['recognition_score'] = recognition_score
 
+            # Update world state recognition (for frustration tracking)
+            if self.world_engine:
+                was_recognized = recognition_score > 0.3
+                self.world_engine.update_agent_recognition(
+                    agent_id, was_recognized, recognition_score
+                )
+
             if self.config.verbose and verbosity_penalty > 0.01:
                 print(f"    [VERBOSITY] {agent_id}: {len(words)} words > {word_limit} limit → "
                       f"eng {engagement_base:.2f}→{penalized_engagement:.2f} (penalty={verbosity_penalty:.2f})")
@@ -713,17 +780,61 @@ class SocialRLRunner:
         self,
         history: List[SocialRLMessage],
         agent: Dict[str, Any],
-        round_config: Dict[str, Any]
+        round_config: Dict[str, Any],
+        turn_number: int = 1,
+        world_context: str = ""
     ) -> str:
-        """Build the user message with conversation context."""
+        """Build the user message with conversation context and world state."""
+        agent_name = agent.get('name', 'Unknown')
+        scenario = round_config.get('scenario', '')
+
         if history:
-            context_lines = ["CONVERSATION SO FAR:"]
+            # Get last few speakers for explicit engagement
+            recent_speakers = []
+            for msg in history[-4:]:
+                speaker_name = msg.agent_id.replace("CES_CES_", "").replace("_", " ")
+                recent_speakers.append(speaker_name)
+
+            context_lines = ["=== CONVERSATION SO FAR ==="]
             for msg in history[-10:]:
-                context_lines.append(f"[{msg.agent_id}]: {msg.content}")
+                speaker = msg.agent_id.replace("CES_CES_", "").replace("_", " ")
+                context_lines.append(f"[{speaker}]: {msg.content}")
             context = "\n".join(context_lines)
-            return f"{context}\n\nIt is now your turn to respond as {agent.get('name', 'Unknown')}."
+
+            # Build engagement prompt that REQUIRES responding to others
+            if len(recent_speakers) >= 2:
+                recent_names = ", ".join(set(recent_speakers[-3:]))
+                engagement_prompt = (
+                    f"\n\n=== YOUR TURN (Turn {turn_number}) ===\n"
+                    f"You are {agent_name}. You have just heard from: {recent_names}.\n"
+                    f"CRITICAL: You MUST directly respond to or acknowledge at least ONE specific point "
+                    f"from a previous speaker. Do NOT simply repeat your own position.\n"
+                    f"Engage with what others have said, then share your perspective."
+                )
+            else:
+                engagement_prompt = (
+                    f"\n\n=== YOUR TURN (Turn {turn_number}) ===\n"
+                    f"You are {agent_name}. Respond to what has been said, building on or "
+                    f"disagreeing with specific points raised by others."
+                )
+
+            # Include world context in user message (more salient than system prompt)
+            if world_context:
+                return f"{world_context}\n\n{context}{engagement_prompt}"
+            else:
+                return f"{context}{engagement_prompt}"
         else:
-            return f"The round begins. {round_config.get('scenario', '')}\n\nRespond as {agent.get('name', 'Unknown')}."
+            # First turn of round - introduce yourself and topic
+            intro_prompt = (
+                f"=== ROUND BEGINS (Turn {turn_number}) ===\n"
+                f"{scenario}\n\n"
+                f"You are {agent_name}. Introduce yourself briefly and share your initial "
+                f"perspective on the topic at hand."
+            )
+            if world_context:
+                return f"{world_context}\n\n{intro_prompt}"
+            else:
+                return intro_prompt
 
     def _generate_with_validation(
         self,
@@ -1144,15 +1255,25 @@ class SocialRLRunner:
 
         # Extract vector from feedback
         # Map feedback signals to identity dimensions
+        # CRITICAL: Only update dimensions that have feedback signals.
+        # Stable dimensions (ideology, partisanship, sociogeographic, tie_to_place)
+        # must be preserved from current state - they have no feedback mapping.
         engagement = feedback.get('engagement', core.vector.engagement)
         # contribution_value maps loosely to institutional_faith
         faith = 1.0 - feedback.get('critical_ratio', 0.0)  # inverse of criticism
         friction = feedback.get('direct_references', core.vector.social_friction)
 
+        # Build full 7D vector preserving stable dimensions from current state
         new_vec = IdentityVector(values={
+            # Observable/updateable from feedback:
             'engagement': engagement,
             'institutional_faith': faith,
             'social_friction': friction,
+            # Stable dimensions (no feedback signal - preserve from current):
+            'ideology': core.vector.ideology,
+            'partisanship': core.vector.partisanship,
+            'sociogeographic': core.vector.sociogeographic,
+            'tie_to_place': core.vector.tie_to_place,
         })
 
         core.update(new_vec, sim_time)

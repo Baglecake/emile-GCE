@@ -456,6 +456,8 @@ def run_ces_experiment(
     # 2x2x2 sweep condition and seed tracking
     condition: Optional[str] = None,  # e.g., "A", "B", ..., "H"
     seed: Optional[int] = None,  # Seed number for replication
+    # Phase 2b: WorldState - give agents a world to live in
+    use_world_state: bool = False,
 ) -> Dict[str, Any]:
     """
     Run a CES-grounded Social RL experiment.
@@ -577,10 +579,12 @@ def run_ces_experiment(
         challenge_mode=challenge_mode,  # For A/B testing: "off", "adaptive", "always"
         use_identity_cores=True,  # Phase 2a: IdentityCore tracking with QSE mechanics
         identity_modulates_temperature=True,  # Let coherence/rupture affect temperature
+        use_world_state=use_world_state,  # Phase 2b: Events, topics, frustration
     )
     print(f"Context mode: {context_mode}")
     print(f"Challenge mode: {challenge_mode}")
     print(f"IdentityCore: ENABLED (Phase 2a)")
+    print(f"WorldState: {'ENABLED' if use_world_state else 'disabled'} (Phase 2b)")
 
     # Create runner
     runner = SocialRLRunner(
@@ -809,6 +813,13 @@ Examples:
         help="Seed number for replication (e.g., 1, 2, 3)"
     )
 
+    # Phase 2b: WorldState - give agents a world to live in
+    parser.add_argument(
+        "--world-state",
+        action="store_true",
+        help="Enable WorldState: events, topics, frustration mechanics (differential agent experience)"
+    )
+
     args = parser.parse_args()
 
     try:
@@ -834,6 +845,8 @@ Examples:
             # 2x2x2 sweep condition and seed tracking
             condition=args.condition,
             seed=args.seed,
+            # Phase 2b: WorldState
+            use_world_state=args.world_state,
         )
 
         print(f"\nExperiment completed!")
