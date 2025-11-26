@@ -158,6 +158,10 @@ class CESAgentConfig:
     riding_competitiveness: float = 0.5
     local_minority_pct: float = 0.0
 
+    # Identity metrics (from identity_metrics.py)
+    identity_salience: float = 0.5
+    tie_to_place: float = 0.5
+
     # Generated persona (compiled from above)
     persona_description: str = ""
     constraints: List[str] = field(default_factory=list)
@@ -183,7 +187,9 @@ class CESAgentConfig:
                 "ideology_lr": self.ideology_lr,
                 "party_id": self.party_id,
                 "party_name": self.party_name,
-                "turnout_likelihood": self.turnout_likelihood
+                "turnout_likelihood": self.turnout_likelihood,
+                "identity_salience": self.identity_salience,
+                "tie_to_place": self.tie_to_place,
             },
             "persona": self.persona_description,
             "goal": self._generate_goal(),
@@ -370,6 +376,11 @@ def ces_row_to_agent(
         riding_id=row.get("cps21_riding_id"),
         current_vote_intention=row.get("cps21_votechoice"),
     )
+
+    # Compute identity metrics from CES profile
+    identity_metrics = compute_identity_metrics(row)
+    config.identity_salience = identity_metrics['identity_salience']
+    config.tie_to_place = identity_metrics['tie_to_place']
 
     # Generate persona if requested
     if include_persona:

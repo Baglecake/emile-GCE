@@ -340,6 +340,29 @@ class SocialRLRunner:
 
         # Phase 2a: Update identity cores with observed behavior
         if self.identity_cores:
+            # First, gather all agent engagements for TE calculation
+            agent_engagements = {
+                aid: fb.as_reward_signal().get('engagement', 0.0)
+                for aid, fb in round_feedback.items()
+            }
+
+            # Update TE histories BEFORE identity core update (critical ordering)
+            for agent_id, ic in self.identity_cores.items():
+                if agent_id in agent_engagements:
+                    # Identity scalar: delta_I (how much identity has changed)
+                    identity_scalar = ic.compute_delta_I()
+
+                    # Behavior scalar: this agent's engagement this round
+                    behavior_scalar = agent_engagements.get(agent_id, 0.0)
+
+                    # Others scalar: mean engagement of OTHER agents
+                    other_engagements = [v for k, v in agent_engagements.items() if k != agent_id]
+                    others_scalar = sum(other_engagements) / len(other_engagements) if other_engagements else 0.0
+
+                    # Update TE histories
+                    ic.update_te_histories(identity_scalar, behavior_scalar, others_scalar)
+
+            # Now update identity cores
             for agent_id, fb in round_feedback.items():
                 self._update_identity_core(agent_id, fb.as_reward_signal(), round_number)
 
@@ -1019,16 +1042,23 @@ class SocialRLRunner:
 
             # Create initial identity vector (neutral baseline)
             # Will be updated after first round with actual behavior
-            initial_vec = IdentityVector(
-                engagement=0.5,  # Neutral engagement
-                institutional_faith=0.8,  # Default moderate faith
-                social_friction=0.2,  # Low initial friction
-            )
+            initial_vec = IdentityVector(values={
+                'engagement': 0.5,  # Neutral engagement
+                'institutional_faith': 0.8,  # Default moderate faith
+                'social_friction': 0.2,  # Low initial friction
+            })
+
+            # Extract identity metrics from canvas attributes (Phase 1)
+            attrs = agent.get("attributes", {})
+            identity_salience = attrs.get("identity_salience", 0.5)
+            tie_to_place = attrs.get("tie_to_place", 0.5)
 
             self.identity_cores[agent_id] = IdentityCore(
                 agent_id=agent_id,
                 group_id=group_id,
                 initial_vector=initial_vec,
+                identity_salience=identity_salience,
+                tie_to_place=tie_to_place,
             )
 
         if self.config.verbose and self.identity_cores:
@@ -1104,11 +1134,11 @@ class SocialRLRunner:
         faith = 1.0 - feedback.get('critical_ratio', 0.0)  # inverse of criticism
         friction = feedback.get('direct_references', core.vector.social_friction)
 
-        new_vec = IdentityVector(
-            engagement=engagement,
-            institutional_faith=faith,
-            social_friction=friction,
-        )
+        new_vec = IdentityVector(values={
+            'engagement': engagement,
+            'institutional_faith': faith,
+            'social_friction': friction,
+        })
 
         core.update(new_vec, sim_time)
 

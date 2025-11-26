@@ -11,7 +11,8 @@ See docs/theoretical_foundations.md for theoretical grounding.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Any
+from typing import Dict, List, Optional, Tuple, Any, Deque
+from collections import deque
 import numpy as np
 
 
@@ -65,48 +66,126 @@ class SurplusTrace:
         }
 
 
+# CANONICAL dimension order for N-dimensional identity vectors
+# DO NOT use sorted(keys()) - this fixed order ensures consistent array operations
+IDENTITY_DIMS = [
+    "engagement", "institutional_faith", "ideology",
+    "partisanship", "sociogeographic", "social_friction", "tie_to_place"
+]
+
+
 @dataclass
 class IdentityVector:
     """
-    Three-dimensional identity vector grounded in CES.
+    N-dimensional identity vector grounded in CES.
 
-    Dimensions:
-        engagement: Network centrality / participation level (0-1)
-        institutional_faith: Trust in institutions, 1 - critical_concepts_ratio (0-1)
-        social_friction: Direct references / conflict level (0+)
+    Phase 2 refactor: Changed from 3 named fields to dict-based storage
+    to support expansion from 3D to 7D without code changes.
+
+    CANONICAL dimension order (for to_array()):
+        engagement, institutional_faith, ideology,
+        partisanship, sociogeographic, social_friction, tie_to_place
+
+    Backward compatibility:
+        - Named properties (engagement, etc.) preserved as getters/setters
+        - from_dict() accepts any subset of dimensions
+        - Old 3D code continues to work unchanged
     """
-    engagement: float
-    institutional_faith: float
-    social_friction: float
+    values: Dict[str, float] = field(default_factory=dict)
+
+    def __post_init__(self):
+        """Ensure all dimensions have values (default 0.0)."""
+        for dim in IDENTITY_DIMS:
+            if dim not in self.values:
+                # Set defaults for missing dimensions
+                if dim == 'institutional_faith':
+                    self.values[dim] = 1.0  # Default moderate faith
+                else:
+                    self.values[dim] = 0.0
+
+    # =========================================================================
+    # Property getters for backward compatibility
+    # =========================================================================
+
+    @property
+    def engagement(self) -> float:
+        return self.values.get('engagement', 0.0)
+
+    @engagement.setter
+    def engagement(self, value: float):
+        self.values['engagement'] = value
+
+    @property
+    def institutional_faith(self) -> float:
+        return self.values.get('institutional_faith', 1.0)
+
+    @institutional_faith.setter
+    def institutional_faith(self, value: float):
+        self.values['institutional_faith'] = value
+
+    @property
+    def social_friction(self) -> float:
+        return self.values.get('social_friction', 0.0)
+
+    @social_friction.setter
+    def social_friction(self, value: float):
+        self.values['social_friction'] = value
+
+    @property
+    def ideology(self) -> float:
+        return self.values.get('ideology', 0.5)
+
+    @ideology.setter
+    def ideology(self, value: float):
+        self.values['ideology'] = value
+
+    @property
+    def partisanship(self) -> float:
+        return self.values.get('partisanship', 0.0)
+
+    @partisanship.setter
+    def partisanship(self, value: float):
+        self.values['partisanship'] = value
+
+    @property
+    def sociogeographic(self) -> float:
+        return self.values.get('sociogeographic', 0.0)
+
+    @sociogeographic.setter
+    def sociogeographic(self, value: float):
+        self.values['sociogeographic'] = value
+
+    @property
+    def tie_to_place(self) -> float:
+        return self.values.get('tie_to_place', 0.0)
+
+    @tie_to_place.setter
+    def tie_to_place(self, value: float):
+        self.values['tie_to_place'] = value
+
+    # =========================================================================
+    # Core methods
+    # =========================================================================
 
     def to_array(self) -> np.ndarray:
-        """Convert to numpy array for math operations."""
-        return np.array([self.engagement, self.institutional_faith, self.social_friction])
+        """Convert to numpy array using CANONICAL dimension order."""
+        return np.array([self.values.get(dim, 0.0) for dim in IDENTITY_DIMS])
 
     @classmethod
     def from_dict(cls, d: Dict[str, float]) -> 'IdentityVector':
         """Create from dictionary (e.g., from vector extraction)."""
-        return cls(
-            engagement=d.get('engagement', 0.0),
-            institutional_faith=d.get('institutional_faith', 1.0),
-            social_friction=d.get('social_friction', 0.0)
-        )
+        return cls(values=dict(d))
 
     def to_dict(self) -> Dict[str, float]:
         """Convert to dictionary for JSON serialization."""
-        return {
-            'engagement': round(self.engagement, 4),
-            'institutional_faith': round(self.institutional_faith, 4),
-            'social_friction': round(self.social_friction, 4),
-        }
+        return {dim: round(self.values.get(dim, 0.0), 4) for dim in IDENTITY_DIMS}
 
     def __sub__(self, other: 'IdentityVector') -> 'IdentityVector':
         """Vector subtraction for ΔI computation."""
-        return IdentityVector(
-            engagement=self.engagement - other.engagement,
-            institutional_faith=self.institutional_faith - other.institutional_faith,
-            social_friction=self.social_friction - other.social_friction,
-        )
+        result = {}
+        for dim in IDENTITY_DIMS:
+            result[dim] = self.values.get(dim, 0.0) - other.values.get(dim, 0.0)
+        return IdentityVector(values=result)
 
     def norm(self) -> float:
         """L2 norm of vector."""
@@ -147,6 +226,19 @@ class IdentityCore:
     # Phase 2b hooks: empirical priors from multi-wave CES
     empirical_delta_mu: Optional[float] = None
     empirical_delta_sigma: Optional[float] = None
+
+    # Phase 1: Wire orphaned metrics from identity_metrics.py
+    # identity_salience: How much the agent's identity matters to them (0-1)
+    # tie_to_place: Geographic/community rootedness (0-1)
+    identity_salience: float = 0.5
+    tie_to_place: float = 0.5
+
+    # Phase 2.5: Transfer Entropy proxy histories (per agent)
+    # Used to compute TE ratio: TE(I->B) / (TE(I->B) + TE(others->B))
+    _identity_history: Deque[float] = field(default_factory=lambda: deque(maxlen=50))
+    _behavior_history: Deque[float] = field(default_factory=lambda: deque(maxlen=50))
+    _others_behavior_history: Deque[float] = field(default_factory=lambda: deque(maxlen=50))
+    _te_ratio: float = 1.0  # Defaults to 1.0 until sufficient history
 
     # Observed stats from this simulation (for natality z-score)
     _delta_history: List[float] = field(default_factory=list)
@@ -231,6 +323,32 @@ class IdentityCore:
         else:
             self.rupture_active = False
 
+    def update_te_histories(
+        self,
+        identity_scalar: float,
+        behavior_scalar: float,
+        others_behavior_scalar: float
+    ) -> None:
+        """
+        Push new scalars to TE history deques.
+
+        Called once per round BEFORE compute_coherence() is used/logged.
+        TE uses lag-1 from previous rounds to predict current behavior.
+
+        Args:
+            identity_scalar: e.g., delta_I (how much identity has changed)
+            behavior_scalar: e.g., per-round engagement for this agent
+            others_behavior_scalar: e.g., mean engagement of other agents
+
+        Note:
+            ORDER OF OPERATIONS is critical:
+            1. update_te_histories() - push new data
+            2. compute_coherence() - uses updated _te_ratio
+        """
+        self._identity_history.append(identity_scalar)
+        self._behavior_history.append(behavior_scalar)
+        self._others_behavior_history.append(others_behavior_scalar)
+
     def update_surplus(self) -> float:
         """
         Update surplus as qualitative capacity, not crude accumulation.
@@ -303,16 +421,22 @@ class IdentityCore:
 
     def compute_coherence(self) -> float:
         """
-        Compute directional coherence: cos(I_t, I_0)
+        Compute directional coherence with TE modulation.
 
-        High (→1): Identity direction preserved
-        Low (→0): Identity has rotated significantly
+        Full formula (Phase 2.5):
+            C_t = cos(I_t, I_0) × TE(I→B) / (TE(I→B) + TE(others→B))
 
-        Full formula (Phase 2b):
-            C_t = cos(I_t, I_0) × TE(I→B) / (TE(I→B) + TE(others→I))
+        High coherence = identity direction preserved AND behavior is identity-driven.
+        Low coherence = identity rotated OR behavior is field-driven.
 
-        Phase 2a: Just cos similarity (TE ratio = 1.0 placeholder)
+        Interpretation:
+        - TE ratio > 0.5: Identity drives behavior more than others (authentic)
+        - TE ratio < 0.5: Others drive behavior more than identity (conformist)
+        - TE ratio = 1.0: Not enough data yet (early rounds)
         """
+        from .transfer_entropy import te_ratio_proxy
+
+        # Cosine similarity between current and initial
         arr0 = self.initial_vector.to_array()
         arrt = self.vector.to_array()
 
@@ -320,14 +444,18 @@ class IdentityCore:
         normt = np.linalg.norm(arrt)
 
         if norm0 < 1e-8 or normt < 1e-8:
-            return 1.0  # No movement = coherent
+            cos_sim = 1.0  # No movement = coherent
+        else:
+            cos_sim = float(np.dot(arr0, arrt) / (norm0 * normt))
 
-        cos_sim = float(np.dot(arr0, arrt) / (norm0 * normt))
+        # TE ratio from histories
+        I_hist = np.array(self._identity_history, dtype=float)
+        B_hist = np.array(self._behavior_history, dtype=float)
+        O_hist = np.array(self._others_behavior_history, dtype=float)
 
-        # Phase 2a: TE ratio placeholder = 1.0
-        te_ratio = 1.0
+        self._te_ratio = te_ratio_proxy(I_hist, B_hist, O_hist)
 
-        return cos_sim * te_ratio
+        return cos_sim * self._te_ratio
 
     # =========================================================================
     # Emergent Time τ
@@ -669,12 +797,18 @@ class IdentityCore:
         current_arr = self.vector.to_array()
         blended_arr = current_arr + self.trace_blend_eta * T
 
-        # Convert back to IdentityVector
-        return IdentityVector(
-            engagement=float(np.clip(blended_arr[0], 0.0, 1.0)),
-            institutional_faith=float(np.clip(blended_arr[1], 0.0, 1.0)),
-            social_friction=float(max(0.0, blended_arr[2])),  # No upper bound
-        )
+        # Convert back to IdentityVector using CANONICAL dimension order
+        blended_values = {}
+        for i, dim in enumerate(IDENTITY_DIMS):
+            if i < len(blended_arr):
+                if dim == 'social_friction':
+                    blended_values[dim] = float(max(0.0, blended_arr[i]))  # No upper bound
+                else:
+                    blended_values[dim] = float(np.clip(blended_arr[i], 0.0, 1.0))
+            else:
+                # Preserve current value for dimensions not in blend
+                blended_values[dim] = self.vector.values.get(dim, 0.0)
+        return IdentityVector(values=blended_values)
 
     def get_trace_summary(self) -> Dict[str, Any]:
         """
@@ -744,6 +878,9 @@ class IdentityCore:
         return {
             'agent_id': self.agent_id,
             'group_id': self.group_id,
+            'identity_salience': round(self.identity_salience, 4),
+            'tie_to_place': round(self.tie_to_place, 4),
+            'te_ratio': round(self._te_ratio, 4),
             'vector': self.vector.to_dict(),
             'initial_vector': self.initial_vector.to_dict(),
             'delta_I': round(self.compute_delta_I(), 4),

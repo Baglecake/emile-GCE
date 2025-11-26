@@ -205,12 +205,26 @@ Each round produces a JSON file with the following structure:
 | Component | Status | Notes |
 |-----------|--------|-------|
 | ContextInjector | Complete | All manifestation modes implemented |
-| SocialFeedbackExtractor | Complete | Core metrics functional |
+| SocialFeedbackExtractor | Complete | Core metrics + recognition scores |
 | ProcessRetriever | Complete | Adaptive retrieval working |
-| SocialRLRunner | Complete | Single-client execution with validation |
-| Coach/Performer separation | Partial | Validation logic in place; dual-client architecture planned |
+| SocialRLRunner | Complete | 1130+ lines with identity integration |
+| TRUE Dual-LLM | Complete | `create_true_dual_llm()` for separate endpoints |
+| IdentityCore Integration | Complete | Per-agent identity mechanics |
+| Expression Capacity | Complete | `soft_cap = base_cap * f_salience * f_natality` |
+| SurplusTrace Management | Complete | Decay, creation, revalorization |
 
-The current implementation uses a single LLM client with temperature-based role differentiation and validation logic. A fully separated dual-LLM client architecture is planned for Phase 3 (see [ROADMAP.md](../ROADMAP.md)).
+TRUE dual-LLM architecture is now implemented in `dual_llm_client.py`:
+
+```python
+from social_rl.dual_llm_client import create_true_dual_llm
+
+dual = create_true_dual_llm(
+    performer_base_url="https://14b-endpoint/v1",
+    performer_model="Qwen/Qwen2.5-14B-Instruct",
+    coach_base_url="https://7b-endpoint/v1",
+    coach_model="Qwen/Qwen2.5-7B-Instruct"
+)
+```
 
 ## Usage
 
@@ -271,11 +285,27 @@ This formulation enables studying emergent social dynamics under theoretically-g
 ```
 social_rl/
 ├── __init__.py           # Package exports
-├── runner.py             # SocialRLRunner, SocialRLConfig, execution logic
+├── runner.py             # SocialRLRunner (1130+ lines) with identity integration
 ├── context_injector.py   # Dynamic context and manifestation generation
-├── feedback_extractor.py # Social feedback extraction and metrics
+├── feedback_extractor.py # Social feedback + recognition score extraction
 ├── process_retriever.py  # PRAR policy retrieval and adaptation
+├── dual_llm_client.py    # TRUE dual-LLM: create_true_dual_llm()
+├── semiotic_coder.py     # Regime detection (ENGAGED_HARMONY, etc.)
 └── README.md             # This file
+```
+
+## Key Formulas
+
+**Expression Capacity** (runner.py lines 444-472):
+```python
+f_salience = 0.5 + 0.5 * identity_salience  # [0.5, 1.0]
+f_natality = 0.5 + 0.5 * natality_t         # [0.5, 1.0]
+soft_cap = int(base_cap * f_salience * f_natality)
+```
+
+**Temperature Modulation** (via IdentityCore):
+```python
+T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality
 ```
 
 ## See Also
