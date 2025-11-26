@@ -26,6 +26,7 @@ import json
 
 # Import identity metrics for grit constraint detection
 from .identity_metrics import compute_identity_metrics, needs_grit_constraint
+from .identity_vector_loader import compute_identity_vector
 from .grit_config import (
     get_grit_constraint,
     generate_grit_prompt,
@@ -162,6 +163,9 @@ class CESAgentConfig:
     identity_salience: float = 0.5
     tie_to_place: float = 0.5
 
+    # 7D Identity vector (from identity_vector_loader.py)
+    identity_vector_7d: Dict[str, float] = field(default_factory=dict)
+
     # Generated persona (compiled from above)
     persona_description: str = ""
     constraints: List[str] = field(default_factory=list)
@@ -190,6 +194,7 @@ class CESAgentConfig:
                 "turnout_likelihood": self.turnout_likelihood,
                 "identity_salience": self.identity_salience,
                 "tie_to_place": self.tie_to_place,
+                "identity_vector_7d": self.identity_vector_7d,
             },
             "persona": self.persona_description,
             "goal": self._generate_goal(),
@@ -381,6 +386,9 @@ def ces_row_to_agent(
     identity_metrics = compute_identity_metrics(row)
     config.identity_salience = identity_metrics['identity_salience']
     config.tie_to_place = identity_metrics['tie_to_place']
+
+    # Compute 7D identity vector from CES profile (Phase 2.4)
+    config.identity_vector_7d = compute_identity_vector(row)
 
     # Generate persona if requested
     if include_persona:

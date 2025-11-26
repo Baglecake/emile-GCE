@@ -1040,18 +1040,22 @@ class SocialRLRunner:
             # Infer group_id from agent identifier
             group_id = self._infer_group_id(agent_id)
 
-            # Create initial identity vector (neutral baseline)
-            # Will be updated after first round with actual behavior
-            initial_vec = IdentityVector(values={
-                'engagement': 0.5,  # Neutral engagement
-                'institutional_faith': 0.8,  # Default moderate faith
-                'social_friction': 0.2,  # Low initial friction
-            })
-
-            # Extract identity metrics from canvas attributes (Phase 1)
+            # Extract identity metrics from canvas attributes
             attrs = agent.get("attributes", {})
             identity_salience = attrs.get("identity_salience", 0.5)
             tie_to_place = attrs.get("tie_to_place", 0.5)
+
+            # Create initial identity vector from 7D canvas data (Phase 2.4)
+            # or fall back to neutral baseline
+            identity_7d = attrs.get("identity_vector_7d", {})
+            if identity_7d:
+                initial_vec = IdentityVector(values=identity_7d)
+            else:
+                initial_vec = IdentityVector(values={
+                    'engagement': 0.5,  # Neutral engagement
+                    'institutional_faith': 0.8,  # Default moderate faith
+                    'social_friction': 0.2,  # Low initial friction
+                })
 
             self.identity_cores[agent_id] = IdentityCore(
                 agent_id=agent_id,

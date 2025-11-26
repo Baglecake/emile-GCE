@@ -1,0 +1,103 @@
+{
+  "_metadata": {
+    "version": "1.0",
+    "description": "7D identity weights mapping CES 2021 variables to canonical IDENTITY_DIMS",
+    "dimensions": ["engagement", "institutional_faith", "ideology", "partisanship", "sociogeographic", "social_friction", "tie_to_place"],
+    "notes": "Weights are normalized within each dimension. Variables use CES 2021 naming conventions."
+  },
+
+  "engagement": {
+    "description": "Political participation and civic activity",
+    "variables": [
+      {"variable": "cps21_turnout", "weight": 0.20, "transform": "binary_high", "notes": "Voted in 2021 election"},
+      {"variable": "cps21_interest_gen_1", "weight": 0.15, "transform": "normalize_10", "notes": "General political interest"},
+      {"variable": "cps21_interest_elxn_1", "weight": 0.15, "transform": "normalize_10", "notes": "Election-specific interest"},
+      {"variable": "pes21_campatt", "weight": 0.10, "transform": "normalize", "notes": "Campaign attention"},
+      {"variable": "pes21_dem_sat", "weight": 0.10, "transform": "normalize", "notes": "Democratic satisfaction"},
+      {"variable": "pes21_turnout2021", "weight": 0.15, "transform": "binary_high", "notes": "Turnout verification"},
+      {"variable": "pes21_contact1", "weight": 0.05, "transform": "binary", "notes": "Contacted by party"},
+      {"variable": "pes21_howvote", "weight": 0.05, "transform": "categorical", "notes": "Voting method"},
+      {"variable": "pes21_votechoice2021", "weight": 0.05, "transform": "categorical", "notes": "Vote choice confirmation"}
+    ]
+  },
+
+  "institutional_faith": {
+    "description": "Trust in democratic institutions and government effectiveness",
+    "variables": [
+      {"variable": "cps21_demsat", "weight": 0.15, "transform": "normalize_4", "notes": "Satisfaction with democracy"},
+      {"variable": "cps21_fed_gov_sat", "weight": 0.15, "transform": "normalize_4", "notes": "Federal government satisfaction"},
+      {"variable": "cps21_prov_gov_sat", "weight": 0.15, "transform": "normalize_4", "notes": "Provincial government satisfaction"},
+      {"variable": "pes21_govtprograms", "weight": 0.10, "transform": "normalize", "notes": "Trust in government programs"},
+      {"variable": "pes21_keepromises", "weight": 0.10, "transform": "normalize", "notes": "Parties keep promises"},
+      {"variable": "pes21_formgovt", "weight": 0.10, "transform": "normalize", "notes": "Government formation satisfaction"},
+      {"variable": "pes21_senate", "weight": 0.08, "transform": "normalize", "notes": "Senate reform views"},
+      {"variable": "pes21_paymed", "weight": 0.08, "transform": "normalize", "notes": "Healthcare system trust"},
+      {"variable": "pes21_hatespeech", "weight": 0.05, "transform": "normalize", "notes": "Institutional hate speech handling"},
+      {"variable": "pes21_foreign", "weight": 0.04, "transform": "normalize", "notes": "Foreign policy trust"}
+    ]
+  },
+
+  "ideology": {
+    "description": "Left-right ideological position and policy preferences",
+    "variables": [
+      {"variable": "cps21_lr_scale", "weight": 0.40, "transform": "normalize_10", "notes": "Self-placement 0-10 L-R scale"},
+      {"variable": "cps21_pos_carbon", "weight": 0.10, "transform": "normalize", "notes": "Carbon pricing position"},
+      {"variable": "cps21_pos_immig", "weight": 0.10, "transform": "normalize", "notes": "Immigration position"},
+      {"variable": "cps21_pos_spend", "weight": 0.10, "transform": "normalize", "notes": "Government spending position"},
+      {"variable": "cps21_pos_tax", "weight": 0.10, "transform": "normalize", "notes": "Taxation position"},
+      {"variable": "pes21_inequal", "weight": 0.10, "transform": "normalize", "notes": "Inequality concern"},
+      {"variable": "pes21_gap", "weight": 0.10, "transform": "normalize", "notes": "Rich-poor gap concern"}
+    ]
+  },
+
+  "partisanship": {
+    "description": "Party identification strength and affective attachment",
+    "variables": [
+      {"variable": "cps21_pid_party", "weight": 0.30, "transform": "partisan_strength", "notes": "Party identification"},
+      {"variable": "cps21_pid_strength", "weight": 0.25, "transform": "normalize_4", "notes": "PID strength (strong/weak)"},
+      {"variable": "cps21_party_id_closest", "weight": 0.15, "transform": "binary", "notes": "Closest party identification"},
+      {"variable": "cps21_votechoice", "weight": 0.15, "transform": "consistency", "notes": "Vote choice consistency with PID"},
+      {"variable": "cps21_vote_unlikely", "weight": 0.15, "transform": "inverse", "notes": "Inverse of vote uncertainty"}
+    ]
+  },
+
+  "sociogeographic": {
+    "description": "Urban-rural context and regional identity",
+    "variables": [
+      {"variable": "cps21_urban_rural", "weight": 0.35, "transform": "urban_rural_scale", "notes": "1=Urban, 2=Suburban, 3=Rural"},
+      {"variable": "cps21_province", "weight": 0.20, "transform": "regional_weight", "notes": "Provincial identity"},
+      {"variable": "cps21_riding_id", "weight": 0.15, "transform": "competitiveness", "notes": "Electoral district context"},
+      {"variable": "cps21_language", "weight": 0.15, "transform": "binary_french", "notes": "French/English community"},
+      {"variable": "cps21_yrs_in_residence", "weight": 0.15, "transform": "normalize_10", "notes": "Years in current residence"}
+    ]
+  },
+
+  "social_friction": {
+    "description": "Perceived social conflict and group-based grievances",
+    "variables": [
+      {"variable": "cps21_groupdiscrim_1", "weight": 0.12, "transform": "normalize", "notes": "Group discrimination: women"},
+      {"variable": "cps21_groupdiscrim_2", "weight": 0.12, "transform": "normalize", "notes": "Group discrimination: visible minorities"},
+      {"variable": "cps21_groupdiscrim_3", "weight": 0.12, "transform": "normalize", "notes": "Group discrimination: Indigenous"},
+      {"variable": "cps21_groupdiscrim_4", "weight": 0.12, "transform": "normalize", "notes": "Group discrimination: LGBTQ+"},
+      {"variable": "pes21_inequal", "weight": 0.13, "transform": "normalize", "notes": "Inequality perception"},
+      {"variable": "pes21_gap", "weight": 0.13, "transform": "normalize", "notes": "Rich-poor gap"},
+      {"variable": "pes21_donerm", "weight": 0.06, "transform": "normalize", "notes": "Regional grievance: Maritimes"},
+      {"variable": "pes21_donew", "weight": 0.06, "transform": "normalize", "notes": "Regional grievance: West"},
+      {"variable": "pes21_donegl", "weight": 0.07, "transform": "normalize", "notes": "Regional grievance: general"},
+      {"variable": "pes21_doneqc", "weight": 0.07, "transform": "normalize", "notes": "Regional grievance: Quebec"}
+    ]
+  },
+
+  "tie_to_place": {
+    "description": "Rootedness in geographic and social community",
+    "variables": [
+      {"variable": "cps21_urban_rural", "weight": 0.20, "transform": "rural_bonus", "notes": "Rural areas = stronger local ties"},
+      {"variable": "cps21_bornin_canada", "weight": 0.20, "transform": "binary_high", "notes": "Born in Canada indicator"},
+      {"variable": "cps21_yob", "weight": 0.20, "transform": "age_stability", "notes": "Age as settlement proxy"},
+      {"variable": "cps21_income_cat", "weight": 0.15, "transform": "middle_class_stability", "notes": "Income as rootedness proxy"},
+      {"variable": "cps21_province", "weight": 0.10, "transform": "regional_identity", "notes": "Provincial attachment"},
+      {"variable": "pes21_parents_born", "weight": 0.10, "transform": "generational", "notes": "Generational rootedness"},
+      {"variable": "cps21_education", "weight": 0.05, "transform": "local_education", "notes": "Local vs mobile education"}
+    ]
+  }
+}
