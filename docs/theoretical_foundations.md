@@ -55,21 +55,28 @@ From the émile framework, agents have **quality spaces** (Q) that structure **e
 
 ### Surplus (S)
 
-**Definition**: Identity-as-accumulated-enactment.
+**Definition**: Identity-as-accumulated-enactment. In émile-GCE, surplus is **qualitative capacity** rather than simple accumulation.
+
+**Implementation** (`agents/identity_core/core.py`):
 
 ```python
-S_t = S_{t-1} + α * |enact_t - I_t|
+# Qualitative surplus formula
+local_surplus = delta_I * f_tau * f_natality * f_recognition
+
+# Where:
+#   delta_I = magnitude of identity change
+#   f_tau = 0.5 + 0.5 * tau_normalized (emergent time modulation)
+#   f_natality = 0.5 + 0.5 * natality_t (capacity for new beginnings)
+#   f_recognition = 0.5 + 0.5 * recognition_ema (social validation)
+
+# EMA update (smoothed)
+surplus = (1 - beta) * surplus + beta * local_surplus
 ```
 
-Where:
-- `enact_t`: Behavior enacted at time t
-- `I_t`: Current identity vector
-- High S → "invested identity" (agent has enacted this position many times)
-
-**Operationalization in émile-GCE**:
-- Track cumulative engagement, message count, concept usage
-- High surplus → agent is "committed" to identity
-- Low surplus → agent is "exploratory" or newly formed
+**Interpretation**:
+- High surplus → agent has enacted meaningful identity expressions with social recognition
+- Low surplus → agent is exploratory or unrecognized
+- Surplus modulates expression capacity: `soft_cap = base_cap * f_salience * f_natality`
 
 ### Symbolic Tension (σ)
 
@@ -236,19 +243,23 @@ T_issue_i = T_base + k_s * salience_i + k_c * (1 - coherence_i)
 - Low T on federal budget (don't care, brief responses)
 - Moderate T on housing/rent (occasional engaged bursts)
 
-### Implementation
+### Implementation (COMPLETE)
+
+**Location**: `agents/identity_core/core.py:get_temperature()`
 
 ```python
-def compute_temperature(agent, round_data):
-    coherence = compute_coherence(agent.identity_history)
-    rupture = detect_rupture(agent.sigma, threshold=0.15)
-    natality = compute_natality_z_score(agent.history)
+def get_temperature(self, base_temp: float = 0.7) -> float:
+    """T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality"""
+    k_r, k_c, k_n = 0.15, 0.10, 0.05
 
-    T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality
-    return clip(T, 0.2, 1.2)  # Constrain to reasonable range
+    rupture = 1.0 if self.detect_rupture() else 0.0
+    coherence = self.compute_coherence()
+
+    T = base_temp + k_r*rupture + k_c*(1 - coherence) + k_n*self.natality_t
+    return np.clip(T, 0.3, 1.2)
 ```
 
-Pass this T to Performer LLM for that agent.
+This temperature is passed to the Performer LLM for each agent. Integration is in `social_rl/runner.py`.
 
 ## Natality: Relative to Pace of Change
 

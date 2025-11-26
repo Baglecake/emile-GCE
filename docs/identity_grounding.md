@@ -1,4 +1,4 @@
-# Identity-Grounding Implementation Plan (Phase 2)
+# Identity-Grounding Implementation (Phase 2)
 
 ## Goal
 
@@ -6,9 +6,10 @@ Reduce Condition G's **residual +50% hyper-enfranchisement** (0.256 vs CES expec
 
 ## Status
 
-- **Phase 1**: COMPLETE ✅ - Architecture optimization (G is optimal)
-- **Phase 2**: IN PROGRESS 🔄 - Identity-grounding
-- **Phase 3**: PLANNED ⏭️ - Sociogeographic embodiment
+- **Phase 1**: COMPLETE - Architecture optimization (G is optimal)
+- **Phase 2 Stages 1-4**: COMPLETE - Core identity mechanics implemented
+- **Phase 2b**: IN PROGRESS - Transfer entropy, mortality
+- **Phase 3**: PLANNED - Sociogeographic embodiment, Coach-as-field
 
 ## CES-Based Identity Artifacts
 
@@ -21,208 +22,148 @@ Reduce Condition G's **residual +50% hyper-enfranchisement** (0.256 vs CES expec
 - `data/identity/identity_group_means_2021.csv`
   Empirical group-level means of identity dimensions (Region × rural/urban × household).
 
-## Phase 2 Roadmap
+## Implemented Components (Stages 1-4)
 
-### Immediate: Per-Round Vector Extraction
+### Stage 1: Emergent Time (tau)
 
-**Current limitation**: `extract_identity_vectors.py` works per-experiment (avg across rounds).
-
-**Need**: Per-round extraction to compute:
-- `ΔI` between rounds
-- Emergent time `τ` from magnitude of change
-- Coherence trajectories `cos(I_t, I_0)`
-- Natality intensity `z_{i,t}`
-
-**Implementation**:
+**Location**: `agents/identity_core/tau.py`
 
 ```python
-# extract_identity_vectors.py (modified)
-def extract_vectors_per_round(exp_dir: Path) -> Dict:
-    """Extract identity vectors for each round separately."""
-    rounds = load_rounds(exp_dir)
-
-    vectors_by_round = {}
-    for r, round_data in enumerate(rounds):
-        vectors_by_round[r] = {
-            agent_id: {
-                'engagement': calc_engagement(agent_id, round_data),
-                'institutional_faith': calc_faith(agent_id, round_data),
-                'social_friction': calc_friction(agent_id, round_data),
-            }
-            for agent_id in get_agent_ids(round_data)
-        }
-
-    return vectors_by_round
+def tau_from_delta(delta_mag: float, tau_min=0.5, tau_max=2.0, k=5.0, theta=0.1) -> float:
+    """Emergent time: tau = logistic(|I_t - I_0|)"""
+    return tau_min + (tau_max - tau_min) / (1 + np.exp(k * (delta_mag - theta)))
 ```
 
-**Deliverable**: `outputs/G_seed2_fixed/identity_vectors_per_round.json`
+- High delta_mag (rapid change) -> low tau (compressed time)
+- Low delta_mag (stability) -> high tau (normal flow)
 
-### Short-term: IdentityCore Class
+### Stage 2: Stateful Natality
 
 **Location**: `agents/identity_core/core.py`
 
-**Design**:
+```python
+def compute_natality_baseline(self) -> float:
+    """Tau-based baseline for natality."""
+    tau = self.compute_tau()
+    tau_norm = (tau - TAU_MIN) / (TAU_MAX - TAU_MIN)
+    return 0.3 + 0.5 * tau_norm  # [0.3, 0.8]
+
+def update_natality(self, recognition_score: float, overshoot: float) -> float:
+    """Stateful natality update with recognition/overshoot modulation."""
+    baseline = self.compute_natality_baseline()
+
+    # Decay toward baseline
+    decay_rate = 0.15
+    self.natality_t = self.natality_t + decay_rate * (baseline - self.natality_t)
+
+    # Modulate by recognition (boost when recognized)
+    if recognition_score > 0.3:
+        boost = 0.1 * (recognition_score - 0.3)
+        self.natality_t = min(1.0, self.natality_t + boost)
+
+    # Suppress when overshooting engagement target
+    if overshoot > 0.1:
+        suppress = 0.15 * overshoot
+        self.natality_t = max(0.1, self.natality_t - suppress)
+
+    return self.natality_t
+```
+
+### Stage 3: Qualitative Surplus + SurplusTrace
+
+**Location**: `agents/identity_core/core.py`
 
 ```python
-from dataclasses import dataclass
-from collections import deque
-import numpy as np
-
 @dataclass
-class IdentityCore:
-    """Dynamic identity core with émile QSE mechanics."""
+class SurplusTrace:
+    """Memory of an enacted surplus event."""
+    round_number: int
+    turn_number: int
+    semiotic_regime: str
+    delta_I: np.ndarray      # 3D normalized direction
+    tau_at_event: float
+    natality_at_event: float
+    recognition_score: float
+    contribution_value: float
+    engagement: float
+    weight: float            # Decays unless revalorized
 
-    # Core identity vector
-    vector: np.ndarray  # (engagement, faith, friction, tie_to_place, salience, ...)
+def update_surplus(self) -> float:
+    """Qualitative capacity: local_surplus = delta_I * f_tau * f_nat * f_rec"""
+    delta_I = self.compute_delta_I()
 
-    # QSE mechanics
-    surplus: float = 0.0           # Accumulated enactment
-    sigma: float = 0.0             # Symbolic tension |I - B|
-    tau_emergent: float = 1.0      # Emergent time (default: normal pace)
+    # Modulate by tau (higher tau = more capacity)
+    tau = self.compute_tau()
+    tau_normalized = (tau - TAU_MIN) / (TAU_MAX - TAU_MIN)
+    f_tau = 0.5 + 0.5 * tau_normalized
 
-    # Coherence tracking
-    initial_vector: np.ndarray = None  # I_0 for cos(I_t, I_0)
-    coherence: float = 1.0         # cos(I_t, I_0) × TE ratio
+    # Modulate by natality
+    f_nat = 0.5 + 0.5 * self.natality_t
 
-    # Energy / lifecycle
-    energy: float = 1.0            # Drains with dissonance, recovers with validation
+    # Modulate by recognition
+    f_rec = 0.5 + 0.5 * self._recognition_ema
 
-    # Temperature modulation
-    temperature: float = 0.7       # T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality
+    local_surplus = delta_I * f_tau * f_nat * f_rec
 
-    # History for natality z-scores
-    history: deque = None          # Recent ΔI values
-
-    def __post_init__(self):
-        if self.initial_vector is None:
-            self.initial_vector = self.vector.copy()
-        if self.history is None:
-            self.history = deque(maxlen=10)  # Keep last 10 rounds
-
-    def update_from_behavior(self, behavior_vector: np.ndarray, validation: float):
-        """Update identity based on enacted behavior and validation received."""
-        # 1. Compute symbolic tension
-        self.sigma = np.linalg.norm(self.vector - behavior_vector)
-
-        # 2. Update surplus (accumulated enactment)
-        self.surplus += 0.1 * self.sigma  # More tension → more enactment
-
-        # 3. Update identity vector (drift toward behavior, modulated by tension)
-        drift_rate = 0.05 if self.sigma < 0.15 else 0.02  # Less drift when ruptured
-        self.vector += drift_rate * (behavior_vector - self.vector)
-
-        # 4. Update energy
-        dissonance_cost = 0.1 * self.sigma
-        validation_reward = 0.15 * validation
-        self.energy = max(0, self.energy - dissonance_cost + validation_reward)
-
-        # 5. Track ΔI for natality
-        delta_I = np.linalg.norm(self.vector - self.initial_vector)
-        self.history.append(delta_I)
-
-        # 6. Update emergent time (τ)
-        self.tau_emergent = self._compute_emergent_time()
-
-        # 7. Update coherence (cos + TE ratio, requires round_data)
-        # NOTE: TE computation needs full round context, done separately
-        self.coherence = self._compute_directional_stability()
-
-        # 8. Update temperature
-        self.temperature = self._compute_temperature()
-
-    def _compute_emergent_time(self) -> float:
-        """Emergent time from magnitude of recent identity change."""
-        if len(self.history) < 2:
-            return 1.0
-
-        delta = np.mean(np.abs(np.diff(list(self.history))))
-        TAU_MIN, TAU_MAX = 0.5, 2.0
-        K, THETA = 5.0, 0.1
-
-        tau = TAU_MIN + (TAU_MAX - TAU_MIN) / (1 + np.exp(K * (delta - THETA)))
-        return tau
-
-    def _compute_directional_stability(self) -> float:
-        """Cosine similarity between I_t and I_0."""
-        cos_sim = np.dot(self.vector, self.initial_vector) / (
-            np.linalg.norm(self.vector) * np.linalg.norm(self.initial_vector) + 1e-6
-        )
-        return max(0, cos_sim)  # Clamp to [0, 1]
-
-    def _compute_temperature(self) -> float:
-        """Dynamic temperature based on rupture, coherence, natality."""
-        T_base = 0.7
-        k_r, k_c, k_n = 0.3, 0.2, 0.1
-
-        rupture = 1.0 if self.sigma > 0.15 else 0.0
-        natality = self._compute_natality_z_score()
-
-        T = T_base + k_r*rupture + k_c*(1 - self.coherence) + k_n*natality
-        return np.clip(T, 0.2, 1.2)
-
-    def _compute_natality_z_score(self) -> float:
-        """Natality signal from z-score of recent change."""
-        if len(self.history) < 3:
-            return 0.5  # Default for new agents
-
-        recent_deltas = np.diff(list(self.history))
-        mu = np.mean(recent_deltas)
-        sigma = np.std(recent_deltas) + 1e-6
-
-        current_delta = self.history[-1] - self.history[-2] if len(self.history) >= 2 else 0
-        z = (current_delta - mu) / sigma
-
-        # Sigmoid activation
-        natality = 1 / (1 + np.exp(-2 * z))
-        return natality
-
-    def detect_rupture(self, threshold: float = 0.15) -> bool:
-        """Check if identity has ruptured."""
-        return self.sigma > threshold
-
-    def detect_death(self) -> tuple[bool, str]:
-        """Check death conditions. Returns (is_dead, death_type)."""
-        # Energy death
-        if self.energy < 0.1:
-            return True, "energy_death"
-
-        # Incoherence death (coherence low for k consecutive steps)
-        # NOTE: Needs coherence history tracking
-        if self.coherence < 0.2:
-            return True, "incoherence_death"
-
-        # Silencing death (checked externally: engagement ≈ 0 + high faith)
-
-        return False, None
+    # EMA update
+    beta = 0.2
+    self.surplus = (1 - beta) * self.surplus + beta * local_surplus
+    return local_surplus
 ```
 
-**Integration with runner**:
+**Trace mechanics:**
+- `decay_traces()`: Weight decays by 0.9 each round
+- `revalorize_traces()`: Boost weight when current direction aligns with trace
+- `maybe_create_trace()`: Create on high surplus * recognition events
+- `apply_trace_blend()`: `I_new = I_current + eta * T` (weighted trace direction)
+
+### Stage 4: Expression Capacity
+
+**Location**: `social_rl/runner.py`
 
 ```python
-# social_rl/runner.py (modified)
-class Agent:
-    def __init__(self, ces_profile, ...):
-        self.ces_profile = ces_profile
+# Identity-grounded token limits (lines 444-472)
+f_salience = 0.5 + 0.5 * identity_salience  # [0.5, 1.0]
+f_natality = 0.5 + 0.5 * natality_t         # [0.5, 1.0]
+soft_cap = int(base_cap * f_salience * f_natality)
 
-        # Initialize identity core
-        self.identity_core = IdentityCore(
-            vector=extract_ces_identity_vector(ces_profile),
-            surplus=0.0,
-            energy=1.0
-        )
-
-    def after_round(self, round_data, validation):
-        """Update identity core after each round."""
-        behavior_vector = extract_behavior_vector(self.id, round_data)
-        self.identity_core.update_from_behavior(behavior_vector, validation)
-
-        # Check death
-        is_dead, death_type = self.identity_core.detect_death()
-        if is_dead:
-            self.handle_death(death_type)
+# Expression capacity emerges from social field, not crude punishment
 ```
 
-**Deliverable**: Working IdentityCore class integrated with runner.
+### Temperature Modulation
+
+**Location**: `agents/identity_core/core.py`
+
+```python
+def get_temperature(self, base_temp: float = 0.7) -> float:
+    """T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality"""
+    k_r, k_c, k_n = 0.15, 0.10, 0.05
+
+    rupture = 1.0 if self.detect_rupture() else 0.0
+    coherence = self.compute_coherence()
+
+    T = base_temp + k_r*rupture + k_c*(1 - coherence) + k_n*self.natality_t
+    return np.clip(T, 0.3, 1.2)
+```
+
+### TRUE Dual-LLM Architecture
+
+**Location**: `social_rl/dual_llm_client.py`
+
+```python
+def create_true_dual_llm(
+    performer_base_url: str,
+    performer_model: str,
+    coach_base_url: str,
+    coach_model: str,
+    performer_temp: float = 0.7,
+    coach_temp: float = 0.1,
+) -> DualLLMClient:
+    """Create TRUE dual-LLM with two separate endpoints/models."""
+    # Separate 14B Performer + 7B Coach on distinct GPUs
+```
+
+**Usage**: See `experiments/run_ces_experiment.py` with `--performer-url` and `--coach-url` flags.
 
 ### Medium-term: Transfer Entropy
 
@@ -547,27 +488,37 @@ for agent in agents:
 - Calibrated constraints don't cause全agents to withdraw
 - Relational field remains dynamic, not frozen
 
-## Timeline
+## Implementation Status
 
-| Milestone | Estimated Effort | Status |
-|-----------|------------------|--------|
-| Per-round vector extraction | 1-2 days | ⏭️ Next |
-| IdentityCore class (stub) | 1 day | ⏭️ Next |
-| Transfer entropy (proxy) | 2-3 days | 🔄 Planned |
-| Grit v2 + G seed 7 | 2-3 days | 🔄 Planned |
-| Identity salience experiments | 3-4 days | 🔄 Planned |
-| CoachField class | 4-5 days | ⏭️ Future |
-| Mortality mechanics | 5-7 days | ⏭️ Future |
-| Multi-generation experiments | 7-10 days | ⏭️ Future |
+| Milestone | Status |
+|-----------|--------|
+| IdentityCore class (full implementation) | COMPLETE |
+| Emergent time (tau) | COMPLETE |
+| Stateful natality | COMPLETE |
+| Qualitative surplus | COMPLETE |
+| SurplusTrace buffer | COMPLETE |
+| Expression capacity integration | COMPLETE |
+| Temperature modulation | COMPLETE |
+| TRUE dual-LLM (14B/7B) | COMPLETE |
+| Grit v2 (tiered constraints) | COMPLETE |
+| Per-round identity logging | COMPLETE |
+| Transfer entropy (TE) | Phase 2b |
+| Multi-wave CES priors | Phase 2b |
+| Mortality mechanics | Phase 3 |
+| Coach-as-field | Phase 3 |
+| Multi-generation experiments | Phase 3 |
 
-**Total Phase 2 estimate**: 4-6 weeks (intermittent work)
+## Next Steps (Phase 2b)
 
-## Next Steps
+1. **Transfer entropy**: TE(I->B) vs TE(others->I) for coherence formula
+2. **CES priors**: Load multi-wave empirical delta_mu/sigma per group
+3. **Tie-to-place**: Integrate riding-level geographic attachment
 
-1. ✅ **DONE**: Migration to emile-gce repo
-2. **IMMEDIATE**: Implement per-round vector extraction
-3. **THIS WEEK**: Stub IdentityCore class + integration
-4. **NEXT WEEK**: Grit v2 design + G seed 7 experiment
+## Future (Phase 3)
+
+1. **Coach as convention field C(t)**: Inner/outer thought separation
+2. **Mortality mechanics**: Energy death, incoherence death, silencing death
+3. **Field vector F_t**: Extract from discourse, compute alignment = cos(I_t, F_t)
 
 ---
 

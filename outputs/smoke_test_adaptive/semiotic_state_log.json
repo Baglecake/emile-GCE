@@ -1,7 +1,0 @@
-{
-  "experiment_id": "smoke_test_adaptive",
-  "context_mode": "adaptive",
-  "challenge_mode": "always",
-  "rounds": [],
-  "divergence_log": []
-}

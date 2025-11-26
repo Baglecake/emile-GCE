@@ -53,64 +53,84 @@
 
 ---
 
-## Current 🔄
+## Completed (Phase 2a)
 
-### Phase 2: Identity-Grounding
+### Phase 2: Identity-Grounding (Stages 1-4 Complete)
 
 **Goal**: Reduce G's residual +50% hyper-enfranchisement to CES-accurate levels (~0.17) through identity-grounding interventions.
 
-**Reframed research question**:
-> Can identity-grounding interventions (grit v2, identity salience, tie-to-place) reduce G's residual +50% to achieve CES-accurate levels?
+**Completed work**:
+
+1. **IdentityCore Class** (COMPLETE)
+   - Location: `agents/identity_core/core.py` (791 lines)
+   - Full QSE mechanics: surplus, sigma, tau, coherence, natality
+   - Dynamic temperature: T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality
+
+2. **Emergent Time (tau)** (COMPLETE)
+   - Location: `agents/identity_core/tau.py`
+   - `tau = logistic(|I_t - I_0|)`
+   - High delta -> compressed time, low delta -> normal flow
+
+3. **Stateful Natality** (COMPLETE)
+   - Tau-based baseline: `baseline = 0.3 + 0.5 * tau_normalized`
+   - Recognition-driven modulation (boost when recognized)
+   - Overshoot suppression (suppress when above engagement target)
+
+4. **Qualitative Surplus + SurplusTrace** (COMPLETE)
+   - `local_surplus = delta_I * f_tau * f_natality * f_recognition`
+   - SurplusTrace dataclass with decay/revalorization
+   - Identity blending: `I_new = I_current + eta * T`
+
+5. **Expression Capacity** (COMPLETE)
+   - Location: `social_rl/runner.py`
+   - `soft_cap = base_cap * f_salience * f_natality`
+   - Identity-grounded token limits
+
+6. **TRUE Dual-LLM** (COMPLETE)
+   - Location: `social_rl/dual_llm_client.py`
+   - `create_true_dual_llm()` for separate 14B Performer + 7B Coach
+   - Distinct GPU endpoints
+
+7. **Grit v2: Tiered Constraints** (COMPLETE)
+   - Location: `agents/ces_generators/grit_config.py`
+   - Levels: NONE/LIGHT/MODERATE/STRONG
+   - CES-calibrated targets
+   - Dynamic calibration based on overshoot
+
+8. **Per-Round Identity Logging** (COMPLETE)
+   - Integrated with runner.py
+   - Logs natality, surplus, coherence, traces per turn
+
+**Deliverables**:
+- Full IdentityCore implementation with all QSE mechanics
+- Expression capacity formula integrated with runner
+- TRUE dual-LLM with separate model endpoints
+- Grit v2 tiered constraint system
+
+---
+
+## Current (Phase 2b)
+
+### Phase 2b: Remaining Identity-Grounding
 
 **In progress**:
 
-1. **Per-Round Vector Extraction** (NEXT)
-   - Modify `extract_identity_vectors.py` to work per-round (not per-experiment)
-   - Enable ΔI computation, coherence trajectories, natality z-scores
-   - **Status**: Planned
+1. **Transfer Entropy Implementation**
+   - Location: `analysis/compute_transfer_entropy.py` (planned)
+   - Compute TE(I->B): How much identity predicts behavior
+   - Compute TE(others->I): How much social field overwrites identity
+   - Full coherence formula: cos(I_t, I_0) × TE(I->B) / (TE(I->B)+TE(others->I))
+   - **Status**: Phase 2b (MI proxy to start)
 
-2. **IdentityCore Class** (NEXT)
-   - Location: `agents/identity_core/core.py`
-   - QSE mechanics: surplus, sigma, tau, coherence, energy
-   - Dynamic temperature: T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality
-   - **Status**: Stub needed
+2. **Multi-Wave CES Priors**
+   - Load empirical delta_mu/sigma per demographic group
+   - Enable z-score natality relative to CES baselines
+   - **Status**: Phase 2b
 
-3. **Transfer Entropy Implementation**
-   - Location: `analysis/compute_transfer_entropy.py`
-   - Compute TE(I→B): How much identity predicts behavior
-   - Compute TE(others→I): How much social field overwrites identity
-   - Coherence formula: cos(I_t, I_0) × TE(I→B) / (TE(I→B)+TE(others→I))
-   - **Status**: Planned (start with MI proxy)
-
-**Planned experiments**:
-
-1. **Grit v2: Calibrated Constraints**
-   - Target +50% residual, not full suppression
-   - Both layers: Computational (limit initiative) + Affective (brief responses)
-   - Dynamic temperature based on coherence
-   - **Experiment**: G seed 7 with grit v2
-   - **Success metric**: Disengaged Renter ~0.17-0.20 (not 0.0)
-
-2. **Identity Salience Experiments**
-   - Oversample high-salience voters (high turnout + issue salience)
-   - Test if high surplus S prevents convergence → PRODUCTIVE_DISSONANCE
-   - **Experiment**: G seed 8 with high-salience cohort
-   - **Success metric**: Sustained dissonance, no regime collapse
-
-3. **Qualitative Analysis**
-   - Side-by-side message comparison (G2 vs G6)
-   - Identify computational vs affective layer distinction
-   - Validate two-layer LLM architecture theory
-
-**Deliverables** (planned):
-
-- Per-round vector extraction + coherence trajectories
-- IdentityCore class integrated with runner
-- Grit v2 constraints + G seed 7 results
-- Identity salience experiments + regime comparison
-- Transfer entropy computation (proxy implementation)
-
-**Timeline**: 4-6 weeks (intermittent work)
+3. **Tie-to-Place Integration**
+   - Integrate riding-level geographic attachment
+   - Place-specific tau computation
+   - **Status**: Phase 2b
 
 ---
 
@@ -308,25 +328,34 @@
 
 ## Next Actions
 
-### This Week
+### Completed (Phase 2a)
 
-- [ ] Implement per-round vector extraction
-- [ ] Create stub IdentityCore class
-- [ ] Integrate IdentityCore with runner (basic)
+- [x] Implement per-round vector extraction
+- [x] Create IdentityCore class (full implementation, 791 lines)
+- [x] Integrate IdentityCore with runner
+- [x] Implement emergent time (tau)
+- [x] Implement stateful natality with tau-based baseline
+- [x] Implement qualitative surplus + SurplusTrace buffer
+- [x] Implement expression capacity formula
+- [x] Implement temperature modulation
+- [x] Implement TRUE dual-LLM (14B/7B)
+- [x] Implement Grit v2 tiered constraints
+- [x] Per-round identity state logging
 
-### Next Week
-
-- [ ] Design grit v2 constraints
-- [ ] Run G seed 7 experiment
-- [ ] Analyze G seed 7 results (achieve ~0.17?)
-
-### Next Month
+### Phase 2b (Current)
 
 - [ ] Implement transfer entropy (MI proxy)
-- [ ] Identity salience experiments (G seed 8)
-- [ ] Qualitative analysis (G2 vs G6 messages)
+- [ ] Load multi-wave CES priors for delta_mu/sigma
+- [ ] Integrate tie-to-place metrics
+
+### Phase 3 (Future)
+
+- [ ] Coach as convention field C(t)
+- [ ] Mortality mechanics
+- [ ] Field vector F_t extraction
+- [ ] Multi-generation experiments
 - [ ] Draft Paper I outline
 
 ---
 
-See [Identity Grounding](../docs/identity_grounding.md) for detailed Phase 2 implementation plan.
+See [Identity Grounding](../docs/identity_grounding.md) for detailed implementation documentation.

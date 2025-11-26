@@ -5,7 +5,16 @@ __pycache__/
 .env
 venv/
 .vscode/
-outputs/*/simulation_logs/
+outputs/
 
 # Development notes (theory/design conversations)
 dev-notes.md
+
+# Conversation logs and design notes (not code documentation)
+expression_capacity_notes
+inner_outer_protocol
+identity_notes.txt
+notes/dev_notes_archive_*.md
+
+# GPU connection info (contains IP addresses)
+GPU_info.txt

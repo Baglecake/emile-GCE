@@ -29,13 +29,22 @@ Unlike traditional social simulation (which tests hypotheses about individuals),
 - **Key finding**: Condition G (dual-LLM + adaptive context + challenge mode) is optimal
 - See: [FACTORIAL_ANALYSIS.md](FACTORIAL_ANALYSIS.md)
 
-### Phase 2: Identity-Grounding (Current 🔄)
+### Phase 2: Identity-Grounding (Stages 1-4 Complete)
 
-- Implement IdentityCore with émile QSE mechanics (surplus, rupture, emergent time)
-- Identity coherence via transfer entropy: TE(I→B) vs TE(others→I)
-- Temperature modulation: T_base + k_r\*rupture + k_c\*(1-coherence) + k_n\*natality
-- Natality relative to pace of change (z-scores, not arbitrary thresholds)
-- Mortality: energy death, incoherence death, silencing death
+**Implemented:**
+- **IdentityCore** with full QSE mechanics (surplus, rupture, emergent time tau)
+- **Stateful natality**: tau-based baseline with recognition-driven modulation
+- **Qualitative surplus**: `local_surplus = delta_I * f_tau * f_natality * f_recognition` (EMA-smoothed)
+- **SurplusTrace buffer**: Memory of enacted surplus events with decay/revalorization
+- **Identity blending**: `I_new = I_current + eta * T` (weighted trace direction)
+- **Expression capacity**: `soft_cap = base_cap * f_salience * f_natality` (identity-grounded)
+- **Temperature modulation**: `T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality`
+- **TRUE dual-LLM**: Separate 14B Performer + 7B Coach on distinct GPU endpoints
+
+**Remaining (Phase 2b):**
+- Transfer entropy: TE(I->B) vs TE(others->I) for coherence formula
+- Multi-wave CES priors for empirical delta_mu/sigma
+- Mortality mechanics (energy death, incoherence death, silencing death)
 
 ### Phase 3: Sociogeographic Embodiment (Future ⏭️)
 
@@ -92,8 +101,20 @@ pip install -r requirements.txt
 ### Running Experiments
 
 ```bash
-# Run Condition G (optimal architecture) with seed 2
-python3 experiments/run_ces_experiment.py --condition G --seed 2 --rounds 3
+# Run with TRUE dual-LLM (14B Performer + 7B Coach on separate GPUs)
+python3 experiments/run_ces_experiment.py \
+  --performer-url "https://your-14b-endpoint/v1" \
+  --performer-model "Qwen/Qwen2.5-14B-Instruct" \
+  --coach-url "https://your-7b-endpoint/v1" \
+  --coach-model "Qwen/Qwen2.5-7B-Instruct" \
+  --condition G --seed 2 --rounds 3
+
+# Run Condition G with single vLLM endpoint
+python3 experiments/run_ces_experiment.py \
+  --provider vllm \
+  --base-url "https://your-endpoint/v1" \
+  --model "Qwen/Qwen2.5-14B-Instruct" \
+  --condition G --seed 2 --rounds 3
 
 # Extract identity vectors from results
 python3 analysis/extract_identity_vectors.py outputs/G_seed2_fixed/
@@ -104,11 +125,19 @@ python3 analysis/analyze_full_sweep.py
 
 ### Configuration
 
-Set your API keys:
+Create a `.env` file with your endpoints:
 
 ```bash
-export ANTHROPIC_API_KEY="your-key-here"
-export OPENROUTER_API_KEY="your-key-here"  # for open-source models
+# RunPod API key
+RUNPOD_API_KEY=your-key-here
+
+# Performer endpoint (14B model)
+PERFORMER_BASE_URL=https://your-14b-endpoint/v1
+PERFORMER_MODEL=Qwen/Qwen2.5-14B-Instruct
+
+# Coach endpoint (7B model)
+COACH_BASE_URL=https://your-7b-endpoint/v1
+COACH_MODEL=Qwen/Qwen2.5-7B-Instruct
 ```
 
 ## Key Results
@@ -161,4 +190,4 @@ Delmar Coburn - [GitHub](https://github.com/delcoburn)
 
 ---
 
-**Status**: Phase 1 complete (architecture optimization). Phase 2 in progress (identity-grounding).
+**Status**: Phase 1 complete. Phase 2 Stages 1-4 complete (IdentityCore, natality, surplus, traces, expression capacity). Phase 2b (transfer entropy, mortality) in progress.

@@ -44,8 +44,13 @@ agents/
 ├── agent_factory.py      # Factory for instantiating agents from canvas
 ├── agent_runner.py       # Runtime for executing multi-agent simulations
 ├── __init__.py
-├── persona_library/      # Reusable persona templates (planned)
-├── ces_generators/       # CES-to-agent transformation (Phase 5)
+├── ces_generators/       # CES-to-agent transformation (COMPLETE)
+│   ├── grit_config.py    # Tiered grit constraints (NONE/LIGHT/MODERATE/STRONG)
+│   ├── identity_metrics.py
+│   └── row_to_agent.py
+├── identity_core/        # Identity mechanics (COMPLETE - Phase 2a)
+│   ├── core.py           # Full IdentityCore class (791 lines)
+│   └── tau.py            # Emergent time computation
 └── README.md
 ```
 
@@ -183,14 +188,25 @@ runner = create_social_rl_runner(
 )
 ```
 
-## Integration with Dual-LLM Architecture
+## Integration with Dual-LLM Architecture (COMPLETE)
 
-In the dual-LLM architecture (Phase 2):
+TRUE dual-LLM architecture is now implemented:
 
-- **Coach**: Validates agent outputs, enforces behavioral constraints (low temperature)
-- **Performer**: Executes agent personas via the agent system (higher temperature)
+- **Performer (14B)**: Generates agent dialogue via the agent system (higher temperature)
+- **Coach (7B)**: Validates outputs, enforces behavioral constraints (low temperature)
 
-Current implementation uses validation logic within a single LLM client. Full dual-client separation is planned for Phase 3.
+Implementation: `social_rl/dual_llm_client.py` with `create_true_dual_llm()` for separate endpoints.
+
+```python
+from social_rl.dual_llm_client import create_true_dual_llm
+
+dual = create_true_dual_llm(
+    performer_base_url="https://14b-endpoint/v1",
+    performer_model="Qwen/Qwen2.5-14B-Instruct",
+    coach_base_url="https://7b-endpoint/v1",
+    coach_model="Qwen/Qwen2.5-7B-Instruct"
+)
+```
 
 ## Development Roadmap
 
@@ -200,10 +216,13 @@ Current implementation uses validation logic within a single LLM client. Full du
 | AgentFactory | Complete | State file loading, agent instantiation |
 | AgentRunner | Complete | Round execution, transcript logging |
 | Social RL integration | Complete | Used by SocialRLRunner |
-| Persona library templates | Planned | Reusable persona definitions |
-| Coach integration | Partial | Validation logic in place |
-| Behavioral metrics | Planned | Phase 4 |
-| CES agent generation | Planned | Phase 5 |
+| CES agent generation | Complete | `ces_generators/` module |
+| IdentityCore class | Complete | Full QSE mechanics (791 lines) |
+| TRUE dual-LLM | Complete | Separate 14B/7B endpoints |
+| Grit v2 constraints | Complete | Tiered: NONE/LIGHT/MODERATE/STRONG |
+| Expression capacity | Complete | `soft_cap = base_cap * f_salience * f_natality` |
+| Transfer entropy | Phase 2b | For full coherence formula |
+| Mortality mechanics | Phase 3 | Energy/incoherence/silencing death |
 
 ## See Also
 

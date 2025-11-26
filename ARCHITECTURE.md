@@ -63,25 +63,40 @@
 - `outputs/`: All experimental data (A-H, seeds 2-3)
 - `analysis/analyze_full_sweep.py`: Factorial analysis script
 
-### Phase 2: Identity-Grounding (CURRENT 🔄)
+### Phase 2: Identity-Grounding (Stages 1-4 COMPLETE)
 
 **Goal**: Reduce G's residual +50% hyper-enfranchisement to CES-accurate levels (~0.17)
 
-**Method**:
-- Implement IdentityCore with émile QSE mechanics
-- Per-round vector extraction (currently per-experiment only)
-- Transfer entropy: TE(I→B) vs TE(others→I)
-- Temperature modulation: T_base + k_r\*rupture + k_c\*(1-coherence) + k_n\*natality
+**Implemented (Stages 1-4):**
 
-**Components**:
-- `agents/identity_core/`: IdentityCore class, coherence, emergent time
-- `analysis/compute_transfer_entropy.py`: TE(I→B), TE(others→I)
-- `social_rl/identity_core.py`: Integration with runner
+1. **IdentityCore with QSE mechanics** (`agents/identity_core/core.py`, 791 lines)
+   - Emergent time tau: `tau = logistic(|I_t - I_0|)`
+   - Stateful natality with tau-based baseline
+   - Qualitative surplus: `local_surplus = delta_I * f_tau * f_natality * f_recognition`
+   - Coherence: `cos(I_t, I_0)` (TE ratio placeholder for Phase 2b)
 
-**Deliverables** (planned):
-- Grit v2: Calibrated constraints targeting +50% residual
-- Identity salience experiments
-- Per-round vector extraction + coherence trajectories
+2. **SurplusTrace buffer** (Stage 3)
+   - Memory of enacted surplus events with decay/revalorization
+   - Traces created on high-surplus + high-recognition events
+   - Identity blending: `I_new = I_current + eta * T`
+
+3. **Expression capacity** (`social_rl/runner.py`)
+   - `soft_cap = base_cap * f_salience * f_natality`
+   - Identity-grounded token limits (not crude punishment)
+
+4. **TRUE dual-LLM** (`social_rl/dual_llm_client.py`)
+   - Separate 14B Performer + 7B Coach on distinct GPU endpoints
+   - `create_true_dual_llm()` factory function
+
+5. **Grit v2** (`agents/ces_generators/grit_config.py`)
+   - Tiered constraints: NONE/LIGHT/MODERATE/STRONG
+   - CES-calibrated targets
+   - Dynamic calibration based on engagement overshoot
+
+**Remaining (Phase 2b):**
+- Transfer entropy: TE(I->B) vs TE(others->I) for full coherence formula
+- Multi-wave CES priors for empirical delta_mu/sigma per group
+- Mortality mechanics (energy death, incoherence death, silencing death)
 
 ### Phase 3: Sociogeographic Embodiment (FUTURE ⏭️)
 
@@ -108,11 +123,16 @@
 - `row_to_agent.py`: Convert CES row to agent canvas
 - `needs_grit_constraint()`: Identify low-salience agents
 
-**`identity_core/`** (Phase 2, planned):
+**`identity_core/`** (IMPLEMENTED):
 
-- `core.py`: IdentityCore class with QSE mechanics
-- `coherence.py`: cos(I_t, I_0) × TE ratio
-- `temperature.py`: Dynamic T modulation
+- `core.py`: Full IdentityCore class (791 lines) with:
+  - SurplusTrace dataclass (decay, revalorization, blending)
+  - IdentityVector dataclass (3D: engagement, faith, friction)
+  - Stateful natality with tau-based baseline
+  - Qualitative surplus computation
+  - Temperature modulation: `T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality`
+- `tau.py`: Emergent time from identity magnitude change
+- `grit_config.py`: Tiered grit constraints (NONE/LIGHT/MODERATE/STRONG)
 
 ### `experiments/`
 
@@ -124,15 +144,18 @@
 
 **Core social RL components**:
 
-- `runner.py`: Multi-round deliberation orchestrator
-- `feedback_extractor.py`: Compute engagement (references + responses + initiative)
+- `runner.py`: Multi-round deliberation orchestrator (1130+ lines) with:
+  - Expression capacity: `soft_cap = base_cap * f_salience * f_natality`
+  - SurplusTrace management (decay, creation, revalorization)
+  - IdentityCore integration per agent
+  - Per-agent temperature modulation
+- `feedback_extractor.py`: Compute engagement + recognition scores
 - `context_injector.py`: Inject semiotic context (progressive or adaptive)
 - `semiotic_coder.py`: Detect regimes from message patterns
-
-**Identity integration** (Phase 2, planned):
-
-- `identity_core.py`: IdentityCore integration with runner
-- Per-agent temperature based on coherence/rupture
+- `dual_llm_client.py`: TRUE dual-LLM architecture (IMPLEMENTED)
+  - `create_true_dual_llm()`: Factory for separate Performer/Coach endpoints
+  - Coach validates, Performer generates
+  - Supports 14B Performer + 7B Coach on separate GPUs
 
 ### `analysis/`
 
@@ -262,31 +285,76 @@ When low-salience agents received grit constraints (G seed 6):
 
 **Phase 2-3 goal**: Make this explicit via Coach as convention field C(t) that agents couple to.
 
-## Identity-in-Place Function (Phase 2)
+## Identity-in-Place Function (IMPLEMENTED)
 
-Proposed formalization:
+Formalization:
 
 ```python
-I_i(τ) = f(identity_salience_i, tie_to_place_i, affordance_validation_i(τ))
+I_i(tau) = f(identity_salience_i, natality_i, surplus_i, trace_history_i)
 ```
 
 Where:
-- `identity_salience_i`: How much agent has invested in identity (surplus S)
-- `tie_to_place_i`: Attachment to geographic/social context
-- `affordance_validation_i(τ)`: Whether context confirms/disconfirms identity at emergent time τ
+- `identity_salience_i`: From CES turnout * (1 - lr_distance) * engagement
+- `natality_i`: Capacity for new beginnings (tau-based baseline, recognition-modulated)
+- `surplus_i`: Qualitative capacity = delta_I * f_tau * f_natality * f_recognition
+- `trace_history_i`: Memory of enacted surplus events
 
-**Implementation** (Phase 2):
+**Actual Implementation** (`agents/identity_core/core.py`):
 
 ```python
+@dataclass
+class SurplusTrace:
+    """Memory of an enacted surplus event."""
+    round_number: int
+    turn_number: int
+    semiotic_regime: str
+    delta_I: np.ndarray      # 3D normalized direction
+    tau_at_event: float
+    natality_at_event: float
+    recognition_score: float
+    contribution_value: float
+    engagement: float
+    weight: float            # Decays unless revalorized
+
 class IdentityCore:
-    vector: np.ndarray  # (engagement, faith, friction, tie_to_place, salience, ...)
-    surplus: float      # QSE-style accumulated enactment
-    sigma: float        # tension between I and enacted behavior
-    tau_emergent: float # emergent time from |ΔI|
-    coherence: float    # cos(I_t, I_0) × TE(I→B) / (TE(I→B)+TE(others→I))
-    energy: float       # drains with dissonance, recovers with validation
-    temperature: float  # T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality
-    history: deque      # for computing μ, σ for natality
+    """Full identity mechanics for GCE agents."""
+
+    # State
+    vector: IdentityVector           # 3D: engagement, institutional_faith, social_friction
+    initial_vector: IdentityVector   # I_0 for coherence
+    natality_t: float                # Current natality (stateful)
+    surplus: float                   # EMA-smoothed qualitative surplus
+    traces: List[SurplusTrace]       # Trace buffer (max 10)
+    _recognition_ema: float          # Smoothed recognition score
+
+    def compute_tau(self) -> float:
+        """Emergent time: tau = logistic(|I_t - I_0|)"""
+
+    def update_natality(self, recognition_score: float, overshoot: float) -> float:
+        """Stateful natality with recognition/overshoot modulation"""
+        # Decay toward tau-based baseline
+        # Boost when recognized, suppress when overshooting
+
+    def update_surplus(self) -> float:
+        """Qualitative capacity: local_surplus = delta_I * f_tau * f_nat * f_rec"""
+
+    def maybe_create_trace(self, ...) -> Optional[SurplusTrace]:
+        """Create trace on high-surplus + high-recognition events"""
+
+    def apply_trace_blend(self, eta: float = 0.1) -> None:
+        """I_new = I_current + eta * T (weighted trace direction)"""
+
+    def get_temperature(self, base_temp: float) -> float:
+        """T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality"""
+```
+
+**Expression Capacity** (`social_rl/runner.py:444-472`):
+
+```python
+# Identity-grounded token limits
+f_salience = 0.5 + 0.5 * identity_salience  # [0.5, 1.0]
+f_natality = 0.5 + 0.5 * natality_t         # [0.5, 1.0]
+soft_cap = int(base_cap * f_salience * f_natality)
 ```
 
 ## Running Experiments
@@ -335,31 +403,33 @@ See `experiments/run_ces_experiment.py --help` for full options:
 
 ## Next Steps
 
-### Immediate (Phase 2 start)
+### Completed (Phase 2a - Stages 1-4)
 
-1. Implement per-round vector extraction (currently per-experiment)
-2. Create stub `IdentityCore` class in `agents/identity_core/core.py`
-3. Implement coherence calculation (cosine similarity I_t to I_0)
+- [x] IdentityCore class with full QSE mechanics
+- [x] Emergent time tau: `logistic(|I_t - I_0|)`
+- [x] Stateful natality with tau-based baseline
+- [x] Qualitative surplus with f_tau, f_natality, f_recognition modulation
+- [x] SurplusTrace buffer (decay, revalorization, blending)
+- [x] Expression capacity: `soft_cap = base_cap * f_salience * f_natality`
+- [x] Temperature modulation: `T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality`
+- [x] TRUE dual-LLM with separate 14B/7B endpoints
+- [x] Grit v2: Tiered constraints (NONE/LIGHT/MODERATE/STRONG)
+- [x] Per-round identity state logging
 
-### Short-term (Phase 2 core)
+### Phase 2b (Current)
 
-1. Transfer entropy implementation (`analysis/compute_transfer_entropy.py`)
-2. Temperature modulation based on coherence/rupture
-3. Grit v2: Calibrated constraints + dynamic temperature
+1. Transfer entropy: TE(I->B) vs TE(others->I) for coherence formula
+2. Multi-wave CES priors for empirical delta_mu/sigma per group
+3. Tie-to-place metrics integration from CES riding data
 
-### Medium-term (Phase 2 complete)
+### Phase 3 (Future)
 
-1. Identity salience experiments (does high-salience prevent convergence?)
-2. Tie-to-place metrics from CES
-3. Qualitative analysis of G2 vs G6 messages (computational vs affective layers)
-
-### Long-term (Phase 3)
-
-1. Coach as convention field C(t)
+1. Coach as convention field C(t) (inner/outer thought separation)
 2. Mortality mechanics (energy death, incoherence death, silencing death)
-3. Natality/repopulation (CES-grounded children)
-4. Multi-generation experiments
+3. Field vector F_t from discourse (alignment = cos(I_t, F_t))
+4. Natality/repopulation (CES-grounded children)
+5. Multi-generation experiments
 
 ---
 
-See [Research Roadmap](notes/research_roadmap.md) for detailed timeline.
+See [Research Roadmap](notes/research_roadmap.md) for detailed planning.
