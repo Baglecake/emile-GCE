@@ -1,0 +1,268 @@
+UPDATED IMPLEMENTATION PLAN (with TE)
+
+================================================================================
+CRITICAL IMPLEMENTATION NOTES (from review_gpt validation)
+================================================================================
+
+1. CANONICAL DIMENSION ORDER for IdentityVector
+   - Do NOT use sorted(self.values.keys()) in to_array()
+   - Use a FIXED list: IDENTITY_DIMS = [
+       "engagement", "institutional_faith", "ideology",
+       "partisanship", "sociogeographic", "social_friction", "tie_to_place"
+     ]
+   - This ensures TE uses genuinely 6D/7D vectors, not arbitrary key order
+
+2. PROPERTY SETTERS for backward compatibility
+   - Add setters for engagement, institutional_faith, social_friction
+   - Old code that assigns directly (ic.vector.engagement = x) must still work
+
+3. ORDER OF OPERATIONS in runner.py
+   - update_te_histories() MUST run BEFORE compute_coherence() is used/logged
+   - TE uses lag-1 from previous rounds; coherence uses current TE ratio
+
+4. EARLY ROUND BEHAVIOR
+   - te_ratio = 1.0 when histories < min_len (not because identity is autonomous)
+   - Interpret early rounds as "coherence = pure cosine" until history accumulates
+   - Optional: add te_valid: bool flag to distinguish "true 1.0" from "unknown 1.0"
+
+================================================================================
+PHASE ORDER
+================================================================================
+Phase	Description	Time
+1	Wire orphaned metrics (salience, tie_to_place)	1hr
+2	N-Dimensional IdentityVector (3D → 7D)	2-3hr
+2.5	Transfer Entropy Proxy + Coherence Integration	1-2hr
+3	Recompute Group Means for 7D	1-2hr
+4	Identity-aware Regime Classification	2-3hr
+5	Documentation Cleanup	1hr
+PHASE 2.5: Transfer Entropy Proxy (NEW)
+Goal: Replace te_ratio = 1.0 placeholder with actual identity→behavior vs others→behavior ratio. The Formula:
+Coherence = cos(Iₜ, I₀) × TE(I→B) / (TE(I→B) + TE(others→B))
+Interpretation:
+TE(I→B) high, TE(others→B) low: Agent is steering its own surplus = authentic coherence
+TE(others→B) dominates: Agent is being dragged by the field = conformist coherence
+Step 2.5.1: Create transfer_entropy.py
+New file: agents/identity_core/transfer_entropy.py
+"""
+Transfer Entropy Proxy for Identity-Behavior Coupling.
+
+Implements a mutual-information based proxy for transfer entropy:
+- TE(I→B): How much does identity history predict current behavior?
+- TE(others→B): How much does others' behavior predict this agent's behavior?
+
+This is the "antifinite autonomy ratio" - am I living my own surplus or being dragged?
+"""
+
+import numpy as np
+from typing import Optional
+
+
+def _discretize(series: np.ndarray, bins: int = 5) -> np.ndarray:
+    """Simple equal-width binning for MI approximation."""
+    if len(series) == 0 or series.max() == series.min():
+        return np.zeros_like(series, dtype=int)
+    edges = np.linspace(series.min(), series.max(), bins + 1)
+    return np.digitize(series, edges[:-1], right=True)
+
+
+def mutual_info(x: np.ndarray, y: np.ndarray, bins: int = 5) -> float:
+    """
+    Simple mutual information approximation via histogram.
+    
+    Can be replaced with more sophisticated estimators later (e.g., JIDT).
+    """
+    if len(x) != len(y) or len(x) < 5:
+        return 0.0
+    
+    x_b = _discretize(x, bins)
+    y_b = _discretize(y, bins)
+    
+    # Joint histogram
+    joint, _, _ = np.histogram2d(x_b, y_b, bins=(bins, bins))
+    
+    if joint.sum() == 0:
+        return 0.0
+    
+    pxy = joint / joint.sum()
+    px = pxy.sum(axis=1)
+    py = pxy.sum(axis=0)
+    
+    # MI = sum p(x,y) log(p(x,y) / (p(x)p(y)))
+    mi = 0.0
+    for i in range(bins):
+        for j in range(bins):
+            if pxy[i, j] > 0 and px[i] > 0 and py[j] > 0:
+                mi += pxy[i, j] * np.log(pxy[i, j] / (px[i] * py[j]))
+    
+    return float(max(0.0, mi))
+
+
+def te_ratio_proxy(
+    identity_history: np.ndarray,
+    behavior_history: np.ndarray,
+    others_history: np.ndarray,
+    min_len: int = 8,
+) -> float:
+    """
+    Compute TE ratio: TE(I→B) / (TE(I→B) + TE(others→B))
+    
+    Uses lag-1 mutual information as a proxy for transfer entropy:
+    - TE(I→B) ≈ I(Bₜ; Iₜ₋₁)
+    - TE(others→B) ≈ I(Bₜ; Oₜ₋₁)
+    
+    Args:
+        identity_history: Time series of identity scalar (e.g., ||Iₜ - I₀||)
+        behavior_history: Time series of behavior scalar (e.g., engagement)
+        others_history: Time series of mean others' behavior
+        min_len: Minimum history length before computing (return 1.0 if insufficient)
+    
+    Returns:
+        Float in [0, 1]:
+        - >0.5: Identity drives behavior more than others (authentic)
+        - <0.5: Others drive behavior more than identity (conformist)
+        - =1.0: Not enough data yet
+    """
+    if (len(identity_history) < min_len or 
+        len(behavior_history) < min_len or 
+        len(others_history) < min_len):
+        return 1.0  # Neutral until we have data
+    
+    # Ensure arrays
+    I = np.asarray(identity_history, dtype=float)
+    B = np.asarray(behavior_history, dtype=float)
+    O = np.asarray(others_history, dtype=float)
+    
+    # Lag-1 series
+    I_prev = I[:-1]
+    B_curr = B[1:]
+    O_prev = O[:-1]
+    
+    # Compute MI proxies
+    te_I = mutual_info(I_prev, B_curr)
+    te_O = mutual_info(O_prev, B_curr)
+    
+    denom = te_I + te_O
+    if denom <= 1e-8:
+        return 1.0  # No signal yet
+    
+    return float(te_I / denom)
+Step 2.5.2: Add history tracking to IdentityCore
+Modify: agents/identity_core/core.py
+from collections import deque
+from typing import Deque
+
+@dataclass
+class IdentityCore:
+    # ... existing fields ...
+    
+    # TE proxy histories (per agent)
+    _identity_history: Deque[float] = field(default_factory=lambda: deque(maxlen=50))
+    _behavior_history: Deque[float] = field(default_factory=lambda: deque(maxlen=50))
+    _others_behavior_history: Deque[float] = field(default_factory=lambda: deque(maxlen=50))
+    _te_ratio: float = 1.0
+    
+    def update_te_histories(
+        self,
+        identity_scalar: float,
+        behavior_scalar: float,
+        others_behavior_scalar: float
+    ) -> None:
+        """
+        Push new scalars to TE history deques.
+        
+        Called once per round after behavior extraction.
+        
+        Args:
+            identity_scalar: e.g., ||Iₜ - I₀|| (delta_I)
+            behavior_scalar: e.g., per-round engagement
+            others_behavior_scalar: e.g., mean engagement of other agents
+        """
+        self._identity_history.append(identity_scalar)
+        self._behavior_history.append(behavior_scalar)
+        self._others_behavior_history.append(others_behavior_scalar)
+Step 2.5.3: Update compute_coherence
+Modify: agents/identity_core/core.py lines 304-330
+def compute_coherence(self) -> float:
+    """
+    Compute directional coherence with TE modulation.
+    
+    Full formula:
+        C_t = cos(I_t, I_0) × TE(I→B) / (TE(I→B) + TE(others→B))
+    
+    High coherence = identity direction preserved AND behavior is identity-driven.
+    Low coherence = identity rotated OR behavior is field-driven.
+    """
+    from .transfer_entropy import te_ratio_proxy
+    
+    # Cosine similarity between current and initial
+    arr0 = self.initial_vector.to_array()
+    arrt = self.vector.to_array()
+    
+    norm0 = np.linalg.norm(arr0)
+    normt = np.linalg.norm(arrt)
+    
+    if norm0 < 1e-8 or normt < 1e-8:
+        cos_sim = 1.0  # No movement = coherent
+    else:
+        cos_sim = float(np.dot(arr0, arrt) / (norm0 * normt))
+    
+    # TE ratio from histories
+    I_hist = np.array(self._identity_history, dtype=float)
+    B_hist = np.array(self._behavior_history, dtype=float)
+    O_hist = np.array(self._others_behavior_history, dtype=float)
+    
+    self._te_ratio = te_ratio_proxy(I_hist, B_hist, O_hist)
+    
+    return cos_sim * self._te_ratio
+Step 2.5.4: Wire into runner.py
+Modify: social_rl/runner.py After each round, compute scalars and update histories:
+# After computing per-agent engagement for the round:
+for agent_id, ic in self.identity_cores.items():
+    # Identity scalar: delta_I (how much identity has changed)
+    identity_scalar = ic.compute_delta_I()
+    
+    # Behavior scalar: this agent's engagement this round
+    behavior_scalar = agent_engagements.get(agent_id, 0.0)
+    
+    # Others scalar: mean engagement of OTHER agents
+    other_engagements = [v for k, v in agent_engagements.items() if k != agent_id]
+    others_scalar = np.mean(other_engagements) if other_engagements else 0.0
+    
+    # Update TE histories
+    ic.update_te_histories(identity_scalar, behavior_scalar, others_scalar)
+
+# Log TE ratio in identity state
+identity_state['te_ratio'] = ic._te_ratio
+Step 2.5.5: Validation
+Run G seed experiment and verify:
+te_ratio appears in logs and evolves over time
+Starts at 1.0 when histories are short (<8 rounds)
+Diverges from 1.0 as data accumulates:
+High-salience agents should trend >0.5 (identity-driven)
+Low-salience agents might trend <0.5 (field-driven)
+Coherence changes now reflect both direction AND autonomy
+================================================================================
+COMPLETE UPDATED PLAN
+================================================================================
+Step	Description	Files	Time
+1.1	Add identity_salience/tie_to_place to IdentityCore	core.py	15m
+1.2	Wire from row_to_agent	row_to_agent.py	15m
+1.3	Log in runner	runner.py	15m
+2.1	Refactor IdentityVector to dict-based with CANONICAL order	core.py	45m
+2.2	Add property SETTERS for backward compat	core.py	15m
+2.3	Create identity_weights_2021.v1.json (7D)	data/identity/	30m
+2.4	Update row_to_agent for 7D	row_to_agent.py	30m
+2.5.1	Create transfer_entropy.py	identity_core/	30m
+2.5.2	Add TE history deques to IdentityCore	core.py	15m
+2.5.3	Update compute_coherence with TE	core.py	15m
+2.5.4	Wire TE updates in runner (BEFORE coherence)	runner.py	20m
+2.5.5	Validate TE in experiment	-	15m
+3.1	Regenerate group means for 7D	compute_*.py	45m
+3.2	Update prior_loader for 7D	prior_loader.py	30m
+4.1	Identity-aware regime classification	semiotic_coder.py	60m
+5.1	Remove DATA_DICTIONARY.md	-	5m
+5.2	Update identity_grounding.md	docs/	30m
+Total: ~7-9 hours
+This gives you the full Émile coherence formula:
+Coherence = cos(Iₜ, I₀) × TE(I→B) / (TE(I→B) + TE(others→B))
+Where an agent can have high cosine similarity (hasn't drifted) but low TE ratio (being dragged by the field) = conformist coherence. Or high cosine AND high TE = authentic coherence. Ready to begin?
