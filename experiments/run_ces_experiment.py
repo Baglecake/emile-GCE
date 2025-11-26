@@ -329,12 +329,57 @@ def build_ces_canvas(
             }
         ]
 
-    if rounds > 2:
-        canvas["rounds"].append({
-            "round_number": 3,
+    # Extended scenarios for TE validation (need 8+ rounds for min_len=8)
+    extended_scenarios = [
+        {
             "scenario": "Cross-cutting exposure: Can voters with different positions find common ground?",
             "tasks": "Identify shared concerns across urban/rural, left/right divides. Discuss what would make politics work better.",
             "rules": "Actively engage with perspectives different from your own. Seek understanding, not just disagreement.",
+        },
+        {
+            "scenario": "Healthcare priorities: How should the federal government address healthcare wait times and access?",
+            "tasks": "Discuss healthcare from your personal experience. Urban vs rural access differences. Provincial vs federal responsibility.",
+            "rules": "Ground responses in your actual healthcare experiences and location-specific challenges.",
+        },
+        {
+            "scenario": "Climate policy trade-offs: Carbon pricing, job impacts, and regional fairness.",
+            "tasks": "Debate climate policy from your economic and geographic perspective. Energy sector workers vs urban professionals.",
+            "rules": "Acknowledge real economic concerns while discussing environmental policy.",
+        },
+        {
+            "scenario": "Immigration and community change: How does immigration affect your community?",
+            "tasks": "Share how immigration shapes your area - labor markets, services, cultural change. Be specific to your location.",
+            "rules": "Speak from lived experience in your community. Avoid generalizations.",
+        },
+        {
+            "scenario": "Cost of living crisis: Who should government help first?",
+            "tasks": "Discuss priorities: seniors, families, renters, rural communities? Where should limited resources go?",
+            "rules": "Advocate from your demographic position while acknowledging others' needs.",
+        },
+        {
+            "scenario": "Democratic reform: Should Canada change how we vote?",
+            "tasks": "Discuss electoral reform, regional representation, and whether your voice is heard in the current system.",
+            "rules": "Connect voting system discussion to your actual experience of representation.",
+        },
+        {
+            "scenario": "Indigenous reconciliation: What does meaningful action look like?",
+            "tasks": "Discuss reconciliation from your regional perspective. Urban/rural differences in engagement with Indigenous issues.",
+            "rules": "Engage respectfully with different levels of proximity to Indigenous communities.",
+        },
+        {
+            "scenario": "Final reflections: What did you learn from this discussion?",
+            "tasks": "Reflect on perspectives you heard that surprised you. What common ground emerged? What divides remain?",
+            "rules": "Synthesize the conversation. Acknowledge changed or reinforced views.",
+        },
+    ]
+
+    # Add extended scenarios for rounds > 2
+    for i, ext_scenario in enumerate(extended_scenarios):
+        if len(canvas["rounds"]) >= rounds:
+            break
+        canvas["rounds"].append({
+            "round_number": len(canvas["rounds"]) + 1,
+            **ext_scenario,
             "platform_config": {
                 "participants": participants,
                 "who_sends": "All",
