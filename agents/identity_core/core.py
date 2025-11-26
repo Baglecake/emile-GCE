@@ -770,9 +770,17 @@ class IdentityCore:
         if total_weight < 1e-8:
             return None
 
-        weighted_sum = np.zeros(3)
+        n_dims = len(IDENTITY_DIMS)
+        weighted_sum = np.zeros(n_dims)
         for trace in self.surplus_traces:
-            weighted_sum += trace.weight * trace.delta_I
+            # Handle dimension mismatch (old traces may have different dimensionality)
+            delta_I = trace.delta_I
+            if len(delta_I) != n_dims:
+                # Pad or truncate to match current dimensionality
+                padded = np.zeros(n_dims)
+                padded[:min(len(delta_I), n_dims)] = delta_I[:min(len(delta_I), n_dims)]
+                delta_I = padded
+            weighted_sum += trace.weight * delta_I
 
         return weighted_sum / total_weight
 

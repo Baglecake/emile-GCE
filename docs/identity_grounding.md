@@ -513,6 +513,8 @@ for agent in agents:
 | Per-round identity logging | COMPLETE |
 | Transfer entropy (TE) coherence | COMPLETE |
 | Identity salience/tie_to_place wiring | COMPLETE |
+| 7D identity weights (v1.json) | COMPLETE |
+| 7D vector loader + runner wiring | COMPLETE |
 | Multi-wave CES priors | Phase 2b |
 | Mortality mechanics | Phase 3 |
 | Coach-as-field | Phase 3 |
@@ -521,7 +523,6 @@ for agent in agents:
 ## Next Steps (Phase 2b)
 
 1. **CES priors**: Load multi-wave empirical delta_mu/sigma per group
-2. **7D weights**: Create identity_weights_2021.v1.json for full 7D initialization
 
 ## Future (Phase 3)
 
