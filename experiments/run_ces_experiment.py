@@ -692,6 +692,10 @@ def run_ces_experiment(
         "challenge_mode": challenge_mode,
         "dual_llm": use_dual_llm,
         "true_dual_llm": true_dual_mode,
+        "performer_model": performer_model if true_dual_mode else None,
+        "performer_url": performer_url if true_dual_mode else None,
+        "coach_model": coach_model if true_dual_mode else None,
+        "coach_url": coach_url if true_dual_mode else None,
         # Regime trajectory summary
         "regime_trajectory": [s["regime"] for s in semiotic_state_log],
         "final_regime": semiotic_state_log[-1]["regime"] if semiotic_state_log else None,
