@@ -144,6 +144,7 @@
 
 **Core social RL components**:
 
+- `world_state.py`: WorldState engine providing identity-grounded environmental context (see below)
 - `runner.py`: Multi-round deliberation orchestrator (1130+ lines) with:
   - Expression capacity: `soft_cap = base_cap * f_salience * f_natality`
   - SurplusTrace management (decay, creation, revalorization)
@@ -242,6 +243,108 @@ Emergent patterns detected via `semiotic_coder.py`:
 **Status**: Rarely observed (Phase 1)
 
 **Phase 3 goal**: Achieve via identity-grounding (agents have "existential stakes" in positions).
+
+## WorldState Engine
+
+**Location**: `social_rl/world_state.py`
+
+The WorldState engine provides agents with a dynamic environment that differentially affects them based on their 7D identity vectors. Rather than presenting identical context to all agents, the engine generates identity-grounded experiences of shared events.
+
+### Core Components
+
+**WorldEvent**: Events that occur in the world (e.g., housing price increases, factory closures, policy announcements). Each event defines:
+- `salience_weights`: Which identity dimensions this event activates (and in which direction)
+- `valence_map`: Emotional framing by group membership (e.g., "threatening" vs. "opportunity")
+- `stakes_map`: What is at risk for different identity profiles
+
+**DiscussionTopic**: Topics for deliberation with identity-specific stakes and position seeds. Topics rotate sequentially or randomly across rounds.
+
+**AgentState**: Per-agent accumulating state including:
+- `frustration`: Increases when agent contributions are not recognized
+- `fatigue`: Accumulates over rounds, reduced by successful engagement
+- `entrenchment`: Position hardening when repeatedly challenged without movement
+
+### Differential Impact Mechanism
+
+The engine computes per-agent impact through identity vector alignment:
+
+```python
+salience = sum(
+    weight * (dim_value if weight > 0 else 1 - dim_value)
+    for dim, weight in event.salience_weights.items()
+)
+```
+
+This produces different salience scores for the same event based on agent identity. A housing price surge registers as "urgent" for an urban renter but "distant" for a rural homeowner.
+
+### Integration
+
+Enable WorldState via the `--world-state` flag:
+
+```bash
+python3 experiments/run_ces_experiment.py \
+  --condition G \
+  --seed 42 \
+  --rounds 10 \
+  --world-state \
+  --experiment-id "worldstate_experiment"
+```
+
+The engine injects context into user messages (not system prompts) for better LLM attention:
+
+```
+=== WORLD CONTEXT ===
+[RECENT NEWS: Housing prices surge 15% in major cities]
+For you, this feels urgent. At stake: Whether you can afford to stay
+
+[DISCUSSION: What does it mean to belong somewhere?]
+Consider your connection to place, community, and identity.
+For someone like you: Freedom to move matters more than staying
+```
+
+### Validation Results
+
+Extended 10-round experiment (`world-output/worldstate_FIXED_extended`) demonstrated:
+- Engagement trajectory: 0.48 (Round 1) to 0.80 (Round 10, EMA-smoothed)
+- Regime trajectory: UNKNOWN to ACTIVE_CONTESTATION with ENGAGED_HARMONY phases
+- No divergence events or collapse
+- Agents addressing each other by name throughout discourse
+
+## Conversation Engagement Protocol
+
+**Location**: `social_rl/runner.py`, `_build_user_message()` method
+
+A critical component ensuring authentic multi-agent discourse rather than parallel monologues.
+
+### Problem Addressed
+
+Initial experiments exhibited a "repetition bug" where agents produced identical messages within the same round, indicating failure to engage with prior speakers. Root cause analysis identified that the user message construction merely listed conversation history without explicit engagement requirements.
+
+### Solution
+
+The `_build_user_message()` function now enforces explicit engagement:
+
+```python
+engagement_prompt = (
+    f"You are {agent_name}. You have just heard from: {recent_names}.\n"
+    f"CRITICAL: You MUST directly respond to or acknowledge at least ONE specific point "
+    f"from a previous speaker. Do NOT simply repeat your own position.\n"
+    f"Engage with what others have said, then share your perspective."
+)
+```
+
+Key elements:
+1. **Turn numbering**: Each turn explicitly numbered for LLM awareness
+2. **Speaker identification**: Recent speakers named explicitly
+3. **Engagement mandate**: Explicit instruction to reference prior contributions
+4. **Position warning**: Explicit prohibition against mere repetition
+
+### Verification
+
+The fix was validated across multiple 10-round experiments. Discourse logs confirm:
+- Agents reference each other by name (e.g., "Rural Conservative makes a valid point...")
+- Substantive engagement with prior arguments
+- No repetition of identical content within rounds
 
 ## Factorial Effects
 

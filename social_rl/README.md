@@ -212,6 +212,51 @@ Each round produces a JSON file with the following structure:
 | IdentityCore Integration | Complete | Per-agent identity mechanics |
 | Expression Capacity | Complete | `soft_cap = base_cap * f_salience * f_natality` |
 | SurplusTrace Management | Complete | Decay, creation, revalorization |
+| WorldState Engine | Complete | Identity-grounded environmental context |
+| Conversation Engagement | Complete | Explicit cross-speaker referencing |
+
+### WorldState Engine
+
+**Location**: `world_state.py`
+
+The WorldState engine provides agents with differential experiences of shared world events based on their 7D identity vectors.
+
+**Core Components**:
+- **WorldEvent**: Events with identity-specific salience, valence, and stakes
+- **DiscussionTopic**: Topics with position seeds based on identity profile
+- **AgentState**: Per-agent frustration, fatigue, and entrenchment tracking
+
+**Usage**:
+```python
+from social_rl.world_state import WorldStateEngine, create_world_engine
+
+engine = create_world_engine(seed=42, event_probability=0.4)
+event, topic = engine.advance_round()
+
+# Get identity-grounded context for agent
+context = engine.get_world_context_injection(
+    agent_id="Urban_Progressive",
+    identity_vector=agent_vector,  # 7D dict
+    group_id="urban_left"
+)
+```
+
+The same event produces different context for different agents:
+- Housing price surge: "urgent" for urban renters, "distant" for rural owners
+- Factory closure: "devastating" for rural communities, "abstract" for urban professionals
+
+### Conversation Engagement Protocol
+
+The `_build_user_message()` function enforces explicit engagement between agents:
+
+```python
+engagement_prompt = (
+    f"CRITICAL: You MUST directly respond to or acknowledge at least ONE "
+    f"specific point from a previous speaker. Do NOT simply repeat your own position."
+)
+```
+
+This prevents the "parallel monologue" failure mode where agents produce content without genuine cross-referencing.
 
 TRUE dual-LLM architecture is now implemented in `dual_llm_client.py`:
 
@@ -291,6 +336,7 @@ social_rl/
 ├── process_retriever.py  # PRAR policy retrieval and adaptation
 ├── dual_llm_client.py    # TRUE dual-LLM: create_true_dual_llm()
 ├── semiotic_coder.py     # Regime detection (ENGAGED_HARMONY, etc.)
+├── world_state.py        # WorldState: identity-grounded environmental context
 └── README.md             # This file
 ```
 

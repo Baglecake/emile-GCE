@@ -516,9 +516,12 @@ for agent in agents:
 | 7D identity weights (v1.json) | COMPLETE |
 | 7D vector loader + runner wiring | COMPLETE |
 | Multi-wave CES drift priors | COMPLETE |
-| Mortality mechanics | Phase 3 |
-| Coach-as-field | Phase 3 |
-| Multi-generation experiments | Phase 3 |
+| WorldState Engine | COMPLETE |
+| Conversation Engagement Protocol | COMPLETE |
+| Inner/Outer Protocol | Phase 3 |
+| Field Vector F_t | Phase 3 |
+| Mortality mechanics | Phase 4 |
+| Multi-generation experiments | Phase 4 |
 
 ## Multi-wave CES Drift Priors (Phase 2b - COMPLETE)
 
@@ -542,11 +545,258 @@ for agent in agents:
 - `institutional_faith`: delta_mu=0.044, sigma=0.28 (CES 2019→2021)
 - Other dimensions: Literature-based pending additional CES variable mapping
 
-## Future (Phase 3)
+## WorldState Engine (Phase 2c - COMPLETE)
 
-1. **Coach as convention field C(t)**: Inner/outer thought separation
-2. **Mortality mechanics**: Energy death, incoherence death, silencing death
-3. **Field vector F_t**: Extract from discourse, compute alignment = cos(I_t, F_t)
+**Location**: `social_rl/world_state.py`
+
+### Theoretical Motivation
+
+Static conversation scenarios produce identical environmental context for all agents, obscuring how identity shapes perception of shared events. The WorldState engine addresses this by generating differential experiences of the same world events based on each agent's 7D identity vector.
+
+### Architecture
+
+**Core Classes**:
+
+```python
+@dataclass
+class WorldEvent:
+    id: str
+    headline: str
+    description: str
+    salience_weights: Dict[str, float]  # Identity dimension activations
+    valence_map: Dict[str, str]         # Emotional framing by group
+    stakes_map: Dict[str, str]          # What is at risk per profile
+
+@dataclass
+class DiscussionTopic:
+    id: str
+    question: str
+    framing: str
+    identity_stakes: Dict[str, str]     # Stakes by identity profile
+    position_seeds: Dict[str, str]      # Natural starting positions
+
+class WorldStateEngine:
+    def advance_round(self) -> Tuple[Optional[WorldEvent], DiscussionTopic]
+    def compute_agent_impact(self, agent_id, identity_vector, group_id) -> Dict
+    def get_world_context_injection(self, agent_id, identity_vector, group_id) -> str
+```
+
+**Event Library**: 8 events covering housing, employment, climate policy, immigration, technology, healthcare, elections, and local community. Each event defines salience weights across identity dimensions and valence/stakes mappings by group membership.
+
+**Topic Rotation**: 6 topics (belonging, institutional trust, pace of change, fairness, in-group/out-group, voice/representation) with identity-specific stakes and position seeds.
+
+### Differential Impact Computation
+
+The engine computes salience through identity vector alignment:
+
+```python
+for dim, weight in event.salience_weights.items():
+    dim_value = identity_vector.get(dim, 0.5)
+    if weight > 0:
+        salience += weight * dim_value
+    else:
+        salience += abs(weight) * (1 - dim_value)
+```
+
+This produces the following differential responses:
+- Housing price surge: "urgent" for urban renters (high engagement, low tie_to_place), "distant" for rural homeowners (high tie_to_place, high sociogeographic)
+- Factory closure: "devastating" for rural working-class (high sociogeographic, high tie_to_place), "abstract news" for urban professionals
+
+### Agent State Tracking
+
+Per-agent state accumulates across rounds:
+- `frustration`: Increases when contributions go unrecognized
+- `fatigue`: Accumulates over time, reduced by successful engagement
+- `entrenchment`: Position hardening when challenged without movement
+
+### Usage
+
+```bash
+python3 experiments/run_ces_experiment.py \
+  --condition G --seed 42 --rounds 10 \
+  --world-state \
+  --experiment-id "worldstate_experiment"
+```
+
+---
+
+## Conversation Engagement Protocol (Phase 2c - COMPLETE)
+
+**Location**: `social_rl/runner.py`, `_build_user_message()` method
+
+### Problem Statement
+
+Initial experiments exhibited a failure mode where agents produced substantively identical messages within the same round. Analysis revealed that agents were generating content in parallel without genuine engagement with prior speakers, resulting in what can be characterized as "parallel monologues" rather than authentic discourse.
+
+### Root Cause
+
+The original `_build_user_message()` function merely listed conversation history without explicit requirements for engagement:
+
+```python
+# Original (problematic)
+return f"Conversation so far:\n{history}\n\nYour turn."
+```
+
+This provided no instruction to the LLM that engagement with prior speakers was required, allowing it to simply generate position statements without cross-referencing.
+
+### Solution
+
+The revised function enforces explicit engagement through structured prompts:
+
+```python
+def _build_user_message(
+    self, history, agent, round_config, turn_number, world_context
+) -> str:
+    if history:
+        recent_speakers = [msg.agent_id for msg in history[-4:]]
+        recent_names = ", ".join(set(recent_speakers[-3:]))
+
+        engagement_prompt = (
+            f"You are {agent_name}. You have just heard from: {recent_names}.\n"
+            f"CRITICAL: You MUST directly respond to or acknowledge at least ONE "
+            f"specific point from a previous speaker. Do NOT simply repeat your "
+            f"own position.\n"
+            f"Engage with what others have said, then share your perspective."
+        )
+```
+
+**Key Design Elements**:
+1. **Turn numbering**: Explicit turn numbers for LLM temporal awareness
+2. **Speaker identification**: Recent speakers named for reference
+3. **Engagement mandate**: Explicit instruction requiring cross-referencing
+4. **Repetition prohibition**: Direct warning against mere position repetition
+5. **World context placement**: Context injected into user message (not system prompt) for better LLM attention
+
+### Validation Results
+
+Extended 10-round experiment (`world-output/worldstate_FIXED_extended`) demonstrated:
+
+| Metric | Round 1 | Round 10 | Interpretation |
+|--------|---------|----------|----------------|
+| Engagement (raw) | 0.481 | 0.818 | Sustained increase |
+| Engagement (EMA) | 0.493 | 0.801 | Stable trajectory |
+| Voice Valence | 0.0 | 0.0 | Consistent expression |
+| Stance Valence | 1.0 | 1.0 | Position maintenance |
+| Justificatory % | 8.3% | 16.7% | Increased reasoning |
+
+**Regime Trajectory**: UNKNOWN, ENGAGED_HARMONY, ACTIVE_CONTESTATION (oscillating), settling in ACTIVE_CONTESTATION by Round 10.
+
+**Qualitative Verification**: Discourse logs confirm agents reference each other by name and engage substantively with prior arguments throughout all 10 rounds. No repetition of identical content within rounds.
+
+---
+
+## Phase 3: Inner/Outer Protocol
+
+*Reference: `notes/inner_outer_protocol`*
+
+### Conceptual Foundation
+
+Transform the Coach/Performer architecture from "generic critic" to a phenomenological model of **inner thought vs social performance**:
+
+- **Coach** = *internal awareness of identity coherence*
+  - Sees identity state: I_t, τ, natality, surplus, traces
+  - Asks: "Does this utterance cohere with who I am, where I am, and how I've been becoming?"
+  - Produces `U_inner` (identity-coherent version)
+
+- **Performer** = *social performance layer*
+  - Enacts speech into the shared field
+  - Ground truth *should* be inner thought, but can diverge under pressure
+  - Produces `U_outer` (actual spoken utterance)
+
+### 3.1 Inner/Outer Logging Protocol
+
+**Per-turn flow:**
+1. Performer drafts candidate utterance `U_raw`
+2. Coach receives:
+   - `U_raw`
+   - IdentityCore snapshot: I_t, τ_t, natality_t, surplus_t
+   - Summary of top-weighted SurplusTraces
+   - Recent recognition + alignment metrics
+3. Coach evaluates:
+   - **Identity coherence**: Is U_raw aligned with I_t? Does it contradict enacted traces?
+   - **Context rationality**: Is it responsive to what was said? Does it misread the field?
+4. Coach proposes `U_inner` (identity-coherent version)
+5. System logs both `U_inner` and `U_outer` for gap analysis
+
+**Modes:**
+- *Strict mode*: Only `U_inner` gets spoken
+- *Soft mode*: Both kept—`U_inner` logged, `U_outer` spoken (enables gap measurement)
+
+### 3.2 Measurable Gaps
+
+Once inner/outer are separated, new metrics emerge:
+
+**Self-coherence gap:**
+```
+gap_self = embed_distance(U_inner, U_outer)
+```
+- Large gap → self-censorship, strategic performance, alienation, or identity rupture
+
+**Field-coherence gap:**
+```
+gap_field = cos(U_outer, F_t) - cos(U_inner, F_t)
+```
+- Positive → outer utterance more field-aligned than inner (conforming)
+- Negative → outer utterance less field-aligned (resisting)
+
+These gaps operationalize "how the social field deforms identity expression."
+
+### 3.3 Field Vector F_t
+
+Construct semiotic field vector per round from discourse:
+
+**Components:**
+- Topics/issues mentioned (weighted by frequency)
+- Stances expressed (aggregated positions)
+- Frames employed (linguistic patterns)
+
+**Usage:**
+```
+align_t = cos(I_t, F_t)
+```
+- High alignment: Identity semiotically consonant with current field
+- Low alignment: Identity at odds with field discourse
+
+Feeds into:
+- Surplus calculation (field receptivity)
+- Coherence metrics
+- Inner/outer gap analysis
+
+### 3.4 Coach as Vector-Aware Conscience
+
+Coach prompt structure:
+```
+Here is your current identity vector and natural-language rendering.
+Here are your top 3 revalorized traces (issues you've acted on).
+Here is your drafted utterance.
+
+Does this utterance:
+- Respect your commitments?
+- Reflect your position in this field?
+- Avoid self-contradiction or unnecessary self-erasure?
+```
+
+Coach becomes **identity-grounded inner monologue**, not generic critic.
+
+### 3.5 Implementation Checklist
+
+| Task | Status |
+|------|--------|
+| Add `U_inner` field to turn logging | TODO |
+| Pass IdentityCore snapshot to Coach | TODO |
+| Implement Coach coherence-check prompt | TODO |
+| Compute self-coherence gap metric | TODO |
+| Extract F_t from round discourse | TODO |
+| Compute field-coherence gap metric | TODO |
+| Add gap metrics to identity_states output | TODO |
+
+---
+
+## Phase 4: Future Work
+
+1. **Mortality mechanics**: Energy death, incoherence death, silencing death
+2. **Multi-generation experiments**: Natality/repopulation with CES-grounded children
+3. **Exit types**: Alienated, silencing, satisfied withdrawal
 
 ---
 

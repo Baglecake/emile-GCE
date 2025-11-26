@@ -74,6 +74,29 @@ python3 experiments/run_ces_experiment.py \
   --experiment-id "experiments/<name>"
 ```
 
+### WorldState Experiment
+
+Enables identity-grounded environmental context injection. Agents experience shared world events differentially based on their 7D identity vectors:
+
+```bash
+python3 experiments/run_ces_experiment.py \
+  --performer-url "https://9qrgc461yk73t4-8080.proxy.runpod.net/v1" \
+  --performer-model "Qwen/Qwen2.5-14B-Instruct" \
+  --coach-url "https://coaapc0tyag7h3-8000.proxy.runpod.net/v1" \
+  --coach-model "Qwen/Qwen2.5-7B-Instruct" \
+  --api-key "sk-1234" \
+  --condition G \
+  --seed 42 \
+  --rounds 10 \
+  --world-state \
+  --experiment-id "worldstate_experiment"
+```
+
+The `--world-state` flag activates the WorldStateEngine, which:
+- Injects world events with identity-specific salience, valence, and stakes
+- Rotates discussion topics with position seeds based on agent profile
+- Tracks per-agent frustration, fatigue, and entrenchment
+
 ---
 
 ## Output Directory Structure
@@ -165,7 +188,8 @@ Look for:
 - `GPU_info.txt` - Current GPU pod IDs and connection info
 - `experiments/run_ces_experiment.py` - Main experiment runner
 - `agents/identity_core/core.py` - IdentityCore implementation
-- `data/identity/identity_weights_2021.v1.json` - 7D CES→identity mapping
+- `social_rl/world_state.py` - WorldStateEngine for identity-grounded environmental context
+- `data/identity/identity_weights_2021.v1.json` - 7D CES to identity mapping
 - `data/identity/identity_drift_priors.v1.json` - Per-dimension drift priors for tau calibration
 - `analysis/identity/drift_prior_loader.py` - Loads drift priors with group modifiers
 
@@ -173,6 +197,7 @@ Look for:
 - `--condition G` - Optimal architecture (dual-LLM + adaptive + challenge)
 - `--rounds 10` - Minimum for meaningful TE data (need 8+ for real TE)
 - `--seed N` - Random seed for reproducibility
+- `--world-state` - Enable WorldState engine for differential event/topic injection
 
 ### Identity Dimensions (Canonical Order)
 1. engagement
