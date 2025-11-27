@@ -73,6 +73,7 @@ def main():
             warmup_steps=10,
             learning_rate=2e-4,
             bf16=True,
+            report_to="none",
         ),
     )
 
