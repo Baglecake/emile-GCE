@@ -72,7 +72,7 @@ def main():
             save_steps=100,
             warmup_steps=10,
             learning_rate=2e-4,
-            fp16=True,
+            bf16=True,
         ),
     )
 
