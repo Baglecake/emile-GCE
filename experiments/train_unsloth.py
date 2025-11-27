@@ -10,6 +10,7 @@ Usage:
 
 import os
 os.environ["TRANSFORMERS_NO_MAMBA"] = "1"  # Avoid mamba_ssm import errors
+os.environ["WANDB_DISABLED"] = "true"  # Disable wandb completely
 
 import argparse
 from unsloth import FastLanguageModel
