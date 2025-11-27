@@ -267,8 +267,11 @@ class IdentityCore:
     # Phase 1: Wire orphaned metrics from identity_metrics.py
     # identity_salience: How much the agent's identity matters to them (0-1)
     # tie_to_place: Geographic/community rootedness (0-1)
-    identity_salience: float = 0.5
-    tie_to_place: float = 0.5
+    # NOTE: None = "not yet grounded", NOT "neutral midpoint"
+    # Per Social Aesthetics: 0.5 defaults smuggle in "view from nowhere"
+    # These MUST be populated from CES priors at construction time
+    identity_salience: Optional[float] = None
+    tie_to_place: Optional[float] = None
 
     # Phase 2.5: Transfer Entropy proxy histories (per agent)
     # Used to compute TE ratio: TE(I->B) / (TE(I->B) + TE(others->B))
@@ -312,6 +315,9 @@ class IdentityCore:
 
     def __post_init__(self):
         """Initialize vector and history if not provided."""
+        # Allow passing initial_vector as dict for convenience (e.g., from JSON)
+        if isinstance(self.initial_vector, dict):
+            self.initial_vector = IdentityVector.from_dict(self.initial_vector)
         if self.vector is None:
             self.vector = self.initial_vector
         if not self.history:
@@ -319,6 +325,22 @@ class IdentityCore:
         # Initialize natality_t from τ-based baseline
         if self.natality_t is None:
             self.natality_t = self.compute_natality_baseline()
+
+        # Validate identity metrics - per Social Aesthetics, None = "not yet grounded"
+        # Warn but don't crash for backwards compatibility during transition
+        import warnings
+        if self.identity_salience is None:
+            warnings.warn(
+                f"IdentityCore({self.agent_id}): identity_salience is None. "
+                "This field MUST be populated from CES priors. Using 0.5 fallback is "
+                "antithetical to Social Aesthetics - it smuggles in 'view from nowhere'."
+            )
+        if self.tie_to_place is None:
+            warnings.warn(
+                f"IdentityCore({self.agent_id}): tie_to_place is None. "
+                "This field MUST be populated from CES priors. Using 0.5 fallback is "
+                "antithetical to Social Aesthetics - it smuggles in 'view from nowhere'."
+            )
 
     def load_drift_priors(self, profile: Optional[Dict[str, Any]] = None) -> None:
         """
@@ -335,18 +357,31 @@ class IdentityCore:
         Phase 2b implementation: Enables empirical normalization in tau_from_delta().
         """
         try:
-            from analysis.identity.drift_prior_loader import get_aggregate_drift
+            from analysis.identity.drift_prior_loader import (
+                get_aggregate_drift, get_dimension_drift
+            )
+            # Aggregate priors (used for overall tau)
             delta_mu, sigma = get_aggregate_drift(profile)
             self.empirical_delta_mu = delta_mu
             self.empirical_delta_sigma = sigma
+
+            # Per-dimension priors (for dimension-specific tau, future use)
+            # Stores {dim: (delta_mu, sigma)} for each identity dimension
+            self.dimension_drift_priors: Dict[str, tuple] = {}
+            for dim in IDENTITY_DIMS:
+                dim_mu, dim_sigma = get_dimension_drift(dim, profile)
+                self.dimension_drift_priors[dim] = (dim_mu, dim_sigma)
+
         except ImportError:
             # Fallback if drift_prior_loader not available
             self.empirical_delta_mu = 0.069
             self.empirical_delta_sigma = 0.090
+            self.dimension_drift_priors = {}
         except Exception:
             # Any other error, use defaults
             self.empirical_delta_mu = 0.069
             self.empirical_delta_sigma = 0.090
+            self.dimension_drift_priors = {}
 
     # =========================================================================
     # Core Update Methods
@@ -500,7 +535,7 @@ class IdentityCore:
         - TE ratio < 0.5: Others drive behavior more than identity (conformist)
         - TE ratio = 1.0: Not enough data yet (early rounds)
         """
-        from .transfer_entropy import te_ratio_proxy
+        from .transfer_entropy import te_ratio_proxy, compute_te_valid
 
         # Cosine similarity between current and initial
         arr0 = self.initial_vector.to_array()
@@ -514,12 +549,15 @@ class IdentityCore:
         else:
             cos_sim = float(np.dot(arr0, arrt) / (norm0 * normt))
 
-        # TE ratio from histories
+        # TE ratio from histories - only compute if sufficient history
         I_hist = np.array(self._identity_history, dtype=float)
         B_hist = np.array(self._behavior_history, dtype=float)
         O_hist = np.array(self._others_behavior_history, dtype=float)
 
-        self._te_ratio = te_ratio_proxy(I_hist, B_hist, O_hist)
+        if compute_te_valid(len(B_hist)):
+            self._te_ratio = te_ratio_proxy(I_hist, B_hist, O_hist)
+        else:
+            self._te_ratio = 1.0  # Default until sufficient history
 
         return cos_sim * self._te_ratio
 
@@ -540,6 +578,54 @@ class IdentityCore:
         from .tau import tau_from_delta
         delta = self.compute_delta_I()
         return tau_from_delta(delta, self.empirical_delta_mu, self.empirical_delta_sigma)
+
+    def compute_dimension_tau(self, dim: str) -> float:
+        """
+        Compute emergent time τ for a specific identity dimension.
+
+        Uses per-dimension drift priors from CES data for more precise calibration.
+        Different dimensions may have different stability characteristics:
+        - partisanship: typically stable (high τ)
+        - engagement: more volatile (lower τ)
+
+        Args:
+            dim: Identity dimension name (one of IDENTITY_DIMS)
+
+        Returns:
+            τ value for this dimension (TAU_MIN to TAU_MAX)
+        """
+        from .tau import tau_from_delta
+
+        if not hasattr(self, 'dimension_drift_priors') or not self.dimension_drift_priors:
+            # Fall back to aggregate if per-dimension not loaded
+            return self.compute_tau()
+
+        if dim not in self.dimension_drift_priors:
+            return self.compute_tau()
+
+        # Get dimension-specific priors
+        dim_mu, dim_sigma = self.dimension_drift_priors[dim]
+
+        # Compute dimension-specific delta (change in this dimension only)
+        dim_delta = abs(
+            getattr(self.vector, dim, 0.5) - getattr(self.initial_vector, dim, 0.5)
+        )
+
+        return tau_from_delta(dim_delta, dim_mu, dim_sigma)
+
+    def get_dimension_drift_prior(self, dim: str) -> tuple:
+        """
+        Get (delta_mu, sigma) drift prior for a specific dimension.
+
+        Args:
+            dim: Identity dimension name
+
+        Returns:
+            (delta_mu, sigma) tuple for this dimension
+        """
+        if hasattr(self, 'dimension_drift_priors') and dim in self.dimension_drift_priors:
+            return self.dimension_drift_priors[dim]
+        return (self.empirical_delta_mu, self.empirical_delta_sigma)
 
     # =========================================================================
     # Natality (z-score of ΔP with τ-based baseline)
@@ -921,12 +1007,13 @@ class IdentityCore:
         """
         Compute dynamic temperature for LLM generation.
 
-        T_t = T_base + k_r * rupture + k_c * (1 - coherence) + k_n * natality + k_f * frustration
+        T_t = T_base + k_r * rupture + k_c * (1 - coherence) + k_n * natality + k_f * frustration + grit_mod
 
         High coherence → low T → stable voice
         Low coherence → high T → exploratory, variable prose
         Rupture → high T → frantic exploration
         Frustration → high T → erratic, volatile expression
+        Low identity_salience → high T → less "helpful AI polished", more variable
 
         Uses stateful natality_t (updated by recognition/overshoot) not computed natality.
 
@@ -938,11 +1025,25 @@ class IdentityCore:
         # Use stateful natality_t, not computed
         natality = self.natality_t
 
+        # Grit temperature modifier: low-salience agents get higher temperature
+        # Makes their responses more variable, less "helpful AI" polished
+        grit_mod = 0.0
+        if self.identity_salience is not None:
+            try:
+                from agents.ces_generators.grit_config import get_grit_temperature_modifier
+                grit_mod = get_grit_temperature_modifier(
+                    {'identity_salience': self.identity_salience},
+                    coherence=coherence
+                )
+            except ImportError:
+                pass  # grit_config not available, use 0.0
+
         T = (self.T_base
              + self.k_rupture * rupture_signal
              + self.k_coherence * (1 - coherence)
              + self.k_natality * natality
-             + self.k_frustration * frustration)
+             + self.k_frustration * frustration
+             + grit_mod)
 
         # Clamp to reasonable range
         return float(np.clip(T, 0.2, 1.2))
@@ -1100,8 +1201,9 @@ class IdentityCore:
         return {
             'agent_id': self.agent_id,
             'group_id': self.group_id,
-            'identity_salience': round(self.identity_salience, 4),
-            'tie_to_place': round(self.tie_to_place, 4),
+            # Handle None values - per Social Aesthetics, None = "not yet grounded"
+            'identity_salience': round(self.identity_salience, 4) if self.identity_salience is not None else None,
+            'tie_to_place': round(self.tie_to_place, 4) if self.tie_to_place is not None else None,
             'te_ratio': round(self._te_ratio, 4),
             'vector': self.vector.to_dict(),
             'initial_vector': self.initial_vector.to_dict(),

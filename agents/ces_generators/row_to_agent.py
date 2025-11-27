@@ -155,13 +155,16 @@ class CESAgentConfig:
     issue_salience: Dict[str, float] = field(default_factory=dict)
 
     # Socio-geographic context (populated from riding data)
+    # NOTE: None = "not yet grounded", NOT "neutral midpoint"
+    # Per Social Aesthetics: 0.5 defaults smuggle in "view from nowhere"
     riding_id: Optional[str] = None
-    riding_competitiveness: float = 0.5
-    local_minority_pct: float = 0.0
+    riding_competitiveness: Optional[float] = None  # Must be set from electoral data
+    local_minority_pct: Optional[float] = None      # Must be set from census data
 
     # Identity metrics (from identity_metrics.py)
-    identity_salience: float = 0.5
-    tie_to_place: float = 0.5
+    # These are populated from CES data via compute_identity_metrics()
+    identity_salience: Optional[float] = None  # Set from CES profile
+    tie_to_place: Optional[float] = None       # Set from CES profile
 
     # 7D Identity vector (from identity_vector_loader.py)
     identity_vector_7d: Dict[str, float] = field(default_factory=dict)
@@ -200,6 +203,9 @@ class CESAgentConfig:
                 "tie_to_place": self.tie_to_place,
                 "identity_vector_7d": self.identity_vector_7d,
                 "group_id": self.group_id,
+                "riding_id": self.riding_id,
+                "riding_competitiveness": self.riding_competitiveness,
+                "local_minority_pct": self.local_minority_pct,
             },
             "persona": self.persona_description,
             "goal": self._generate_goal(),
@@ -413,6 +419,8 @@ def ces_row_to_agent(
         born_in_canada=row.get("cps21_bornin_canada", 1) == 1,
         language="French" if row.get("cps21_language", 1) == 2 else "English",
         riding_id=row.get("cps21_riding_id"),
+        riding_competitiveness=row.get("riding_competitiveness"),  # None if not in data
+        local_minority_pct=row.get("local_minority_pct"),  # None if not in data
         current_vote_intention=row.get("cps21_votechoice"),
     )
 
@@ -478,6 +486,9 @@ def ces_cluster_to_prototype(
         party_name=party_name,
         ideology_lr=float(cluster_stats.get("ideology_lr_mean", 5.0)),
         turnout_likelihood=float(cluster_stats.get("turnout_mean", 0.5)),
+        riding_id=str(cluster_stats.get("riding_id", "")),
+        riding_competitiveness=cluster_stats.get("riding_competitiveness"),  # None if not in data
+        local_minority_pct=cluster_stats.get("local_minority_pct"),  # None if not in data
     )
 
     # Generate cluster-specific persona

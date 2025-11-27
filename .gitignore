@@ -18,3 +18,4 @@ notes/dev_notes_archive_*.md
 
 # GPU connection info (contains IP addresses)
 GPU_info.txt
+models/*.tar.gz

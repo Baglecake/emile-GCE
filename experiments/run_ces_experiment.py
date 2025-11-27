@@ -414,8 +414,18 @@ def _build_agent_prompt(agent: CESAgentConfig) -> str:
     # Check if this is a STRONG grit agent (needs special handling)
     is_strong_grit = any('GRIT-STRONG' in c for c in agent.constraints)
 
-    # Build base prompt
-    prompt = f"""ROLE: You are a Canadian voter with the following CES-derived profile.
+    # Location-specific language based on riding
+    riding = agent.source_id.split('_')[-1] if '_' in agent.source_id else ""
+    location_flavor = ""
+    if agent.urban_rural == "Rural":
+        location_flavor = "Use local/rural expressions. Reference 'up here', 'out here', 'my area'."
+    elif agent.urban_rural == "Suburban":
+        location_flavor = "Reference suburbs, commuting, family neighborhoods, 'the 905'."
+    else:
+        location_flavor = "Reference downtown, transit, density, rent prices."
+
+    # Build base prompt with friction instructions
+    prompt = f"""ROLE: You are a REAL Canadian voter, not a polite AI. Speak like an actual person.
 
 PROFILE:
 - Location: {agent.province_name} ({agent.urban_rural})
@@ -425,6 +435,11 @@ PROFILE:
 - Turnout likelihood: {agent.turnout_likelihood:.0%}
 
 PERSONA: {agent.persona_description}
+
+AUTHENTICITY:
+- Don't introduce yourself or give your bio - just respond to the topic
+- Speak from your own experience and situation
+- {location_flavor}
 
 CONSTRAINTS:
 {chr(10).join('- ' + c for c in other_constraints) if other_constraints else '- Speak authentically from your socioeconomic position'}
@@ -437,9 +452,9 @@ GOALS: {agent._generate_goal()}"""
 
     # Final instruction - different for grit vs non-grit agents
     if is_strong_grit:
-        prompt += "\n\nREMEMBER: Keep responses SHORT (2-3 sentences max). You are not invested in this discussion."
+        prompt += "\n\nREMEMBER: Keep responses SHORT (2-3 sentences max). You don't really care about this discussion. Maybe shrug it off."
     else:
-        prompt += "\n\nRespond naturally as this person would in a political discussion."
+        prompt += "\n\nBe direct. Be stubborn. Real people have opinions and aren't diplomatic about them."
 
     return prompt
 
@@ -472,6 +487,8 @@ def run_ces_experiment(
     seed: Optional[int] = None,  # Seed number for replication
     # Phase 2b: WorldState - give agents a world to live in
     use_world_state: bool = False,
+    # Real CES sampling vs static archetypes
+    use_real_ces: bool = False,
 ) -> Dict[str, Any]:
     """
     Run a CES-grounded Social RL experiment.
@@ -569,10 +586,18 @@ def run_ces_experiment(
             )
             print("Pseudo dual-LLM configured (same model, different temps)\n")
 
-    # Generate CES agents
+    # Generate CES agents - either static archetypes or real CES sampling
     print("Generating CES-grounded agents...")
     mapper = CESVariableMapper()
-    ces_profiles = create_ces_profiles()
+
+    if use_real_ces:
+        from agents.ces_generators.ces_sampler import sample_ces_profiles
+        ces_profiles = sample_ces_profiles(n=4, year=2021, seed=seed)
+        print("  [Using REAL CES data sampling]")
+    else:
+        ces_profiles = create_ces_profiles()
+        print("  [Using static archetypes]")
+
     agents = [ces_row_to_agent(p, mapper) for p in ces_profiles]
 
     for agent in agents:
@@ -834,6 +859,13 @@ Examples:
         help="Enable WorldState: events, topics, frustration mechanics (differential agent experience)"
     )
 
+    # Real CES data sampling
+    parser.add_argument(
+        "--real-ces",
+        action="store_true",
+        help="Sample agents from real CES 2021 data instead of static archetypes"
+    )
+
     args = parser.parse_args()
 
     try:
@@ -861,6 +893,8 @@ Examples:
             seed=args.seed,
             # Phase 2b: WorldState
             use_world_state=args.world_state,
+            # Real CES sampling
+            use_real_ces=args.real_ces,
         )
 
         print(f"\nExperiment completed!")

@@ -44,10 +44,12 @@ class OllamaClient:
     def __init__(
         self,
         model: str = "qwen2.5:7b",
-        base_url: str = "http://localhost:11434"
+        base_url: str = "http://localhost:11434",
+        timeout: float = 300.0  # 5 minutes for cold starts
     ):
         self.model = model
         self.base_url = base_url
+        self.timeout = timeout
 
     def send_message(
         self,
@@ -72,7 +74,7 @@ class OllamaClient:
                 },
                 "stream": False
             },
-            timeout=120
+            timeout=self.timeout
         )
         response.raise_for_status()
         return response.json()["message"]["content"]

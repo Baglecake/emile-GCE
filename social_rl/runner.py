@@ -31,7 +31,7 @@ from .feedback_extractor import (
     create_extractor_for_framework
 )
 from .process_retriever import ProcessRetriever, ReasoningPolicy
-from .dual_llm_client import DualLLMClient, DualLLMConfig, GenerationResult
+from .dual_llm_client import DualLLMClient, DualLLMConfig, GenerationResult, CoachCritique
 
 # Phase 2a: IdentityCore integration (optional)
 try:
@@ -50,6 +50,24 @@ except ImportError:
     WORLD_STATE_AVAILABLE = False
     WorldStateEngine = None
     create_world_engine = None
+
+# Phase 2c: Semiotic coder integration (optional) - empirical semiotics analysis
+try:
+    from .semiotic_coder import SemioticCoder, load_and_code_experiment
+    SEMIOTIC_CODER_AVAILABLE = True
+except ImportError:
+    SEMIOTIC_CODER_AVAILABLE = False
+    SemioticCoder = None
+    load_and_code_experiment = None
+
+# Phase 2d: Relational metrics integration (optional) - domination/alienation analysis
+try:
+    from .metrics import RelationalMetricsComputer, compute_experiment_metrics
+    RELATIONAL_METRICS_AVAILABLE = True
+except ImportError:
+    RELATIONAL_METRICS_AVAILABLE = False
+    RelationalMetricsComputer = None
+    compute_experiment_metrics = None
 
 
 def _get_default_output_dir(experiment_id: str = None) -> str:
@@ -85,13 +103,16 @@ class SocialRLConfig:
 
     # Coach/Performer settings
     use_coach_validation: bool = True
+    # NOTE: coach_temperature and performer_temperature are recommended defaults.
+    # When using DualLLMClient, pass these to DualLLMConfig or create_dual_llm_client().
+    # Runner uses identity-modulated temperature from IdentityCore when available.
     coach_temperature: float = 0.1
     performer_temperature: float = 0.7
     max_validation_retries: int = 2
 
     # Output settings
     verbose: bool = True
-    save_feedback_history: bool = True
+    save_feedback_history: bool = True  # Save accumulated feedback to feedback_history.json
     auto_save: bool = True  # Auto-save after each round
     output_dir: str = ""    # Empty = auto-detect
 
@@ -255,6 +276,10 @@ class SocialRLRunner:
         # Agents in this set skip future turns
         self.dead_agents: set = set()  # Set of agent_ids that have died
 
+        # Section 9: Coach critique log (for dual-LLM analysis)
+        # Stores all coach observations, not just validation failures
+        self.coach_critiques: List[Dict[str, Any]] = []
+
         # Phase 2b: WorldState - events, topics, frustration (optional)
         self.world_engine: Optional['WorldStateEngine'] = None
         if self.config.use_world_state and WORLD_STATE_AVAILABLE:
@@ -376,6 +401,11 @@ class SocialRLRunner:
         # Update accumulated feedback (use to_dict to include direct_references, response_received)
         for agent_id, fb in round_feedback.items():
             self.accumulated_feedback[agent_id] = fb.to_dict()
+
+        # Section 8.1: Update context injector with feedback for semiotic tracking
+        if self.context_injector:
+            for agent_id, fb in round_feedback.items():
+                self.context_injector.update_feedback(agent_id, fb.as_reward_signal())
 
         # Phase 2a: Update identity cores with observed behavior
         if self.identity_cores:
@@ -582,21 +612,25 @@ class SocialRLRunner:
 
         # 5a. Compute temperature FIRST (needed for capacity coupling)
         # T = T_base + k_r*rupture + k_c*(1-coherence) + k_n*natality + k_f*frustration
-        identity_temperature = self._get_identity_temperature(agent_id, frustration)
+        # Only use identity-modulated temperature if config flag is set
+        if self.config.identity_modulates_temperature:
+            identity_temperature = self._get_identity_temperature(agent_id, frustration)
+        else:
+            identity_temperature = None  # Use default temperature
 
         # Compute identity-grounded capacity WITH temperature coupling
         base_cap = TOKEN_CAPS_BY_GRIT.get(old_grit, 512)
         f_salience = 0.5 + 0.5 * identity_salience  # [0.5, 1.0]
         f_natality = 0.5 + 0.5 * natality_t         # [0.5, 1.0]
 
-        # Temperature coupling: delegated to IdentityCore
+        # Temperature coupling: delegated to IdentityCore (if modulation enabled)
         # f_T = τ_baseline + (1 - τ_baseline) * t_normalized
         # Floor emerges from τ (emergent time), NOT hardcoded
-        if agent_id in self.identity_cores:
+        if self.config.identity_modulates_temperature and agent_id in self.identity_cores:
             f_temperature = self.identity_cores[agent_id].compute_temperature_capacity_factor()
             f_energy = self.identity_cores[agent_id].compute_energy_capacity_factor()
         else:
-            f_temperature = 0.5  # Neutral default (no IdentityCore)
+            f_temperature = 0.5  # Neutral default (no IdentityCore or modulation disabled)
             f_energy = 1.0  # Full energy if no IdentityCore
 
         # Fatigue factor: tired = fewer words
@@ -639,6 +673,30 @@ class SocialRLRunner:
         else:
             content = self._generate_simple(system_prompt, user_message)
             validation_meta = None
+
+        # Section 9: Log coach critique for analysis (separate from validation)
+        # This captures theoretical alignment observations even for accepted outputs
+        if self.dual_llm is not None:
+            try:
+                critique = self.dual_llm.get_coach_critique_for_message(
+                    content=content,
+                    agent_id=agent_id,
+                    context={
+                        'round_number': round_config.get("round_number", 1),
+                        'turn_number': turn_number,
+                        'grit_level': old_grit,
+                    }
+                )
+                if critique:
+                    self.coach_critiques.append({
+                        'agent_id': agent_id,
+                        'round_number': round_config.get("round_number", 1),
+                        'turn_number': turn_number,
+                        'critique': critique,
+                        'timestamp': time.time(),
+                    })
+            except Exception as e:
+                pass  # Don't fail generation for critique logging errors
 
         # 5b. DYNAMIC GRIT CALIBRATION: Adjust grit level based on engagement vs CES target
         # This is the "active dynamics" - grit level changes per-turn based on overshoot
@@ -785,9 +843,30 @@ class SocialRLRunner:
                     agent_id, was_recognized, recognition_score
                 )
 
+                # Section 12: Track position for entrenchment mechanics
+                # Challenged = low recognition despite engaging
+                if self.world_engine.current_topic:
+                    was_challenged = (recognition_score < 0.4 and overshoot_ratio < 0.2)  # Active but ignored
+                    position_preview = content[:100] if len(content) > 100 else content
+                    self.world_engine.update_agent_position(
+                        agent_id=agent_id,
+                        topic_id=self.world_engine.current_topic.id,
+                        position_taken=position_preview,
+                        was_challenged=was_challenged
+                    )
+
             if self.config.verbose and verbosity_penalty > 0.01:
                 print(f"    [VERBOSITY] {agent_id}: {len(words)} words > {word_limit} limit → "
                       f"eng {engagement_base:.2f}→{penalized_engagement:.2f} (penalty={verbosity_penalty:.2f})")
+
+            # Token cap throttling: reduce max_tokens for next turn after overshoot
+            if self.config.token_throttle_enabled and agent_id in self.token_caps:
+                current_cap = self.token_caps[agent_id]
+                throttled_cap = int(current_cap * self.config.token_throttle_factor)
+                throttled_cap = max(self.config.token_min_cap, throttled_cap)  # Floor
+                self.token_caps[agent_id] = throttled_cap
+                if self.config.verbose:
+                    print(f"    [THROTTLE] {agent_id}: token cap {current_cap}→{throttled_cap}")
 
         if len(words) > word_limit + 10:  # Allow small buffer
             # Find sentence boundary near limit
@@ -1179,6 +1258,11 @@ class SocialRLRunner:
             with open(output_path / f"round{round_num}_social_rl.json", "w") as f:
                 json.dump(result.to_dict(), f, indent=2)
 
+        # Save accumulated feedback history (engagement, verbosity penalties, etc.)
+        if self.config.save_feedback_history and self.accumulated_feedback:
+            with open(output_path / "feedback_history.json", "w") as f:
+                json.dump(self.accumulated_feedback, f, indent=2)
+
         # Save policy state
         self.process_retriever.save_policy_state(str(output_path / "policy_state.json"))
 
@@ -1194,6 +1278,100 @@ class SocialRLRunner:
             }
             with open(output_path / "identity_cores.json", "w") as f:
                 json.dump(identity_state, f, indent=2)
+
+            # Phase 2.5: Save per-agent identity trajectories for analysis
+            identity_trajectories = {
+                agent_id: core.get_trajectory()
+                for agent_id, core in self.identity_cores.items()
+            }
+            with open(output_path / "identity_trajectories.json", "w") as f:
+                json.dump(identity_trajectories, f, indent=2)
+
+        # Section 9: Save coach critique log
+        if self.coach_critiques:
+            with open(output_path / "coach_critiques.json", "w") as f:
+                json.dump(self.coach_critiques, f, indent=2)
+
+        # Section 10/11: Semiotic coding of experiment (empirical semiotics)
+        if SEMIOTIC_CODER_AVAILABLE and self.round_results:
+            try:
+                coder = SemioticCoder()  # Lexicon-based for consistency
+                all_codes = []
+
+                for round_num, result in self.round_results.items():
+                    round_data = {
+                        'round_number': round_num,
+                        'messages': [
+                            {'agent_id': m.agent_id, 'content': m.content}
+                            for m in result.messages if m is not None
+                        ]
+                    }
+                    codes = coder.code_transcript(round_data)
+                    all_codes.extend(codes)
+
+                # Export as dataframe rows (Section 10: to_dataframe_rows)
+                if all_codes:
+                    semiotic_rows = coder.to_dataframe_rows(all_codes)
+                    with open(output_path / "semiotic_coding.json", "w") as f:
+                        json.dump(semiotic_rows, f, indent=2)
+
+                    # Compute and save overall summary
+                    summaries = coder.compute_semiotic_summary(all_codes)
+                    summary_export = {
+                        agent_id: {
+                            'total_turns': s.total_turns,
+                            'justification_ratio': s.justification_ratio,
+                            'assertion_ratio': s.assertion_ratio,
+                            'voice_valence': s.voice_valence,
+                            'stance_valence': s.stance_valence,
+                            'alienation_count': s.alienation_count,
+                            'empowerment_count': s.empowerment_count,
+                            'bridging_count': s.bridging_count,
+                            'dismissive_count': s.dismissive_count,
+                        }
+                        for agent_id, s in summaries.items()
+                    }
+                    with open(output_path / "semiotic_summary.json", "w") as f:
+                        json.dump(summary_export, f, indent=2)
+            except Exception as e:
+                if self.config.verbose:
+                    print(f"  [SEMIOTIC] Coding failed: {e}")
+
+        # Section 13: Relational metrics (domination/alienation analysis)
+        if RELATIONAL_METRICS_AVAILABLE and self.round_results:
+            try:
+                # Convert round results to format expected by metrics module
+                round_dicts = []
+                for round_num, result in self.round_results.items():
+                    round_dicts.append({
+                        'round_number': round_num,
+                        'messages': [
+                            {'agent_id': m.agent_id, 'content': m.content}
+                            for m in result.messages if m is not None
+                        ]
+                    })
+
+                # Compute experiment-wide metrics
+                metrics_result = compute_experiment_metrics(round_dicts)
+
+                # Save full metrics
+                with open(output_path / "relational_metrics.json", "w") as f:
+                    json.dump(metrics_result, f, indent=2)
+
+                if self.config.verbose:
+                    summary = metrics_result.get('summary', {})
+                    print(f"  [METRICS] Participation: {summary.get('participation_asymmetry', 'N/A')}")
+                    print(f"  [METRICS] Domination: {summary.get('domination_level', 'N/A')}")
+                    print(f"  [METRICS] Alienation: {summary.get('alienation_level', 'N/A')}")
+
+            except Exception as e:
+                if self.config.verbose:
+                    print(f"  [METRICS] Relational metrics failed: {e}")
+
+        # Save WorldState if enabled
+        if self.world_engine:
+            with open(output_path / "world_state.json", "w") as f:
+                json.dump(self.world_engine.get_state_summary(), f, indent=2)
 
         if self.config.verbose:
             print(f"\nResults saved to: {output_dir}")
@@ -1217,8 +1395,19 @@ class SocialRLRunner:
 
             # Use group_id from canvas attributes if available, otherwise infer
             group_id = attrs.get("group_id") or self._infer_group_id(agent_id)
-            identity_salience = attrs.get("identity_salience", 0.5)
-            tie_to_place = attrs.get("tie_to_place", 0.5)
+            # NOTE: No 0.5 fallback - per Social Aesthetics, "neutral midpoint" is
+            # antithetical to situated identity. These MUST come from CES priors.
+            identity_salience = attrs.get("identity_salience")
+            tie_to_place = attrs.get("tie_to_place")
+
+            # If not set from canvas, attempt to compute from CES profile
+            if identity_salience is None or tie_to_place is None:
+                ces_profile = attrs.get("ces_profile", {})
+                if ces_profile:
+                    from agents.ces_generators.identity_metrics import compute_identity_metrics
+                    metrics = compute_identity_metrics(ces_profile)
+                    identity_salience = identity_salience or metrics.get('identity_salience')
+                    tie_to_place = tie_to_place or metrics.get('tie_to_place')
 
             # Create initial identity vector from 7D canvas data (Phase 2.4)
             # or fall back to neutral baseline

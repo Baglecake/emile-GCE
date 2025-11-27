@@ -818,6 +818,10 @@ class ContextInjector:
         if behaviors:
             parts.append(f"BEHAVIORAL RULES: {behaviors}")
 
+        # Minimal authenticity guidance - let profile drive variation
+        parts.append("")
+        parts.append("Respond to the topic directly. No introductions needed.")
+
         return "\n".join(parts)
 
     def update_feedback(self, agent_id: str, feedback: Dict[str, Any]):
