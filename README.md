@@ -172,7 +172,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for system design, 2×2×2 sweep details,
 ```bibtex
 @software{emile-gce,
   title = {émile-GCE: Architecting Social Aesthetics in Agentic Systems},
-  author = {Coburn, Delmar},
+  author = {Coburn, Del},
   year = {2025},
   url = {https://github.com/delcoburn/emile-gce}
 }
@@ -181,7 +181,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for system design, 2×2×2 sweep details,
 ## Related Work
 
 - **émile-core**: [github.com/Baglecake/emile-mini](https://github.com/Baglecake/emile-mini) - Emergent-interactive learner framework
-- **Social Aesthetics**: Weber (1922), Simmel (1908) - Social forms as emergent from interaction
+- **Social Aesthetics**: Levis Martin (2014), and Max Weber (1922), Simmel (1908) - Social forms as emergent from interaction
 - **Computational Ethnography**: Boellstorff (2015), Geiger (2017) - Studying digital social systems
 
 ## License
